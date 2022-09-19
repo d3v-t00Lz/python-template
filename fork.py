@@ -17,11 +17,12 @@ Please update the following files as needed and replace any TODO items:
 
 FILES_TO_UPDATE = [
     "DEBIAN/control",
-    'files/linux/systemd.service',
     "LICENSE",
-    'windows/nsis.jinja',
     "rpm.spec",
     "setup.py",
+    'README.md',
+    'files/linux/systemd.service',
+    'windows/nsis.jinja',
 ]
 
 
@@ -427,6 +428,9 @@ def main():
         "-type f "
         "| xargs sed -i 's/pytemplate/{name}/gI'".format(name=name)
     )
+
+    with open('README.md', 'w') as f:
+        f.write(f"# {name}\nTODO")
 
     _('rm -rf .git')
 
