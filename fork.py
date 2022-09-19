@@ -423,7 +423,7 @@ def main():
         remove_lines_range('setup.py', 'PT:PYPI')
 
     _(
-        "find setup.* fork.py {name}*/ test/ scripts/ Dockerfile* "
+        "find setup.* fork.py src/ test/ scripts/ Dockerfile* "
         "macos/ windows/ Makefile rpm.spec meta.json DEBIAN/ "
         "-type f "
         "| xargs sed -i 's/pytemplate/{name}/gI'".format(name=name)
