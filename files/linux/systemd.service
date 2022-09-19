@@ -1,0 +1,10 @@
+[Unit]
+# TODO: A real description
+Description=pytemplate
+
+[Service]
+# TODO: Update with the actual script name
+ExecStart=/usr/bin/pytemplate
+
+[Install]
+WantedBy=multi-user.target

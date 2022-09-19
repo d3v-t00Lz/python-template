@@ -1,0 +1,19 @@
+#! /usr/bin/make -f
+
+DESTDIR ?=
+#export DH_VERBOSE = 1
+export PYBUILD_NAME = pytemplate
+
+%:
+	dh $@ --with python3 --buildsystem=pybuild
+	DESTDIR="$(DESTDIR)" make install_linux
+	desktop-file-install                                        \
+		--set-name="${PYBUILD_NAME}"                            \
+		--set-icon="${PYBUILD_NAME}"                            \
+		--set-key="Exec" --set-value="${PYBUILD_NAME}_qt %U"    \
+		--add-category="Graphics"                               \
+		--set-key="Type" --set-value="Application"              \
+		--delete-original                                       \
+		--dir=$(DESTDIR)/usr/share/applications                           \
+		$(DESTDIR)/usr/share/applications/${PYBUILD_NAME}.desktop
+

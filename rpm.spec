@@ -1,0 +1,72 @@
+%global modname pytemplate
+%global completions_dir %( pkg-config --variable=completionsdir bash-completion )
+
+Name:           python3-%{modname}
+Version:        0.0.1
+Release:        1%{?dist}
+Summary:        TODO
+License:        MIT
+URL:            https://pypi.io/project/%{modname}
+Source0:        https://pypi.io/packages/source/d/%{modname}/%{modname}-%{version}.tar.gz
+
+BuildArch:      noarch
+
+BuildRequires:  python3-devel
+BuildRequires:  python3-setuptools
+BuildRequires:  python3-shtab
+BuildRequires:  python3-rpm-macros
+BuildRequires:  desktop-file-utils
+
+%?python_enable_dependency_generator
+
+%description
+
+TODO
+
+%prep
+%autosetup -n %{modname}-%{version}
+
+%build
+%py3_build
+
+%install
+%py3_install
+DESTDIR="%{buildroot}" COMPLETIONS_DIR="%{completions_dir}" make install_linux
+
+# PT:GUI
+touch %{buildroot}/%{_datadir}/applications/%{modname}.desktop
+
+desktop-file-install                                        \
+    --set-name="%{modname}"                                 \
+    --set-icon="%{modname}"                                 \
+    --set-key="Exec" --set-value="%{modname}_qt %U"         \
+	--add-category="Graphics"                               \
+    --set-key="Type" --set-value="Application"              \
+	--delete-original                                       \
+	--dir=%{buildroot}%{_datadir}/applications              \
+	%{buildroot}/%{_datadir}/applications/%{modname}.desktop
+# PT:GUI
+
+%check
+# Redundant of `make rpm`, and the target OS may not have all required
+# packages available in the repos
+#%{__python3} setup.py test
+
+%files -n python3-%{modname}
+#%doc CHANGELOG
+%license LICENSE
+%attr(755, root, root) %{_bindir}/%{modname}*
+%{python3_sitelib}/%{modname}*/
+# PT:GUI
+%{_datadir}/applications/%{modname}.desktop
+%{_datadir}/pixmaps/%{modname}.png
+# PT:GUI
+# PT:SYSTEMD
+%{_unitdir}/%{modname}.service
+# PT:SYSTEMD
+
+# PT:CLI
+%{completions_dir}
+# PT:CLI
+
+%changelog

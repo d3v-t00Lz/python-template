@@ -1,0 +1,5 @@
+#!/bin/sh -xe
+
+modname=pytemplate
+
+rm -f /usr/share/applications/${modname}.desktop

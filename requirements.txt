@@ -1,0 +1,8 @@
+pylogrus
+pymarshal>=2.2.1
+pyyaml
+sanic
+PyQt6
+PySDL2
+pysdl2-dll
+shtab
