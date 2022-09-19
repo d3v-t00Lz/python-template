@@ -19,7 +19,7 @@ so this may vary by repo.
 Update `${PROJECT_NAME}/__init__.py:__version__`, commit and then tag a new
 release with that version.  Package as required.
 
-# Runnign unit tests
+# Running unit tests
 ```
 make test
 # to open the coverage report:
@@ -40,4 +40,16 @@ Packages go into pytemplate/vendor/ and can be imported from there
 ```
 ./vendor.sh package-name-1 package-name-2
 ```
+
+# Generating Tab Completion Scripts
+This is done with the `install_completions` target in the `Makefile`.  It is
+controlled by the `DESTDIR`, `COMPLETIONS_DIR` and `COMPLETIONS_SHELL`
+variables.
+
+The RPM and Debian packages already include tab completion scripts.
+Unfortunately, `setuptools` makes it difficult to drop files in arbitrary
+folders when installing a Python package, so there is no easy, automatic
+way to install tab completions directly from pip.
+
+See the `Makefile` source for more details.
 
