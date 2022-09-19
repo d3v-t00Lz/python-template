@@ -103,5 +103,6 @@ test:
 
 type-check:
 	# Check typing of Python type hints
-	mypy --ignore-missing-imports pytemplate pytemplate_cli pytemplate_rest
+	mypy --ignore-missing-imports \
+		src/{pytemplate,pytemplate_cli,pytemplate_rest}
 
