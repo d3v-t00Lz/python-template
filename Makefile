@@ -8,7 +8,7 @@ COMPLETIONS_SHELL ?= bash
 DESTDIR ?=
 PREFIX ?= /usr
 
-.PHONY: test
+.PHONY: test venv
 
 clean:
 	# Remove temporary build files
@@ -105,4 +105,11 @@ type-check:
 	# Check typing of Python type hints
 	mypy --ignore-missing-imports \
 		src/{pytemplate,pytemplate_cli,pytemplate_rest}
+
+venv:
+	# Create a Python "virtual environment" aka venv
+	# Run this target before running:
+	# source venv/bin/activate
+	# ./setup.py develop
+	python3 -m venv --system-site-packages venv
 

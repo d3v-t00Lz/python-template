@@ -1,8 +1,8 @@
-pylogrus
+pylogrus==0.4.0
 pymarshal>=2.2.1
-pyyaml
-sanic
-PyQt6
+pyyaml==5.4.1
+sanic==22.6.2
+PyQt6==6.2.3
 PySDL2
 pysdl2-dll
 shtab
