@@ -2,8 +2,18 @@
 
 block_cipher = None
 
+PROJECT_ROOT = os.path.abspath(
+    os.path.join(
+        os.path.dirname(SPECPATH),
+        '..',
+    )
+)
+
 a = Analysis(
     ['..\\scripts\\pytemplate_qt'],
+    pathex=[
+        os.path.join(PROJECT_ROOT, 'src',),
+    ],
     binaries=[
     ],
     datas=[
