@@ -4,7 +4,21 @@ from typing import Optional
 import argparse
 import json
 import os
+import subprocess
 import sys
+
+
+COMMIT_MSG = """\
+Initial commit
+
+Fork github.com/d3v-t00Lz/python-template into {name}
+Source commit hash: {commit_hash}
+fork.py args: {argv}
+"""
+
+COMMIT_HASH = subprocess.check_output(
+    ['git', 'rev-parse', '--short', 'HEAD'],
+).decode().strip()
 
 SUCCESS_MSG = """
 Successfully forked.
@@ -22,6 +36,7 @@ FILES_TO_UPDATE = [
     "setup.py",
     'README.md',
     'files/linux/systemd.service',
+    'meta.json',
     'windows/nsis.jinja',
 ]
 
@@ -70,6 +85,16 @@ def parse_args():
         help=(
             'Do not create a git repo.  Useful when creating instances '
             'inside a mono-repo'
+        ),
+    )
+    features.add_argument(
+        '--shebang',
+        dest='shebang',
+        default=None,
+        help=(
+            'Specify an alternate shebang lines for files in scripts/ .  '
+            'Used to run with an alternate interpreter to standard CPython3.'
+            '  For example:  --shebang="#!/usr/bin/env pypy3"'
         ),
     )
 
@@ -301,6 +326,20 @@ def meta_json(org, name):
     with open('meta.json', 'w') as f:
         json.dump(j, f, sort_keys=True, indent=4)
 
+def update_shebang(shebang: Optional[str]):
+    if shebang is None:
+        return
+    assert shebang.startswith("#!")
+    shebang += "\n"
+    for fname in os.listdir('scripts'):
+        path = os.path.join('scripts', fname)
+        with open(path) as f:
+            lines = list(f)
+        assert(lines[0].startswith("#!")), (path, lines[0])
+        lines[0] = shebang
+        with open(path, 'w') as f:
+            f.write(''.join(lines))
+
 def main():
     file_path = os.path.abspath(__file__)
     dirname = os.path.dirname(file_path)
@@ -318,6 +357,7 @@ def main():
     _("find . -name '*.pyc' -delete")
 
     meta_json(args.org, args.name)
+    update_shebang(args.shebang)
 
     if any((args.sdl2, args.qt_ui, (args.cli and args.windows))):
         _(f'mv files/icons/pytemplate.png files/icons/{name}.png')
@@ -437,7 +477,12 @@ def main():
     if args.git_repo:
         _('git init .')
         _('git add .')
-        _('git commit -am "Initial commit"')
+        commit_msg = COMMIT_MSG.format(
+            name=name,
+            commit_hash=COMMIT_HASH,
+            argv=sys.argv,
+        )
+        _(f'git commit -am "{commit_msg}"')
 
     print(SUCCESS_MSG)
     print("\n".join(f'    {x}' for x in FILES_TO_UPDATE))
