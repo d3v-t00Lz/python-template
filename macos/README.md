@@ -7,8 +7,10 @@ will be used to download dependencies.
 
 ### Build and package
 ```
+cd macos
+pip3 -r requirements.txt
 ./homebrew_deps.sh
 ./release.py
-# A DMG file will be created in dist/
+# A DMG file will be created in [PROJECT ROOT]/dist/
 ```
 
