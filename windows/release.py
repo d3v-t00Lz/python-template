@@ -46,7 +46,7 @@ if os.path.isdir('dist'):
     shutil.rmtree('dist')
 
 print("Running Pyinstaller")
-subprocess.check_call(["pyinstaller", f"windows/{SPEC_FILE}"])
+subprocess.check_call(["pyinstaller", f'--paths={CWD}/src', f"windows/{SPEC_FILE}"])
 
 with open('windows/nsis.jinja') as f:
     TEMPLATE = Template(f.read())

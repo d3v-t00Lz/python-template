@@ -6,10 +6,17 @@ ARCH = platform.machine()
 
 block_cipher = None
 
+PROJECT_ROOT = os.path.abspath(
+    os.path.join(
+        os.path.dirname(SPECPATH),
+        '..',
+    )
+)
+
 a = Analysis(
     ['../scripts/pytemplate_sdl2'],
     pathex=[
-        os.path.dirname(SPECPATH),
+        os.path.join(PROJECT_ROOT, 'src',),
     ],
     datas=[
         ('../files/', 'files'),

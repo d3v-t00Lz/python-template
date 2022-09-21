@@ -24,7 +24,7 @@ SPEC_FILES = [os.path.basename(x) for x in glob('macos/onedir*.spec')]
 assert len(SPEC_FILES) >= 1, 'no spec_files available'
 
 def parse_args():
-    parser = argparse.ArgumentParser('Create Windows packages')
+    parser = argparse.ArgumentParser('Create MacOS packages')
     if len(SPEC_FILES) > 1:
         parser.add_argument(
             'spec_file',
@@ -46,13 +46,8 @@ BUNDLE = f'dist/{MAJOR_VERSION}.app'
 if os.path.isdir(BUNDLE):
     shutil.rmtree(BUNDLE)
 
-pyinstaller = glob(
-    f'{HOME}/Library/Python/*/bin/pyinstaller',
-)[0]
-
 retcode = subprocess.check_call([
-    pyinstaller,
-    f'--paths=(CWD)',
+    'pyinstaller',
     '--noconfirm',
     f'macos/{SPEC_FILE}',
 ])
