@@ -10,7 +10,7 @@ PROJECT_ROOT = os.path.abspath(
 )
 
 a = Analysis(
-    ['..\\scripts\\pytemplate'],
+    ['..\\scripts\\pytemplate_cli'],
     pathex=[
         os.path.join(PROJECT_ROOT, 'src',),
     ],

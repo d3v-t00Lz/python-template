@@ -2,11 +2,18 @@
 """
 
 """
+
+import argparse
 from platform import platform
 import os
 import sys
 
+
 EV = 'PYSDL2_DLL_PATH'
+
+def parse_args():
+    parser = argparse.ArgumentParser("pytemplate Qt application")
+    return parser.parse_args()
 
 def platform_check():
     """ On Windows, we copy the SDL2 dlls to the same folder as the executable
@@ -22,9 +29,11 @@ def platform_check():
         ):
             os.environ[EV] = os.path.dirname(sys.executable)
 
+parse_args()
 platform_check()
 
 # Now import this with EV set if needed
+
 from pytemplate_sdl2.pong import main
 
 if __name__ == "__main__":

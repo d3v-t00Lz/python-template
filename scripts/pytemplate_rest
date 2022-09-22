@@ -3,6 +3,14 @@
 
 """
 
+import argparse
+
+def parse_args():
+    parser = argparse.ArgumentParser("pytemplate Qt application")
+    return parser.parse_args()
+
+parse_args()
+
 from pytemplate_rest.main import main
 
 if __name__ == "__main__":
