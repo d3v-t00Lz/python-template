@@ -485,8 +485,11 @@ def main():
         )
         _(f'git commit -am "{commit_msg}"')
 
+    SUCCESS_MSG += "\n".join(f'    {x}' for x in FILES_TO_UPDATE)
     print(SUCCESS_MSG)
-    print("\n".join(f'    {x}' for x in FILES_TO_UPDATE))
+
+    with open('TODO-fork', 'w') as f:
+        f.write(SUCCESS_MSG)
 
 if __name__ == "__main__":
     main()
