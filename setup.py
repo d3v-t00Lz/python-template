@@ -24,11 +24,20 @@ def load_requirements(fname):
     if PT_EXCLUDE_LIBS == 'ALL':
         return []
     reqs = parse_requirements(fname, session="test")
-    result = [
-        str(x.requirement)
-        for x in reqs
-        if str(x.requirement) not in EXCLUDE_LIBS
-    ]
+    try:
+        result = [
+            str(x.requirement)
+            for x in reqs
+            if str(x.requirement) not in EXCLUDE_LIBS
+        ]
+    except AttributeError as ex:
+        print(f'Assuming older Python version: {ex}')
+        result = [
+            str(x.req)
+            for x in reqs
+            if str(x.req) not in EXCLUDE_LIBS
+        ]
+
     print(result)
     return result
 
