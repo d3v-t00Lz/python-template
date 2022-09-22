@@ -4,10 +4,14 @@
 """
 
 import os
-from setuptools import setup, find_packages
 import sys
-
+from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
+try:  # for pip >= 10
+    from pip._internal.req import parse_requirements
+except ImportError:  # for pip <= 9.0.3
+    from pip.req import parse_requirements
+
 
 PT_EXCLUDE_LIBS = os.environ.get('PT_EXCLUDE_LIBS', '').strip()
 EXCLUDE_LIBS = set(
@@ -15,13 +19,6 @@ EXCLUDE_LIBS = set(
     for x in PT_EXCLUDE_LIBS.split(',')
 )
 print(EXCLUDE_LIBS)
-
-try:
-    # for pip >= 10
-    from pip._internal.req import parse_requirements
-except ImportError:
-    # for pip <= 9.0.3
-    from pip.req import parse_requirements
 
 def load_requirements(fname):
     if PT_EXCLUDE_LIBS == 'ALL':
