@@ -399,7 +399,7 @@ def main():
         remove_lines('requirements.txt', 'sdl2')
 
     if args.cli:
-        _('mv scripts/pytemplate scripts/{}'.format(name))
+        _('mv scripts/pytemplate_cli scripts/{}_cli'.format(name))
         _('mv src/pytemplate_cli src/{}_cli'.format(name))
         _('mv test/pytemplate_cli test/{}_cli'.format(name))
     else:
