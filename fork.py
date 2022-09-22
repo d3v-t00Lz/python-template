@@ -418,6 +418,7 @@ def main():
         _('mv src/pytemplate src/{}'.format(name))
         _('mv test/pytemplate test/{}'.format(name))
     else:
+        remove_text('setup.cfg', ' --cov=pytemplate')
         _('rm -rf src/pytemplate test/pytemplate')
         replace_makefile_target('type-check', 'pytemplate ', '')
 
