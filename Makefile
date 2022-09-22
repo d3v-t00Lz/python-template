@@ -1,6 +1,6 @@
 ORG ?= $(shell jq .org meta.json)
 PRODUCT ?= $(shell jq -r .product meta.json)
-VERSION ?= $(shell grep __version__ pytemplate/__init__.py | grep -oE "([0-9]+\.[0-9]+\.[0-9]+)")
+VERSION ?= $(shell grep __version__ src/pytemplate/__init__.py | grep -oE "([0-9]+\.[0-9]+\.[0-9]+)")
 DOCKER ?= podman
 DOCKER_TAG ?= $(ORG)/$(PRODUCT)
 COMPLETIONS_DIR ?= /usr/share/bash-completions/completions
@@ -41,12 +41,12 @@ install_completions:
 		| tee $(DESTDIR)/$(COMPLETIONS_DIR)/$(PRODUCT)
 
 install_linux: \
-	# Install various files for Linux,
-	# `setup.py install` must be run separately
 	install_completions \
 	install_linux_icon \
 	install_linux_vendor \
-	install_systemd
+	install_systemd \
+	# Install various files for Linux,
+	# `setup.py install` must be run separately
 
 install_linux_icon:
 	# Install the icon files on Linux

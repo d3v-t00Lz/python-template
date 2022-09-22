@@ -295,7 +295,7 @@ def remove_makefile_target(name: str):
                 deleting = False
             if not deleting:
                 lines.append(
-                    line.replace(f' {name}', ''),  # Remove calls to target
+                    line.replace(f'{name}', ''),  # Remove calls to target
                 )
     with open('Makefile', 'w') as f:
         f.write("".join(lines))
