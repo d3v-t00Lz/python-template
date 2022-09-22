@@ -9,6 +9,8 @@ PROJECT_ROOT = os.path.abspath(
     )
 )
 
+import sdl2dll
+sdl2dll_path = sdl2dll.get_dllpath()
 
 a = Analysis(
     ['..\\scripts\\pytemplate_sdl2'],
@@ -16,6 +18,7 @@ a = Analysis(
         os.path.join(PROJECT_ROOT, 'src',),
     ],
     binaries=[
+        (f'{sdl2dll_path}\\*.dll', '.'),
     ],
     datas=[
     ],
