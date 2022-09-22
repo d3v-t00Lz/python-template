@@ -1,4 +1,4 @@
-ORG ?= $(shell jq .org meta.json)
+ORG ?= $(shell jq -r .org meta.json)
 PRODUCT ?= $(shell jq -r .product meta.json)
 VERSION ?= $(shell grep __version__ src/pytemplate/__init__.py | grep -oE "([0-9]+\.[0-9]+\.[0-9]+)")
 DOCKER ?= podman
