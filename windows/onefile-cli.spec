@@ -2,8 +2,18 @@
 
 block_cipher = None
 
+PROJECT_ROOT = os.path.abspath(
+    os.path.join(
+        os.path.dirname(SPECPATH),
+        '..',
+    )
+)
+
 a = Analysis(
     ['..\\scripts\\pytemplate'],
+    pathex=[
+        os.path.join(PROJECT_ROOT, 'src',),
+    ],
     binaries=[
     ],
     datas=[
@@ -43,6 +53,6 @@ exe = EXE(
     disable_windowed_traceback=False,
     target_arch=None,
     codesign_identity=None,
-    icon='..\\files\\icons\pytemplate.ico',
+    icon='..\\files\\icons\\pytemplate.ico',
     entitlements_file=None,
 )
