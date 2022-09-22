@@ -40,11 +40,11 @@ desktop-file-install                                        \
     --set-name="%{modname}"                                 \
     --set-icon="%{modname}"                                 \
     --set-key="Exec" --set-value="%{modname}_qt %U"         \
-	--add-category="Graphics"                               \
+    --add-category="Graphics"                               \
     --set-key="Type" --set-value="Application"              \
-	--delete-original                                       \
-	--dir=%{buildroot}%{_datadir}/applications              \
-	%{buildroot}/%{_datadir}/applications/%{modname}.desktop
+    --delete-original                                       \
+    --dir=%{buildroot}%{_datadir}/applications              \
+    %{buildroot}/%{_datadir}/applications/%{modname}.desktop
 # PT:GUI
 
 %check
