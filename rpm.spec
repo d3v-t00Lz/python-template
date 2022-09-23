@@ -15,7 +15,9 @@ BuildRequires:  python3-devel
 BuildRequires:  python3-setuptools
 BuildRequires:  python3-shtab
 BuildRequires:  python3-rpm-macros
+# PT:GUI
 BuildRequires:  desktop-file-utils
+# PT:GUI
 
 %?python_enable_dependency_generator
 

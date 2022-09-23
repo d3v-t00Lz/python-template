@@ -374,6 +374,7 @@ def main():
             'debian/python3-pytemplate.install',
             '/usr/share/applications/',
         )
+        remove_lines('debian/control', 'desktop-file-utils')
         remove_lines_range('rpm.spec', 'PT:GUI')
 
     if args.qt_ui:
