@@ -32,7 +32,7 @@ Please update the following files as needed and replace any TODO items:
 FILES_TO_UPDATE = [
     "debian/control",
     "LICENSE",
-    "rpm.spec",
+    "tools/rpm.spec",
     "setup.py",
     'README.md',
     'files/linux/systemd.service',
@@ -367,7 +367,7 @@ def main():
     if any((args.sdl2, args.qt_ui, (args.cli and args.windows))):
         _(f'mv files/icons/pytemplate.png files/icons/{name}.png')
         _(f'mv files/icons/pytemplate.ico files/icons/{name}.ico')
-        remove_lines('rpm.spec', 'PT:GUI')
+        remove_lines('tools/rpm.spec', 'PT:GUI')
     else:
         _('rm -rf files/icons')
         remove_makefile_target('install_linux_icon')
@@ -380,18 +380,18 @@ def main():
             '/usr/share/applications/',
         )
         remove_lines('debian/control', 'desktop-file-utils')
-        remove_lines_range('rpm.spec', 'PT:GUI')
+        remove_lines_range('tools/rpm.spec', 'PT:GUI')
 
     if args.qt_ui:
         _(f'mv src/pytemplate_qt src/{name}_qt')
         _(f'mv scripts/pytemplate_qt scripts/{name}_qt')
-        remove_lines('rpm.spec', 'PT:QT')
+        remove_lines('tools/rpm.spec', 'PT:QT')
     else:
         _('rm -rf src/pytemplate_qt scripts/pytemplate_qt')
         _('rm -rf windows/*-qt.spec macos/*-qt.spec')
         remove_lines('requirements.txt', 'PyQt')
         remove_lines('Makefile', 'UI=qt')
-        remove_lines_range('rpm.spec', 'PT:QT')
+        remove_lines_range('tools/rpm.spec', 'PT:QT')
 
     if args.rest_api:
         _('mv src/pytemplate_rest src/{}_rest'.format(name))
@@ -409,14 +409,14 @@ def main():
     if args.sdl2:
         _('mv src/pytemplate_sdl2 src/{}_sdl2'.format(name))
         _('mv scripts/pytemplate_sdl2 scripts/{}_sdl2'.format(name))
-        remove_lines('rpm.spec', 'PT:SDL2')
+        remove_lines('tools/rpm.spec', 'PT:SDL2')
     else:
         _('rm -rf pytemplate_sdl2 scripts/pytemplate_sdl2')
         _('rm -rf windows/*sdl2.spec macos/*sdl2.spec')
         remove_lines('requirements.txt', 'PySDL2')
         remove_lines('requirements.txt', 'sdl2')
         remove_lines('Makefile', 'UI=sdl2')
-        remove_lines_range('rpm.spec', 'PT:SDL2')
+        remove_lines_range('tools/rpm.spec', 'PT:SDL2')
 
     if args.cli:
         _('mv scripts/pytemplate_cli scripts/{}_cli'.format(name))
@@ -430,7 +430,7 @@ def main():
         remove_makefile_target('docker-cli')
         remove_makefile_target('install_completions')
         remove_lines('Makefile', 'COMPLETIONS')
-        remove_lines_range('rpm.spec', 'PT:CLI')
+        remove_lines_range('tools/rpm.spec', 'PT:CLI')
         remove_lines('requirements.txt', 'shtab')
         replace_makefile_target('type-check', 'pytemplate_cli', '')
 
@@ -443,11 +443,11 @@ def main():
         replace_makefile_target('type-check', 'pytemplate ', '')
 
     if args.systemd:
-        remove_lines('rpm.spec', 'PT:SYSTEMD')
+        remove_lines('tools/rpm.spec', 'PT:SYSTEMD')
     else:
         _('rm -f files/linux/systemd.service')
         remove_makefile_target('install_systemd')
-        remove_lines_range('rpm.spec', 'PT:SYSTEMD')
+        remove_lines_range('tools/rpm.spec', 'PT:SYSTEMD')
         FILES_TO_UPDATE.remove('files/linux/systemd.service')
         remove_lines(
             'debian/python3-pytemplate.install',
@@ -465,8 +465,11 @@ def main():
         FILES_TO_UPDATE.remove('debian/control')
     if not args.macos:
         _('rm -rf macos/')
+        _('rm -f tools/*macos*')
+        _('rm -f tools/*homebrew*')
     if not args.windows:
         _('rm -rf windows/')
+        _('rm -f tools/*windows*')
         FILES_TO_UPDATE.remove('windows/nsis.jinja')
     if not args.docker:
         _('rm -f Dockerfile*')
@@ -478,9 +481,9 @@ def main():
         remove_makefile_target('install_linux_vendor')
 
     if not args.rpm:
-        _('rm -f rpm.spec')
+        _('rm -f tools/rpm.spec')
         remove_makefile_target('rpm')
-        FILES_TO_UPDATE.remove('rpm.spec')
+        FILES_TO_UPDATE.remove('tools/rpm.spec')
     if args.pypi:
         remove_lines('setup.py', 'PT:PYPI')
     else:
@@ -497,7 +500,7 @@ def main():
 
     _(
         "find setup.* fork.py src/ test/ scripts/ Dockerfile* "
-        "macos/ windows/ Makefile rpm.spec meta.json debian/ "
+        "macos/ windows/ Makefile tools/rpm.spec meta.json debian/ "
         "-type f "
         "| xargs sed -i 's/pytemplate/{name}/gI'".format(name=name)
     )
