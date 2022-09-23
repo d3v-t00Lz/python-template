@@ -13,6 +13,7 @@ __pycache__/
 
 # Distribution / packaging
 .Python
+.pybuild
 env/
 build/
 develop-eggs/
@@ -33,6 +34,8 @@ var/
 *.rpm
 .rpmbuild
 *.deb
+/*.desktop
+/*.completions
 
 # PyInstaller
 #  Usually these files are written by a python script from a template

@@ -1,0 +1,22 @@
+Source: python3-pytemplate
+Section: python
+Priority: optional
+Homepage: https://TODO.example.org
+Maintainer: TODO@example.org
+Build-Depends:
+    debhelper-compat (= 13),
+    desktop-file-utils,
+    dh-python, 
+    python3-all, 
+    python3-pip,
+    python3-setuptools, 
+Rules-Requires-Root: no
+Standards-Version: 4.5.1
+
+Package: python3-pytemplate
+Version: 0.0.1
+Architecture: all
+Description: TODO
+Depends: ${misc:Depends}, ${python3:Depends},
+Recommends:
+

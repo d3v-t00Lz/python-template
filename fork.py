@@ -30,7 +30,7 @@ Please update the following files as needed and replace any TODO items:
 """
 
 FILES_TO_UPDATE = [
-    "DEBIAN/control",
+    "debian/control",
     "LICENSE",
     "rpm.spec",
     "setup.py",
@@ -365,6 +365,14 @@ def main():
     else:
         _('rm -rf files/icons')
         remove_makefile_target('install_linux_icon')
+        remove_lines(
+            'debian/python3-pytemplate.install', 
+            '/usr/share/pixmaps/',
+        )
+        remove_lines(
+            'debian/python3-pytemplate.install', 
+            '/usr/share/applications/',
+        )
 
     if args.qt_ui:
         _(f'mv src/pytemplate_qt src/{name}_qt')
@@ -375,6 +383,7 @@ def main():
         _('rm -rf windows/*-qt.spec macos/*-qt.spec')
         remove_lines('requirements.txt', 'PyQt')
         remove_lines_range('rpm.spec', 'PT:GUI')
+        remove_lines('Makefile', 'UI=qt')
 
     if args.rest_api:
         _('mv src/pytemplate_rest src/{}_rest'.format(name))
@@ -397,6 +406,7 @@ def main():
         _('rm -rf windows/*sdl2.spec macos/*sdl2.spec')
         remove_lines('requirements.txt', 'PySDL2')
         remove_lines('requirements.txt', 'sdl2')
+        remove_lines('Makefile', 'UI=sdl2')
 
     if args.cli:
         _('mv scripts/pytemplate_cli scripts/{}_cli'.format(name))
@@ -429,6 +439,10 @@ def main():
         remove_makefile_target('install_systemd')
         remove_lines_range('rpm.spec', 'PT:SYSTEMD')
         FILES_TO_UPDATE.remove('files/linux/systemd.service')
+        remove_lines(
+            'debian/python3-pytemplate.install', 
+            '/usr/lib/systemd/system/',
+        )
 
     if args.windows_service:
         remove_lines('windows/nsis.jinja', 'PT:WINDOWS_SERVICE')
@@ -436,9 +450,9 @@ def main():
         remove_lines_range('windows/nsis.jinja', 'PT:WINDOWS_SERVICE')
 
     if not args.deb:
-        _('rm -rf DEBIAN/')
+        _('rm -rf debian/')
         remove_makefile_target('deb')
-        FILES_TO_UPDATE.remove('DEBIAN/control')
+        FILES_TO_UPDATE.remove('debian/control')
     if not args.macos:
         _('rm -rf macos/')
     if not args.windows:
@@ -463,9 +477,17 @@ def main():
         remove_makefile_target('pypi')
         remove_lines_range('setup.py', 'PT:PYPI')
 
+    # After the original, to avoid moving the file when others need to write
+    if args.deb:  
+        _(
+            'mv '
+            'debian/python3-pytemplate.install '
+            f'debian/python3-{name}.install'
+        )
+
     _(
         "find setup.* fork.py src/ test/ scripts/ Dockerfile* "
-        "macos/ windows/ Makefile rpm.spec meta.json DEBIAN/ "
+        "macos/ windows/ Makefile rpm.spec meta.json debian/ "
         "-type f "
         "| xargs sed -i 's/pytemplate/{name}/gI'".format(name=name)
     )

@@ -1,19 +1,26 @@
 ORG ?= $(shell jq -r .org meta.json)
 PRODUCT ?= $(shell jq -r .product meta.json)
 VERSION ?= $(shell grep __version__ src/pytemplate/__init__.py | grep -oE "([0-9]+\.[0-9]+\.[0-9]+)")
-DOCKER ?= podman
-DOCKER_TAG ?= $(ORG)/$(PRODUCT)
-COMPLETIONS_DIR ?= /usr/share/bash-completions/completions
-COMPLETIONS_SHELL ?= bash
 DESTDIR ?=
 PREFIX ?= /usr
+
+DOCKER ?= podman
+DOCKER_TAG ?= $(ORG)/$(PRODUCT)
+
+COMPLETIONS_DIR ?= /usr/share/bash-completions/completions
+_COMPLETIONS_DIR ?= $(DESTDIR)/usr/share/bash-completions/completions
+COMPLETIONS_EXT ?=
+COMPLETIONS_SHELL ?= bash
+
+LINUX_APPLICATIONS_DIR ?= $(DESTDIR)/usr/share/applications
+UI ?= qt
 
 .PHONY: test venv
 
 clean:
 	# Remove temporary build files
-	rm -rf build/ dist/ htmlcov/ *.egg-info *.nsi .pytest_cache/ \
-		./.rpmbuild/ *.rpm *.deb
+	rm -rf build/ dist/ htmlcov/ ./*.egg-info ./*.nsi .pytest_cache/ \
+		./.rpmbuild/ ./*.rpm ./*.deb
 	find test/ pytemplate* -name __pycache__ -type d \
 		-exec rm -rf {} \; 2>/dev/null \
 		|| true
@@ -28,17 +35,31 @@ docker-rest: test type-check
 
 deb: test type-check
 	# Build the Debian package
-	dpkg-deb --build --root-owner-group . $(PRODUCT)-$(VERSION)-noarch.deb
+	LINUX_APPLICATIONS_DIR=. UI=qt make install_linux_desktop
+	LINUX_APPLICATIONS_DIR=. UI=sdl2 make install_linux_desktop
+	_COMPLETIONS_DIR=. COMPLETIONS_EXT=.completions \
+		make install_completions
+	tar \
+		--exclude='__pycache__' \
+		--exclude='venv' \
+		--exclude='.[^/]*' \
+		--exclude='*.tar.*' \
+		--transform 's,^\.,$(PRODUCT)-$(VERSION),' \
+		-czvf \
+		../python3-$(PRODUCT)_$(VERSION).orig.tar.gz \
+		./
+	DEB_BUILD_OPTIONS=nocheck debuild -i
+	rm ../*.orig ../python3-$(PRODUCT)* debian/*debhelper*
 
 install_completions:
 	# Generate UNIX shell completion scripts so the user can tab-complete
 	# commands
-	install -d $(DESTDIR)$(COMPLETIONS_DIR)
+	install -d $(_COMPLETIONS_DIR)
 	python3 $(shell which shtab) \
 		--shell=$(COMPLETIONS_SHELL) \
 		--prog pytemplate \
 		-u pytemplate_cli.args.arg_parser \
-		| tee $(DESTDIR)/$(COMPLETIONS_DIR)/$(PRODUCT)
+		| tee $(_COMPLETIONS_DIR)/$(PRODUCT)$(COMPLETIONS_EXT)
 
 install_linux: \
 	install_completions \
@@ -69,6 +90,18 @@ install_systemd:
 	install -m 0644 \
 		files/linux/systemd.service\
 		$(DESTDIR)/usr/lib/systemd/system/$(PRODUCT).service
+
+install_linux_desktop:
+	touch "$(LINUX_APPLICATIONS_DIR)/$(PRODUCT)_$(UI).desktop"
+	desktop-file-install                                        \
+		--set-name="$(PRODUCT)"                             \
+		--set-icon="$(PRODUCT)"                             \
+		--set-key="Exec" --set-value='$(PRODUCT)_$(UI) %U'  \
+		--add-category="Graphics"                           \
+		--set-key="Type" --set-value="Application"          \
+		--delete-original                                   \
+		--dir="$(LINUX_APPLICATIONS_DIR)"                   \
+		"$(LINUX_APPLICATIONS_DIR)/$(PRODUCT)_$(UI).desktop"
 
 pdb:
 	# Debug unit tests that raise Exceptions with PDB
@@ -104,7 +137,7 @@ test:
 type-check:
 	# Check typing of Python type hints
 	mypy --ignore-missing-imports \
-		src/{pytemplate,pytemplate_cli,pytemplate_rest}
+		src/pytemplate src/pytemplate_cli src/pytemplate_rest
 
 venv:
 	# Create a Python "virtual environment" aka venv
@@ -113,3 +146,8 @@ venv:
 	# ./setup.py develop
 	python3 -m venv --system-site-packages venv
 
+override_dh_auto_build:
+	# Debian shenanigans
+
+override_dh_auto_install:
+	# Debian shenanigans

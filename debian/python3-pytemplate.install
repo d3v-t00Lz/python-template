@@ -1,0 +1,4 @@
+files/linux/systemd.service /usr/lib/systemd/system/
+*.desktop /usr/share/applications/
+files/icons/pytemplate.png /usr/share/pixmaps/
+pytemplate.completions /usr/share/bash-completions/completions/pytemplate
