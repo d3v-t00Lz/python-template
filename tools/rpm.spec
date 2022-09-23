@@ -1,5 +1,5 @@
 %global modname pytemplate
-%global completions_dir %( pkg-config --variable=completionsdir bash-completion )
+%global completions_dir %( pkg-config --variable=completionsdir bash-completions )
 
 Name:           python3-%{modname}
 Version:        0.0.1
@@ -74,7 +74,7 @@ desktop-file-install                                        \
 %attr(755, root, root) %{_bindir}/%{modname}*
 %{python3_sitelib}/%{modname}*/
 # PT:GUI
-%{_datadir}/applications/%{modname}.desktop
+%{_datadir}/applications/%{modname}*.desktop
 %{_datadir}/pixmaps/%{modname}.png
 # PT:GUI
 # PT:SYSTEMD
@@ -82,7 +82,7 @@ desktop-file-install                                        \
 # PT:SYSTEMD
 
 # PT:CLI
-%{completions_dir}
+%{completions_dir}/*
 # PT:CLI
 
 %changelog

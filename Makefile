@@ -127,7 +127,7 @@ rpm: test type-check
 	rpmbuild -v -ba \
 		--define "_topdir $(shell pwd)/.rpmbuild" \
 		--define "_tmppath $(shell pwd)/.rpmbuild/tmp"\
-		rpm.spec
+		tools/rpm.spec
 	cp ./.rpmbuild/RPMS/noarch/*$(PRODUCT)-$(VERSION)*.rpm .
 
 test:
