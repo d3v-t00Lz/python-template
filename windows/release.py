@@ -35,6 +35,7 @@ if len(SPEC_FILES) == 1:
     SPEC_FILE = SPEC_FILES[0]
 else:
     SPEC_FILE = args.spec_file
+SUFFIX = re.match('.*-([a-z]+).spec', SPEC_FILE).groups[0]
 
 with open('meta.json') as f:
     META = json.load(f)
@@ -56,6 +57,7 @@ template = TEMPLATE.render(
 	MAJOR_VERSION=MAJOR_VERSION,
 	MAJOR_VERSION_NUM=1,
     ORG=META['org'],
+    SUFFIX=SUFFIX,
 )
 template_name = "{0}.nsi".format(MAJOR_VERSION)
 with open(template_name, "w") as f:

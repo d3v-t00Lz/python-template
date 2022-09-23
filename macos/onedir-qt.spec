@@ -67,7 +67,7 @@ coll = COLLECT(
 )
 app = BUNDLE(
     coll,
-    name='pytemplate.app',
+    name='pytemplate_qt.app',
     icon='../files/icons/pytemplate.icns',
-    bundle_identifier='com.gitlab.pytemplate'
+    bundle_identifier='com.gitlab.pytemplate_qt'
 )

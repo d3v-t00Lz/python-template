@@ -5,6 +5,7 @@ import argparse
 import json
 import os
 import platform
+import re
 import shutil
 import subprocess
 
@@ -38,6 +39,7 @@ if len(SPEC_FILES) == 1:
     SPEC_FILE = SPEC_FILES[0]
 else:
     SPEC_FILE = args.spec_file
+SUFFIX = re.match('.*-([a-z]+).spec', SPEC_FILE).groups[0]
 
 MAJOR_VERSION = 'pytemplate'
 from pytemplate import __version__ as VERSION
@@ -67,6 +69,6 @@ subprocess.check_call([
     'create-dmg',
     '--format', 'UDBZ',
     DMG,
-    f'{MAJOR_VERSION}.app',
+    f'{MAJOR_VERSION}_{SUFFIX}.app',
 ])
 

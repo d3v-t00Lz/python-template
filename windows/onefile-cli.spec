@@ -42,7 +42,7 @@ exe = EXE(
     a.zipfiles,
     a.datas,
     [],
-    name='pytemplate',
+    name='pytemplate_cli',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,

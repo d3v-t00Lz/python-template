@@ -43,7 +43,7 @@ exe = EXE(
     a.zipfiles,
     a.datas,
     [],
-    name='pytemplate',
+    name='pytemplate_qt',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,

@@ -71,12 +71,12 @@ Section "Base Install" SEC01
     RMDir /r $INSTDIR\program
     ; Clean up the old legacy file structure
     ; TODO: Remove this in mid 2022
-    Delete $INSTDIR\{{ MAJOR_VERSION }}.exe
+    Delete $INSTDIR\{{ MAJOR_VERSION }}_{{ SUFFIX }}.exe
     Delete $INSTDIR\{{ MAJOR_VERSION }}.ico
     ; Install the program
     CreateDirectory $INSTDIR\program
     SetOutPath $INSTDIR\program
-    File /r "dist\{{ MAJOR_VERSION }}\"
+    File /r "dist\{{ MAJOR_VERSION }}_{{ SUFFIX }}\"
     File "files\icons\{{ MAJOR_VERSION }}.ico"
     ; Add to the "Add or remove programs" dialog
     WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\{{ MAJOR_VERSION }}" \
@@ -93,8 +93,8 @@ SectionEnd
 
 Section "Start Menu Shortcut" SEC02
     createShortCut \
-      "$SMPROGRAMS\{{ MAJOR_VERSION }}.lnk" \
-      "$INSTDIR\program\{{ MAJOR_VERSION }}.exe" \
+      "$SMPROGRAMS\{{ MAJOR_VERSION }}_{{ SUFFIX }}.lnk" \
+      "$INSTDIR\program\{{ MAJOR_VERSION }}_{{ SUFFIX }}.exe" \
       "" \
       "$INSTDIR\program\{{ MAJOR_VERSION }}.ico"
 SectionEnd
@@ -103,7 +103,7 @@ Section "uninstall"
     ; We do not delete settings, projects or any other files the user may have
     ; stored next to the application, only the application itself
     RMDir /r $INSTDIR\program
-    Delete "$SMPROGRAMS\{{ MAJOR_VERSION }}.lnk"
+    Delete "$SMPROGRAMS\{{ MAJOR_VERSION }}_{{ SUFFIX }}.lnk"
     DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\{{ MAJOR_VERSION }}"
 SectionEnd
 

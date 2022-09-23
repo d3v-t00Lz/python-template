@@ -41,7 +41,7 @@ exe = EXE(
     [],
     exclude_binaries=True,
     icon='..\\files\\icons\\pytemplate.ico',
-    name='pytemplate',
+    name='pytemplate_qt',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
