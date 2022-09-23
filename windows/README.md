@@ -25,7 +25,7 @@ The VM should have at least 100GB of hard disk space
 cd %DIRECTORY_OF_GIT_REPO%
 python -m venv venv\pytemplate
 venv\pytemplate\scripts\activate.bat
-pip install -r windows/requirements.txt
+pip install -r tools\windows_requirements.txt
 python setup.py install
 ```
 

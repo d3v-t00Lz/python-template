@@ -341,8 +341,13 @@ def update_shebang(shebang: Optional[str]):
             f.write(''.join(lines))
 
 def main():
-    file_path = os.path.abspath(__file__)
-    dirname = os.path.dirname(file_path)
+    dirname = os.path.dirname(__file__)
+    abspath = os.path.abspath(
+        os.path.join(
+            dirname,
+            '..',
+        ),
+    )
     os.chdir(dirname)
 
     args = parse_args()

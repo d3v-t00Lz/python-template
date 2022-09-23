@@ -7,12 +7,12 @@ Forking is how you create a new repository from this template.  It will
 rename everything to the new project name, and remove components that are not
 needed.
 
-See `./fork.py --help` for many different options to customize the new
+See `tools/fork.py --help` for many different options to customize the new
 repository.
 
 # Additional tooling
-See the `Makefile` for additional tooling that can be used.  `fork.py` will
-remove unused Makefile targets depending on the options that were chosen,
+See the `Makefile` for additional tooling that can be used.  `tools/fork.py`
+will remove unused Makefile targets depending on the options that were chosen,
 so this may vary by repo.
 
 # Creating a new release
@@ -49,7 +49,9 @@ variables.
 The RPM and Debian packages already include tab completion scripts.
 Unfortunately, `setuptools` makes it difficult to drop files in arbitrary
 folders when installing a Python package, so there is no easy, automatic
-way to install tab completions directly from pip.
+way to install tab completions directly from pip.  The easiest way is to
+add a subcommand to your script that uses shtab to generate a script and
+dump it in the users' local tab completion script directory
 
 See the `Makefile` source for more details.
 

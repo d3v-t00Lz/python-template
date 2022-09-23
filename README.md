@@ -19,7 +19,8 @@ target.
 - Clean, well organized and extensible structure
 - Advanced packaging for Docker, Windows, MacOS, PyPi/pip,
   RPM (Red Hat/Fedora/OpenSUSE/etc...) and Debian (Debian/Ubuntu/etc...)
-- Project forking script to customize which components your project includes
+- `tools/fork.py`: Project forking script to customize which components
+  your project includes
 - Generate tab completion scripts for bash and zsh
 
 The `src/pytemplate` module is the base library.  "Interfaces" to the library

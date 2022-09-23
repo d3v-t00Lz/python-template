@@ -61,7 +61,7 @@ make deb
 # Upload your package to PyPi so that anybody can install using pip.
 #
 # NOTE: This means the entire public internet.  Do not enable the pypi
-#       option in fork.py for private/proprietary Python packages.
+#       option in tools/fork.py for private/proprietary Python packages.
 #
 # Requires `twine` to be installed, and a local twine config with your
 # pypi username and password
