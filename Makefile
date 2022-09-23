@@ -7,7 +7,7 @@ PREFIX ?= /usr
 DOCKER ?= podman
 DOCKER_TAG ?= $(ORG)/$(PRODUCT)
 
-COMPLETIONS_DIR ?= /usr/share/bash-completions/completions
+COMPLETIONS_DIR ?= /usr/share/bash-completion/completions
 _COMPLETIONS_DIR ?= $(DESTDIR)/usr/share/bash-completions/completions
 COMPLETIONS_EXT ?=
 COMPLETIONS_SHELL ?= bash
