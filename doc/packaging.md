@@ -51,7 +51,7 @@ make rpm
 
 ### DEB distros (Debian, Ubuntu, etc...)
 ```
-# Remember to edit DEBIAN/control to include the correct information
+# Remember to edit debian/control to include the correct information
 # and dependencies
 make deb
 ```
