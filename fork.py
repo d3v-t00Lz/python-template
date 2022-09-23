@@ -362,28 +362,30 @@ def main():
     if any((args.sdl2, args.qt_ui, (args.cli and args.windows))):
         _(f'mv files/icons/pytemplate.png files/icons/{name}.png')
         _(f'mv files/icons/pytemplate.ico files/icons/{name}.ico')
+        remove_lines('rpm.spec', 'PT:GUI')
     else:
         _('rm -rf files/icons')
         remove_makefile_target('install_linux_icon')
         remove_lines(
-            'debian/python3-pytemplate.install', 
+            'debian/python3-pytemplate.install',
             '/usr/share/pixmaps/',
         )
         remove_lines(
-            'debian/python3-pytemplate.install', 
+            'debian/python3-pytemplate.install',
             '/usr/share/applications/',
         )
+        remove_lines_range('rpm.spec', 'PT:GUI')
 
     if args.qt_ui:
         _(f'mv src/pytemplate_qt src/{name}_qt')
         _(f'mv scripts/pytemplate_qt scripts/{name}_qt')
-        remove_lines('rpm.spec', 'PT:GUI')
+        remove_lines('rpm.spec', 'PT:QT')
     else:
         _('rm -rf src/pytemplate_qt scripts/pytemplate_qt')
         _('rm -rf windows/*-qt.spec macos/*-qt.spec')
         remove_lines('requirements.txt', 'PyQt')
-        remove_lines_range('rpm.spec', 'PT:GUI')
         remove_lines('Makefile', 'UI=qt')
+        remove_lines_range('rpm.spec', 'PT:QT')
 
     if args.rest_api:
         _('mv src/pytemplate_rest src/{}_rest'.format(name))
@@ -401,12 +403,14 @@ def main():
     if args.sdl2:
         _('mv src/pytemplate_sdl2 src/{}_sdl2'.format(name))
         _('mv scripts/pytemplate_sdl2 scripts/{}_sdl2'.format(name))
+        remove_lines('rpm.spec', 'PT:SDL2')
     else:
         _('rm -rf pytemplate_sdl2 scripts/pytemplate_sdl2')
         _('rm -rf windows/*sdl2.spec macos/*sdl2.spec')
         remove_lines('requirements.txt', 'PySDL2')
         remove_lines('requirements.txt', 'sdl2')
         remove_lines('Makefile', 'UI=sdl2')
+        remove_lines_range('rpm.spec', 'PT:SDL2')
 
     if args.cli:
         _('mv scripts/pytemplate_cli scripts/{}_cli'.format(name))
@@ -440,7 +444,7 @@ def main():
         remove_lines_range('rpm.spec', 'PT:SYSTEMD')
         FILES_TO_UPDATE.remove('files/linux/systemd.service')
         remove_lines(
-            'debian/python3-pytemplate.install', 
+            'debian/python3-pytemplate.install',
             '/usr/lib/systemd/system/',
         )
 
@@ -478,7 +482,7 @@ def main():
         remove_lines_range('setup.py', 'PT:PYPI')
 
     # After the original, to avoid moving the file when others need to write
-    if args.deb:  
+    if args.deb:
         _(
             'mv '
             'debian/python3-pytemplate.install '

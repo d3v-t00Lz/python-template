@@ -33,8 +33,8 @@ TODO
 %py3_install
 DESTDIR="%{buildroot}" COMPLETIONS_DIR="%{completions_dir}" make install_linux
 
-# PT:GUI
-touch %{buildroot}/%{_datadir}/applications/%{modname}.desktop
+# PT:QT
+touch %{buildroot}/%{_datadir}/applications/%{modname}_qt.desktop
 
 desktop-file-install                                        \
     --set-name="%{modname}"                                 \
@@ -44,8 +44,22 @@ desktop-file-install                                        \
     --set-key="Type" --set-value="Application"              \
     --delete-original                                       \
     --dir=%{buildroot}%{_datadir}/applications              \
-    %{buildroot}/%{_datadir}/applications/%{modname}.desktop
-# PT:GUI
+    %{buildroot}/%{_datadir}/applications/%{modname}_qt.desktop
+# PT:QT
+
+# PT:SDL2
+touch %{buildroot}/%{_datadir}/applications/%{modname}_sdl2.desktop
+
+desktop-file-install                                        \
+    --set-name="%{modname}"                                 \
+    --set-icon="%{modname}"                                 \
+    --set-key="Exec" --set-value="%{modname}_sdl2 %U"       \
+    --add-category="Graphics"                               \
+    --set-key="Type" --set-value="Application"              \
+    --delete-original                                       \
+    --dir=%{buildroot}%{_datadir}/applications              \
+    %{buildroot}/%{_datadir}/applications/%{modname}_sdl2.desktop
+# PT:SDL2
 
 %check
 # Redundant of `make rpm`, and the target OS may not have all required
