@@ -8,7 +8,10 @@ rename everything to the new project name, and remove components that are not
 needed.
 
 See `tools/fork.py --help` for many different options to customize the new
-repository.
+repository.  Note that `tools/fork.py` deletes itself upon completion, as
+it would not be viable to run it a 2nd time.  If you wish to create custom
+forks of this repository to be forked again, do not use `tools/fork.py` to
+remove components.
 
 # Additional tooling
 See the `Makefile` for additional tooling that can be used.  `tools/fork.py`
@@ -27,8 +30,8 @@ firefox htmlcov/index.html
 ```
 
 # Vendoring Dependencies
-Adds vendored dependencies to the shared library, storing packages from
-pip locally in the project, instead of installing to the system or venv.
+Store packages from pip locally in the project, instead of installing to the
+system or venv.
 
 Generally, this is considered a bad practice as it increases
 the maintenance burden of enforcing security updates, but
@@ -36,7 +39,8 @@ has the advantages of creating stability, and making testing updates
 more explicit (no surprises in production because a package was updated
 on a host or container image without warning).
 
-Packages go into pytemplate/vendor/ and can be imported from there
+Vendoreed packages are stored in `src/pytemplate_vendor/` and can be imported
+transparently, as that folder will be added as the first path in `sys.path`.
 ```
 tools/vendor.sh package-name-1 package-name-2
 ```
