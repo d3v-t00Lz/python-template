@@ -12,7 +12,7 @@ import sys
 EV = 'PYSDL2_DLL_PATH'
 
 def parse_args():
-    parser = argparse.ArgumentParser("pytemplate Qt application")
+    parser = argparse.ArgumentParser("pytemplate SDL2 application")
     return parser.parse_args()
 
 def platform_check():

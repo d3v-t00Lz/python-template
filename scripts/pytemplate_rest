@@ -6,7 +6,7 @@
 import argparse
 
 def parse_args():
-    parser = argparse.ArgumentParser("pytemplate Qt application")
+    parser = argparse.ArgumentParser("pytemplate REST service")
     return parser.parse_args()
 
 parse_args()

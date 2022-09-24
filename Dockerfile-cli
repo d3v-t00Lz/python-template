@@ -4,4 +4,4 @@ RUN pip3 install --no-cache-dir \
 	$(grep -ivE "PyQt[5-6]|PySDL2|sanic|#.*|^$" requirements.txt)
 COPY . .
 RUN PT_EXCLUDE_LIBS='ALL' python3 setup.py install
-ENTRYPOINT ["pytemplate"]
+ENTRYPOINT ["pytemplate_cli"]
