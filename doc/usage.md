@@ -38,7 +38,7 @@ on a host or container image without warning).
 
 Packages go into pytemplate/vendor/ and can be imported from there
 ```
-./vendor.sh package-name-1 package-name-2
+tools/vendor.sh package-name-1 package-name-2
 ```
 
 # Generating Tab Completion Scripts

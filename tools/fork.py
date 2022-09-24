@@ -14,7 +14,7 @@ Initial commit
 Fork github.com/d3v-t00Lz/python-template into {name}
 
 python-template commit hash forked from: {commit_hash}
-fork.py command used: {argv}
+tools/fork.py command used: {argv}
 """
 
 COMMIT_HASH = subprocess.check_output(
@@ -488,7 +488,7 @@ def main():
         remove_makefile_target('docker-cli')
         remove_makefile_target('docker-rest')
     if not args.vendor:
-        _('rm -f vendor.sh pytemplate/setup/vendor.py')
+        _('rm -f tools/vendor.sh pytemplate/setup/vendor.py')
         remove_lines('pytemplate/setup/__init__.py', 'vendor')
         remove_makefile_target('install_linux_vendor')
 
@@ -511,8 +511,8 @@ def main():
         )
 
     _(
-        "find setup.* fork.py src/ test/ scripts/ Dockerfile* "
-        "macos/ windows/ Makefile tools/rpm.spec meta.json debian/ "
+        "find setup.* src/ test/ scripts/ Dockerfile* "
+        "macos/ windows/ Makefile tools/ meta.json debian/ "
         "-type f "
         "| xargs sed -i 's/pytemplate/{name}/gI'".format(name=name)
     )
