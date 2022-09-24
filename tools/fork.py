@@ -31,6 +31,7 @@ Please update the following files as needed and replace any TODO items:
 """
 
 FILES_TO_UPDATE = [
+    "appimage/*/*",
     "debian/control",
     "LICENSE",
     "tools/rpm.spec",
@@ -404,6 +405,16 @@ def main():
     if args.qt_ui:
         _(f'mv src/pytemplate_qt src/{name}_qt')
         _(f'mv scripts/pytemplate_qt scripts/{name}_qt')
+        _(
+            'mv '
+            'appimage/qt/pytemplate_qt.appdata.xml '
+            f'appimage/qt/{name}_qt.appdata.xml'
+        )
+        _(
+            'mv '
+            'appimage/qt/pytemplate_qt.desktop '
+            f'appimage/qt/{name}_qt.desktop'
+        )
         remove_lines('tools/rpm.spec', 'PT:QT')
     else:
         _('rm -rf src/pytemplate_qt scripts/pytemplate_qt')
@@ -430,6 +441,16 @@ def main():
         _('mv src/pytemplate_sdl2 src/{}_sdl2'.format(name))
         _('mv scripts/pytemplate_sdl2 scripts/{}_sdl2'.format(name))
         remove_lines('tools/rpm.spec', 'PT:SDL2')
+        _(
+            'mv '
+            'appimage/sdl2/pytemplate_sdl2.appdata.xml '
+            f'appimage/sdl2/{name}_sdl2.appdata.xml'
+        )
+        _(
+            'mv '
+            'appimage/sdl2/pytemplate_sdl2.desktop '
+            f'appimage/sdl2/{name}_sdl2.desktop'
+        )
     else:
         _('rm -rf src/pytemplate_sdl2 scripts/pytemplate_sdl2')
         _('rm -rf windows/*sdl2.spec macos/*sdl2.spec')
@@ -443,6 +464,16 @@ def main():
         _('mv scripts/pytemplate_cli scripts/{}_cli'.format(name))
         _('mv src/pytemplate_cli src/{}_cli'.format(name))
         _('mv test/pytemplate_cli test/{}_cli'.format(name))
+        _(
+            'mv '
+            'appimage/cli/pytemplate_cli.appdata.xml '
+            f'appimage/cli/{name}_cli.appdata.xml'
+        )
+        _(
+            'mv '
+            'appimage/cli/pytemplate_cli.desktop '
+            f'appimage/cli/{name}_cli.desktop'
+        )
     else:
         _('rm -rf src/pytemplate_cli test/pytemplate_cli')
         _('rm -f scripts/pytemplate_cli')
@@ -496,6 +527,7 @@ def main():
         FILES_TO_UPDATE.remove('windows/nsis.jinja')
     if not args.appimage:
         _('rm -rf appimage/')
+        FILES_TO_UPDATE.remove("appimage/*/*")
     if not args.docker:
         _('rm -f Dockerfile*')
         remove_makefile_target('docker-cli')
@@ -524,7 +556,7 @@ def main():
         )
 
     _(
-        "find setup.* src/ test/ scripts/ Dockerfile* "
+        "find appimage/ setup.* src/ test/ scripts/ Dockerfile* "
         "macos/ windows/ Makefile tools/ meta.json debian/ "
         "-type f "
         "| xargs sed -i 's/pytemplate/{name}/gI'".format(name=name)
