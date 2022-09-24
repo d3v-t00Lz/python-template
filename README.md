@@ -1,8 +1,8 @@
 # The Rosetta Stone of Python Packaging
 
-A testing focused, comprehensively packaged, well organized Python3 project
-template.  Python2 is not supported, if you are creating new Python2 projects
-in the year 2022+, I invite you to rethink what you are doing.
+This project is meant to be forked into new Python3 projects using the
+`tools/fork.py` script.  See `tools/fork.py --help` for the many command line
+options available.
 
 Note that it is impossible to guarantee that a forked repo will immediately
 work on any possible target platform, you may need to adjust dependencies based
@@ -13,11 +13,11 @@ you to develop, test and integrate your solutions on every platform you wish to
 target.
 
 # Features
+- 100% unit test coverage out of the box
 - All of the boilerplate in the world
 - Clean separation of business logic from presentation
-- 100% unit test coverage out of the box
 - Clean, well organized and extensible structure
-- Advanced packaging for Docker, Windows, MacOS, PyPi/pip,
+- Advanced packaging for Docker, Windows, MacOS, pypi/pip,
   RPM (Red Hat/Fedora/OpenSUSE/etc...) and Debian (Debian/Ubuntu/etc...)
 - `tools/fork.py`: Project forking script to customize which components
   your project includes
