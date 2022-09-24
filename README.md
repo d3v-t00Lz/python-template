@@ -16,6 +16,8 @@ options available.
   dependencies within your own package, useful when packaging for Linux
   distros that do not have all of the required dependencies / versions
   available in the OS package manager
+- `Makefile`: Many development and build tasks are automated using the `make`
+   command.  See the `Makefile` source code for details.
 - Advanced packaging for
   - AppImage (one-file desktop and CLI portable executables for all
     Linux distributions)
