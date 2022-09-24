@@ -141,6 +141,14 @@ def parse_args():
     )
 
     packaging.add_argument(
+        '--appimage',
+        '-a',
+        action='store_true',
+        dest='appimage',
+        default=False,
+        help='Include AppImage packaging',
+    )
+    packaging.add_argument(
         '--docker',
         '-D',
         action='store_true',
@@ -400,6 +408,7 @@ def main():
     else:
         _('rm -rf src/pytemplate_qt scripts/pytemplate_qt')
         _('rm -rf windows/*-qt.spec macos/*-qt.spec')
+        _('rm -rf appimage/qt/')
         remove_lines('requirements.txt', 'PyQt')
         remove_lines('Makefile', 'UI=qt')
         remove_lines_range('tools/rpm.spec', 'PT:QT')
@@ -424,6 +433,7 @@ def main():
     else:
         _('rm -rf src/pytemplate_sdl2 scripts/pytemplate_sdl2')
         _('rm -rf windows/*sdl2.spec macos/*sdl2.spec')
+        _('rm -rf appimage/sdl2/')
         remove_lines('requirements.txt', 'PySDL2')
         remove_lines('requirements.txt', 'sdl2')
         remove_lines('Makefile', 'UI=sdl2')
@@ -438,6 +448,7 @@ def main():
         _('rm -f scripts/pytemplate_cli')
         _('rm -f Dockerfile-cli')
         _('rm -f windows/*-cli.spec')
+        _('rm -rf appimage/cli/')
         remove_text('setup.cfg', '--cov=pytemplate_cli ')
         remove_makefile_target('docker-cli')
         remove_makefile_target('install_completions')
@@ -483,6 +494,8 @@ def main():
         _('rm -rf windows/')
         _('rm -f tools/*windows*')
         FILES_TO_UPDATE.remove('windows/nsis.jinja')
+    if not args.appimage:
+        _('rm -rf appimage/')
     if not args.docker:
         _('rm -f Dockerfile*')
         remove_makefile_target('docker-cli')

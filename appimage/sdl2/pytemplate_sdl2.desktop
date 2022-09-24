@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=pytemplate_sdl2
+Exec=pytemplate_sdl2
+Comment=pytemplate_sdl2 on Python {{ python-fullversion }}
+Icon=python
+Categories=System;
+#Terminal=true

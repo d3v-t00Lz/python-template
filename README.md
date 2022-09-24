@@ -17,11 +17,17 @@ target.
 - All of the boilerplate in the world
 - Clean separation of business logic from presentation
 - Clean, well organized and extensible structure
-- Advanced packaging for Docker, Windows, MacOS, pypi/pip,
-  RPM (Red Hat/Fedora/OpenSUSE/etc...) and Debian (Debian/Ubuntu/etc...)
 - `tools/fork.py`: Project forking script to customize which components
   your project includes
 - Generate tab completion scripts for bash and zsh
+- Advanced packaging for
+  - AppImage (portable container images for all Linux distributions)
+  - Debian (Debian/Ubuntu/etc...)
+  - Docker
+  - MacOS
+  - pypi/pip
+  - RPM (Red Hat/Fedora/OpenSUSE/etc...)
+  - Windows
 
 The `src/pytemplate` module is the base library.  "Interfaces" to the library
 are created as additional modules, for example: `src/pytemplate_cli`,

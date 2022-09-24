@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=pytemplate_qt
+Exec=pytemplate_qt
+Comment=pytemplate_qt on Python {{ python-fullversion }}
+Icon=python
+Categories=System;
+#Terminal=true

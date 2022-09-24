@@ -1,0 +1,8 @@
+[Desktop Entry]
+Type=Application
+Name=pytemplate_cli
+Exec=pytemplate_cli
+Comment=pytemplate_cli on Python {{ python-fullversion }}
+Icon=python
+Categories=System;
+Terminal=true

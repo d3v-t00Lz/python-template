@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+    <id>pytemplate_cli</id>
+    <metadata_license>MIT</metadata_license>
+    <project_license>Python-2.0</project_license>
+    <name>pytemplate_cli</name>
+    <summary>pytemplate_cli on Python {{ python-fullversion }}</summary>
+    <description>
+		<p> Python {{ python-fullversion }} + pytemplate_cli bundled in
+			an AppImage.
+        </p>
+    </description>
+	<launchable type="desktop-id">pytemplate_cli.desktop</launchable>
+	<url type="homepage">https://github.com/d3v-t00Lz/python-template</url>
+    <provides>
+        <binary>python{{ python-version }}</binary>
+    </provides>
+</component>
