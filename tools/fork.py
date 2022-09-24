@@ -12,8 +12,9 @@ COMMIT_MSG = """\
 Initial commit
 
 Fork github.com/d3v-t00Lz/python-template into {name}
-Source commit hash: {commit_hash}
-fork.py args: {argv}
+
+python-template commit hash forked from: {commit_hash}
+fork.py command used: {argv}
 """
 
 COMMIT_HASH = subprocess.check_output(
@@ -341,10 +342,9 @@ def update_shebang(shebang: Optional[str]):
             f.write(''.join(lines))
 
 def main():
-    dirname = os.path.dirname(__file__)
-    abspath = os.path.abspath(
+    dirname = os.path.abspath(
         os.path.join(
-            dirname,
+            os.path.dirname(__file__),
             '..',
         ),
     )
@@ -364,12 +364,10 @@ def main():
     meta_json(args.org, args.name)
     update_shebang(args.shebang)
 
-    if any((args.sdl2, args.qt_ui, (args.cli and args.windows))):
-        _(f'mv files/icons/pytemplate.png files/icons/{name}.png')
-        _(f'mv files/icons/pytemplate.ico files/icons/{name}.ico')
+    # GUI applications
+    if any((args.sdl2, args.qt_ui)):
         remove_lines('tools/rpm.spec', 'PT:GUI')
     else:
-        _('rm -rf files/icons')
         remove_makefile_target('install_linux_icon')
         remove_lines(
             'debian/python3-pytemplate.install',
@@ -381,6 +379,19 @@ def main():
         )
         remove_lines('debian/control', 'desktop-file-utils')
         remove_lines_range('tools/rpm.spec', 'PT:GUI')
+
+    # Applications that have a CLI
+    if any((args.cli, args.qt_ui, args.rest_api, args.sdl2)):
+        pass
+    else:
+        remove_lines('tools/rpm.spec', '_bindir')
+
+    # Applications that require desktop launchers, use icons
+    if any((args.sdl2, args.qt_ui, (args.cli and args.windows))):
+        _(f'mv files/icons/pytemplate.png files/icons/{name}.png')
+        _(f'mv files/icons/pytemplate.ico files/icons/{name}.ico')
+    else:
+        _('rm -rf files/icons')
 
     if args.qt_ui:
         _(f'mv src/pytemplate_qt src/{name}_qt')
@@ -423,7 +434,8 @@ def main():
         _('mv src/pytemplate_cli src/{}_cli'.format(name))
         _('mv test/pytemplate_cli test/{}_cli'.format(name))
     else:
-        _('rm -rf src/pytemplate_cli test/pytemplate_cli scripts/pytemplate')
+        _('rm -rf src/pytemplate_cli test/pytemplate_cli')
+        _('rm -f scripts/pytemplate_cli')
         _('rm -f Dockerfile-cli')
         _('rm -f windows/*-cli.spec')
         remove_text('setup.cfg', '--cov=pytemplate_cli ')
