@@ -13,8 +13,8 @@ def setup_vendor(module='pytemplate_vendor') -> bool:
     except ModuleNotFoundError:
         return False
 
-    path = vendor.__path__,
-    sys.path.insert(0, path)
+    path = vendor.__path__
+    sys.path.insert(0, str(path))
     LOG.info(f'Using vendored modules at {path}')
     return True
 
