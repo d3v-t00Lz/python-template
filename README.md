@@ -20,9 +20,10 @@ target.
 - `tools/fork.py`: Project forking script to customize which components
   your project includes
 - Generate tab completion scripts for bash and zsh
-- Python package vendoring; Transparently store dependencies within your own
-  package, useful when packaging for Linux distros that do not have all of
-  the required dependencies / versions available in the OS package manager
+- `tools/vendor.sh` Python package vendoring; Transparently store
+  dependencies within your own package, useful when packaging for Linux
+  distros that do not have all of the required dependencies / versions
+  available in the OS package manager
 - Advanced packaging for
   - AppImage (portable container images for all Linux distributions)
   - Debian (Debian / Ubuntu / etc...)
