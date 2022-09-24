@@ -8,9 +8,18 @@ import os
 import shutil
 import subprocess
 
+DESC = """\
+Recursively re-link executables and libraries
+
+MacOS app bundles that contain binary executables and libraries must
+have their linkage changed from system paths to relative paths.  This
+script will recursively copy and relink all required binaries to an
+app bundle.
+"""
+
 def parse_args():
-    parser = argparse.ArgumentParser()
-    parser.add_arguments(
+    parser = argparse.ArgumentParser(DESC)
+    parser.add_argument(
         'binaries',
         nargs='+',
         help='One or more binaries to relink'
