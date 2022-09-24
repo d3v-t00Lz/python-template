@@ -520,7 +520,7 @@ def main():
     with open('README.md', 'w') as f:
         f.write(f"# {name}\nTODO")
 
-    _('rm -rf .git')
+    _('rm -rf .git tools/fork.py')
 
     if args.git_repo:
         _('git init .')
