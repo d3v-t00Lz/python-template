@@ -22,11 +22,11 @@ target.
 - Generate tab completion scripts for bash and zsh
 - Advanced packaging for
   - AppImage (portable container images for all Linux distributions)
-  - Debian (Debian/Ubuntu/etc...)
+  - Debian (Debian / Ubuntu / etc...)
   - Docker
   - MacOS
-  - pypi/pip
-  - RPM (Red Hat/Fedora/OpenSUSE/etc...)
+  - pypi / pip
+  - RPM (Red Hat / Fedora / OpenSUSE / etc...)
   - Windows
 
 The `src/pytemplate` module is the base library.  "Interfaces" to the library
