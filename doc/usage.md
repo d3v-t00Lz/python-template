@@ -19,8 +19,8 @@ will remove unused Makefile targets depending on the options that were chosen,
 so this may vary by repo.
 
 # Creating a new release
-Update `${PROJECT_NAME}/__init__.py:__version__`, commit and then tag a new
-release with that version.  Package as required.
+Update `src/${PROJECT_NAME}/__init__.py:__version__`, commit and then tag
+a new release with that version.  Package as required.
 
 # Running unit tests
 ```
