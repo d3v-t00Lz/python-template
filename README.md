@@ -5,10 +5,11 @@ This project is meant to be forked into new Python3 projects using the
 options available.
 
 # Features
+- Comprehensive packaging options for all major platforms, easily deploy your
+  cross-platform code to nearly any computer in the world
 - 100% unit test coverage out of the box
-- All of the boilerplate in the world
 - Clean separation of business logic from presentation
-- Clean, well organized and extensible structure
+- Well organized and extensible structure
 - Generate tab completion scripts for bash and zsh
 - `tools/fork.py`: Project forking script to customize which components
   your project includes
