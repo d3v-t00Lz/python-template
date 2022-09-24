@@ -422,7 +422,7 @@ def main():
         _('mv scripts/pytemplate_sdl2 scripts/{}_sdl2'.format(name))
         remove_lines('tools/rpm.spec', 'PT:SDL2')
     else:
-        _('rm -rf pytemplate_sdl2 scripts/pytemplate_sdl2')
+        _('rm -rf src/pytemplate_sdl2 scripts/pytemplate_sdl2')
         _('rm -rf windows/*sdl2.spec macos/*sdl2.spec')
         remove_lines('requirements.txt', 'PySDL2')
         remove_lines('requirements.txt', 'sdl2')
