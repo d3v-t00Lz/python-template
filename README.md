@@ -25,7 +25,8 @@ target.
   distros that do not have all of the required dependencies / versions
   available in the OS package manager
 - Advanced packaging for
-  - AppImage (portable container images for all Linux distributions)
+  - AppImage (one-file desktop and CLI portable executables for all
+    Linux distributions)
   - Debian (Debian / Ubuntu / etc...)
   - Docker
   - MacOS
