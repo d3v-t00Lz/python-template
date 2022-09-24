@@ -1,1 +1,1 @@
-git+https://github.com/d3v-t00Lz/python-template
+${CURRENT_REPO}
