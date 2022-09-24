@@ -44,8 +44,9 @@ with open('meta.json') as f:
 MAJOR_VERSION = 'pytemplate'
 from pytemplate import __version__ as MINOR_VERSION
 
-if os.path.isdir('dist'):
-    shutil.rmtree('dist')
+for path in glob(f'dist/*_{SUFFIX}'):
+    if os.path.isdir(path):
+        shutil.rmtree(path)
 
 print("Running Pyinstaller")
 subprocess.check_call(["pyinstaller", f"windows/{SPEC_FILE}"])
