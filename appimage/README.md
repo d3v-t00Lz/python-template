@@ -4,6 +4,8 @@ AppImage provides single-file application distribution on Linux.
 # Instructions
 ## Dependencies
 ```
+cd appimage/
+
 # Dependencies
 pip install -r requirements.txt
 

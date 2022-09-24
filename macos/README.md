@@ -7,8 +7,9 @@ will be used to download dependencies.
 
 ### Build and package
 ```
-pip3 -r tools/macos_requirements.txt
+# Install Homebrew first, visit https://brew.sh
 tools/homebrew_deps.sh
+pip3 install -r macos/requirements.txt
 macos/release.py
 # A DMG file will be created in [PROJECT ROOT]/dist/
 ```

@@ -23,9 +23,9 @@ The VM should have at least 100GB of hard disk space
 ## Windows cmd.exe
 ```
 cd %DIRECTORY_OF_GIT_REPO%
-python -m venv venv\pytemplate
-venv\pytemplate\scripts\activate.bat
-pip install -r tools\windows_requirements.txt
+python -m venv venv
+venv\Scripts\activate.bat
+python -m pip install -r windows/requirements.txt
 python setup.py install
 ```
 
@@ -33,9 +33,10 @@ python setup.py install
 ## Windows cmd.exe
 ```
 cd %DIRECTORY_OF_GIT_REPO%
-venv\pytemplate\Scripts\activate.bat
+venv\Scripts\activate.bat
 # Build the portable exe and installer exe
 python windows\release.py
 ```
 
 The release artifacts are now in `dist/`
+
