@@ -1,4 +1,4 @@
-!define PRODUCT_NAME "{{ MAJOR_VERSION }}"
+!define PRODUCT_NAME "{{ MAJOR_VERSION }}_{{ SUFFIX }}"
 !define PRODUCT_VERSION "{{ MAJOR_VERSION_NUM }}.0"
 !define PRODUCT_PUBLISHER "{{ ORG }}"
 ; PT:SERVICE
@@ -13,14 +13,14 @@ RequestExecutionLevel admin
 SetCompressor /SOLID lzma
 
 Name "{{ MAJOR_VERSION }} {{ MINOR_VERSION }}"
-OutFile "dist\{{ MAJOR_VERSION }}-{{ MINOR_VERSION }}-win64-installer.exe"
-InstallDir "$PROGRAMFILES64\{{ ORG }}\{{ MAJOR_VERSION }}"
+OutFile "dist\${PRODUCT_NAME}-{{ MINOR_VERSION }}-win64-installer.exe"
+InstallDir "$PROGRAMFILES64\{{ ORG }}\${PRODUCT_NAME}"
 
 ;--------------------------------
 ;Interface Settings
   !define MUI_ABORTWARNING
   !define MUI_LICENSEPAGE_CHECKBOX
-  !define MUI_FINISHPAGE_RUN "$INSTDIR\program\{{ MAJOR_VERSION }}.exe"
+  !define MUI_FINISHPAGE_RUN "$INSTDIR\program\${PRODUCT_NAME}.exe"
   !define MUI_STARTMENUPAGE_DEFAULTFOLDER "{{ MAJOR_VERSION }}"
 
 !include MUI2.nsh
@@ -71,30 +71,36 @@ Section "Base Install" SEC01
     RMDir /r $INSTDIR\program
     ; Clean up the old legacy file structure
     ; TODO: Remove this in mid 2022
-    Delete $INSTDIR\{{ MAJOR_VERSION }}_{{ SUFFIX }}.exe
+    Delete $INSTDIR\${PRODUCT_NAME}.exe
     Delete $INSTDIR\{{ MAJOR_VERSION }}.ico
     ; Install the program
     CreateDirectory $INSTDIR\program
     SetOutPath $INSTDIR\program
-    File /r "dist\{{ MAJOR_VERSION }}_{{ SUFFIX }}\"
+    File /r "dist\${PRODUCT_NAME}\"
     File "files\icons\{{ MAJOR_VERSION }}.ico"
     ; Add to the "Add or remove programs" dialog
-    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\{{ MAJOR_VERSION }}" \
-                "DisplayName" "{{ MAJOR_VERSION }}"
-    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\{{ MAJOR_VERSION }}" \
-                "DisplayIcon" "$\"$INSTDIR\program\files\icons\{{ MAJOR_VERSION }}.ico$\""
-    WriteRegStr HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\{{ MAJOR_VERSION }}" \
-                "UninstallString" "$\"$INSTDIR\uninstall.exe$\""
+    WriteRegStr HKLM \
+        "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
+        "DisplayName" \
+        "${PRODUCT_NAME}"
+    WriteRegStr HKLM \
+        "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
+        "DisplayIcon" \
+        "$\"$INSTDIR\program\files\icons\{{ MAJOR_VERSION }}.ico$\""
+    WriteRegStr HKLM \
+        "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
+        "UninstallString" \
+        "$\"$INSTDIR\uninstall.exe$\""
     ; PT:SERVICE
-    ExecWait 'sc create ${serviceName} error= "severe" displayname= "${displayName}" type= "own" start= "auto" binpath= "$INSTDIR\${PRODUCT_NAME}.exe"'
+    ExecWait 'sc create ${serviceName} error= "severe" displayname= "${displayName}" type= "own" start= "auto" binpath= "$INSTDIR\program\${PRODUCT_NAME}.exe"'
 
     ; PT:SERVICE
 SectionEnd
 
 Section "Start Menu Shortcut" SEC02
     createShortCut \
-      "$SMPROGRAMS\{{ MAJOR_VERSION }}_{{ SUFFIX }}.lnk" \
-      "$INSTDIR\program\{{ MAJOR_VERSION }}_{{ SUFFIX }}.exe" \
+      "$SMPROGRAMS\${PRODUCT_NAME}.lnk" \
+      "$INSTDIR\program\${PRODUCT_NAME}.exe" \
       "" \
       "$INSTDIR\program\{{ MAJOR_VERSION }}.ico"
 SectionEnd
@@ -103,7 +109,7 @@ Section "uninstall"
     ; We do not delete settings, projects or any other files the user may have
     ; stored next to the application, only the application itself
     RMDir /r $INSTDIR\program
-    Delete "$SMPROGRAMS\{{ MAJOR_VERSION }}_{{ SUFFIX }}.lnk"
-    DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\{{ MAJOR_VERSION }}"
+    Delete "$SMPROGRAMS\${PRODUCT_NAME}.lnk"
+    DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 SectionEnd
 

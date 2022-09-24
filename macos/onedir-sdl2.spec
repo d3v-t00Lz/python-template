@@ -44,7 +44,7 @@ exe = EXE(
     a.scripts,
     [],
     exclude_binaries=True,
-    name='pytemplate',
+    name='pytemplate_sdl2',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
@@ -64,7 +64,7 @@ coll = COLLECT(
     strip=False,
     upx=True,
     upx_exclude=[],
-    name='pytemplate',
+    name='pytemplate_sdl2',
 )
 app = BUNDLE(
     coll,

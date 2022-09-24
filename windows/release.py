@@ -4,6 +4,7 @@ from glob import glob
 import argparse
 import json
 import os
+import re
 import shutil
 import subprocess
 
@@ -35,7 +36,7 @@ if len(SPEC_FILES) == 1:
     SPEC_FILE = SPEC_FILES[0]
 else:
     SPEC_FILE = args.spec_file
-SUFFIX = re.match('.*-([a-z]+).spec', SPEC_FILE).groups[0]
+SUFFIX = re.match('.*-([a-z0-9]+).spec', SPEC_FILE).groups()[0]
 
 with open('meta.json') as f:
     META = json.load(f)
