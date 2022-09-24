@@ -70,7 +70,9 @@ def build(args):
     for appimage in glob('*.AppImage'):
         dest = os.path.join('..', 'dist', appimage)
         if os.path.exists(dest):
+            print(f'Deleting old version {dest}')
             os.remove(dest)
+        print(f'Moving {appimage} to ../dist/')
         shutil.move(appimage, '../dist/')
 
     print('Finished!  AppImage files are in [project_root]/dist')
