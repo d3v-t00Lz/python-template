@@ -6,6 +6,14 @@ import shutil
 import subprocess
 from glob import glob
 
+LOCALPATH_MSG = """
+Finished.  Now check the files and add to source control:
+
+    git status
+    git diff
+    git commit -a
+    git push
+"""
 
 CWD = os.path.abspath(
     os.path.join(
@@ -18,7 +26,25 @@ DIRS = tuple(sorted(x for x in os.listdir() if os.path.isdir(x)))
 
 def parse_args():
     parser = argparse.ArgumentParser('Create AppImages')
-    parser.add_argument(
+    parser.set_defaults(func=lambda x: print('No subcommand chosen!'))
+
+    subparsers = parser.add_subparsers()
+    localrepo_parser = subparsers.add_parser(
+        'localrepo',
+        help=(
+            'Set the AppImages to build from the local reposistory instead '
+            'of the remote repository.  You must commit the changes '
+            'after this.'
+        ),
+    )
+    localrepo_parser.set_defaults(func=localrepo)
+
+    build_parser = subparsers.add_parser(
+        'build',
+        help='Build an AppImage',
+    )
+    build_parser.set_defaults(func=build)
+    build_parser.add_argument(
         '-p',
         '--python-version',
         default='3.10',
@@ -31,32 +57,51 @@ def parse_args():
         ),
     )
     if len(DIRS) > 1:
-        parser.add_argument(
+        build_parser.add_argument(
             'dirname',
             choices=DIRS,
             help='The appimage directory to build',
         )
     return parser.parse_args()
 
-args = parse_args()
-DIRNAME = args.dirname if len(DIRS) > 1 else DIRS[0]
+def localrepo(args):
+    localpath = os.path.abspath(
+        os.path.join(
+            os.path.dirname(__file__),
+            '..',
+        ),
+    )
+    for path in glob('*/requirements.txt'):
+        with open(path, 'w') as f:
+            f.write(f'file:{localpath}')
+    print(LOCALPATH_MSG)
 
-subprocess.check_call([
-    'python-appimage',
-    'build',
-    'app',
-    '--python-version', args.pyversion,
-    DIRNAME,
-])
+def build(args):
+    DIRNAME = args.dirname if len(DIRS) > 1 else DIRS[0]
 
-if not os.path.isdir('../dist'):
-    os.mkdir('../dist')
+    subprocess.check_call([
+        'python-appimage',
+        'build',
+        'app',
+        '--python-version', args.pyversion,
+        DIRNAME,
+    ])
+    if not os.path.isdir('../dist'):
+        os.mkdir('../dist')
 
-for appimage in glob('*.AppImage'):
-    dest = os.path.join('..', 'dist', appimage)
-    if os.path.exists(dest):
-        os.remove(dest)
-    shutil.move(appimage, '../dist/')
+    for appimage in glob('*.AppImage'):
+        dest = os.path.join('..', 'dist', appimage)
+        if os.path.exists(dest):
+            os.remove(dest)
+        shutil.move(appimage, '../dist/')
 
-print('Finished!  AppImage files are in [project_root]/dist')
+    print('Finished!  AppImage files are in [project_root]/dist')
+
+def main():
+    args = parse_args()
+    func = args.__dict__.pop('func')
+    func(args)
+
+if __name__ == '__main__':
+    main()
 
