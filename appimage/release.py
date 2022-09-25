@@ -43,12 +43,13 @@ def parse_args():
         parser.add_argument(
             'dirname',
             choices=DIRS,
+            nargs='+',
             help='The appimage directory to build',
         )
     return parser.parse_args()
 
 def build(args):
-    DIRNAME = args.dirname if len(DIRS) > 1 else DIRS[0]
+    dirnames = args.dirname if len(DIRS) > 1 else DIRS
     current_repo = os.path.abspath(
         os.path.join(
             os.path.dirname(__file__),
@@ -57,13 +58,18 @@ def build(args):
     )
     env = copy.deepcopy(os.environ)
     env['CURRENT_REPO'] = current_repo
-    subprocess.check_call([
-        'python-appimage',
-        'build',
-        'app',
-        '--python-version', args.pyversion,
-        DIRNAME,
-    ])
+
+    for dirname in dirnames:
+        subprocess.check_call(
+            [
+                'python-appimage',
+                'build',
+                'app',
+                '--python-version', args.pyversion,
+                dirname,
+            ],
+            env=env,
+        )
     if not os.path.isdir('../dist'):
         os.mkdir('../dist')
 
