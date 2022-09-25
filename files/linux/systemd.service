@@ -1,10 +1,11 @@
 [Unit]
 # TODO: A real description
-Description=pytemplate
+Description=pytemplate REST service
+After=systemd-networkd.service
 
 [Service]
 # TODO: Update with the actual script name
-ExecStart=/usr/bin/pytemplate
+ExecStart=/usr/bin/pytemplate_rest
 
 [Install]
 WantedBy=multi-user.target
