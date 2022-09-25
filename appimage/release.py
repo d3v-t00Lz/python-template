@@ -7,14 +7,6 @@ import shutil
 import subprocess
 from glob import glob
 
-LOCALPATH_MSG = """
-Finished.  Now check the files and add to source control:
-
-    git status
-    git diff
-    git commit -a
-    git push
-"""
 
 CWD = os.path.abspath(
     os.path.join(
@@ -60,6 +52,7 @@ def build(args):
     env['CURRENT_REPO'] = current_repo
 
     for dirname in dirnames:
+        print(f'Running python-appimage for {dirname}/')
         subprocess.check_call(
             [
                 'python-appimage',
