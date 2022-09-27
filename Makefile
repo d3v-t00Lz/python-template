@@ -51,6 +51,11 @@ deb: test type-check
 	DEB_BUILD_OPTIONS=nocheck debuild -i
 	rm ../*.orig ../python3-$(PRODUCT)* debian/*debhelper*
 
+git-hooks:
+	# Install git hooks for this repository to enable running tests before
+	# committing, etc...
+	cp -f tools/git-hooks/* .git/hooks/
+
 install_completions:
 	# Generate UNIX shell completion scripts so the user can tab-complete
 	# commands
