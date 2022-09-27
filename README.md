@@ -19,6 +19,7 @@ options available.
   available in the OS package manager
 - `Makefile`: Many development and build tasks are automated using the `make`
    command.  See the `Makefile` source code for details.
+- Boilerplate configs for popular public cloud CI services
 
 ## Advanced packaging
 - AppImage (one-file desktop and CLI portable executables for all
