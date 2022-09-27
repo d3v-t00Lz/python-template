@@ -32,15 +32,17 @@ options available.
 
 ## Included optional user interfaces
 - `command subcommand subcommand` CLI with tab completion
-- Qt5 and Qt6
+- Qt5 and Qt6, flexibly use either in the same codebase using our
+  compatibility layer
 - SDL2
 - RESTful API
 - ...or build your own
 
-The `src/pytemplate` module is the base library.  "Interfaces" to the library
-are created as additional modules, for example: `src/pytemplate_cli`,
-`src/pytemplate_qt`, `src/pytemplate_rest` with corresponding commands in the
-`scripts/` directory to invoke each interface
+The `src/pytemplate` module is the base library that should contain all of your
+application logic.  User interfaces to the library are created as additional
+modules, for example: `src/pytemplate_cli`, `src/pytemplate_qt`,
+`src/pytemplate_rest` with corresponding commands in the `scripts/` directory
+to invoke each interface
 
 # Usage
 See [the documentation folder](doc/)
