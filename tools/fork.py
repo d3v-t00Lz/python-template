@@ -65,7 +65,8 @@ def parse_args():
         'org',
         help=(
             'The organization name that owns the project.  You may want '
-            'to make this the same as your Github org, or etc...'
+            'to make this the same as your Github org, open source project, '
+            'company, etc...'
         ),
     )
     parser.add_argument(
@@ -78,6 +79,7 @@ def parse_args():
     )
 
     features = parser.add_argument_group('Features')
+    cicd = parser.add_argument_group('CI/CD')
     pymodules = parser.add_argument_group('Python Modules')
     packaging = parser.add_argument_group('Packaging Formats and Platforms')
     services = parser.add_argument_group('Services')
@@ -102,9 +104,17 @@ def parse_args():
             '  For example:  --shebang="#!/usr/bin/env pypy3"'
         ),
     )
-    features.add_argument(
+    cicd.add_argument(
+        '--circle-ci',
+        '-C',
+        dest='circle_ci',
+        action='store_true',
+        default=False,
+        help='Include a CircleCI config',
+    )
+    cicd.add_argument(
         '--travis-ci',
-        '-t',
+        '-T',
         dest='travis_ci',
         action='store_true',
         default=False,
@@ -235,7 +245,10 @@ def parse_args():
         action='store_true',
         dest='systemd',
         default=False,
-        help='Include a systemd service file',
+        help=(
+            'Include a systemd service file.  Only valid if using '
+            'RPM or Debian packaging'
+        ),
     )
     services.add_argument(
         '--win-service',
@@ -574,6 +587,9 @@ def main():
 
     if not args.travis_ci:
         _('rm -f .travis.yml')
+
+    if not args.circle_ci:
+        _('rm -rf .circleci')
 
     # After the original, to avoid moving the file when others need to write
     if args.deb:
