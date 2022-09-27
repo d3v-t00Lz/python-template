@@ -102,6 +102,14 @@ def parse_args():
             '  For example:  --shebang="#!/usr/bin/env pypy3"'
         ),
     )
+    features.add_argument(
+        '--travis-ci',
+        '-t',
+        dest='travis_ci',
+        action='store_true',
+        default=False,
+        help='Include a TravisCI config',
+    )
 
     pymodules.add_argument(
         '--no-library',
@@ -557,11 +565,15 @@ def main():
         _('rm -f tools/rpm.spec')
         remove_makefile_target('rpm')
         FILES_TO_UPDATE.remove('tools/rpm.spec')
+
     if args.pypi:
         remove_lines('setup.py', 'PT:PYPI')
     else:
         remove_makefile_target('pypi')
         remove_lines_range('setup.py', 'PT:PYPI')
+
+    if not args.travis_ci:
+        _('rm -f .travis.yml')
 
     # After the original, to avoid moving the file when others need to write
     if args.deb:
