@@ -13,6 +13,16 @@ it would not be viable to run it a 2nd time.  If you wish to create custom
 forks of this repository to be forked again, do not use `tools/fork.py` to
 remove components.
 
+Example:
+```
+NEW_PROJECT=some_name
+git clone https://github.com/d3v-t00Lz/python-template.git $NEW_PROJECT
+cd $NEW_PROJECT
+tools/fork.py -cqaDdrmwvP  myorgname $NEW_PROJECT
+git remote add origin git@github.com:someorg/some_name.git
+git push -u origin main
+```
+
 # Additional tooling
 See the `Makefile` for additional tooling that can be used.  `tools/fork.py`
 will remove unused Makefile targets depending on the options that were chosen,

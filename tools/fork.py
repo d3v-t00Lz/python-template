@@ -30,6 +30,13 @@ Add a new remote origin with:
 Please update the following files as needed and replace any TODO items:
 """
 
+DESCRIPTION = """\
+Forks the project into a new project, renaming to the new name and choosing
+which features, user interfaces and packaging to include using the command line
+options.  Note that fork.py can only be run one time, after which it will
+delete itself.
+"""
+
 FILES_TO_UPDATE = [
     "appimage/*/*",
     "debian/control",
@@ -52,11 +59,7 @@ def _(x):
 
 def parse_args():
     parser = argparse.ArgumentParser(
-        description=(
-            "Forks the project into a new project, renaming to the new name "
-            "and if desired, removing unused components using the command "
-            "line options"
-        )
+        description=DESCRIPTION,
     )
     parser.add_argument(
         'org',
@@ -117,10 +120,10 @@ def parse_args():
         help='Include a command line interface (CLI) utility',
     )
     pymodules.add_argument(
-        '--qt-ui',
+        '--qt',
         '-q',
         action='store_true',
-        dest='qt_ui',
+        dest='qt',
         default=False,
         help='Include a Qt UI',
     )
@@ -147,7 +150,10 @@ def parse_args():
         action='store_true',
         dest='appimage',
         default=False,
-        help='Include AppImage packaging',
+        help=(
+            'Include AppImage packaging for Linux.  Only valid if '
+            'including a CLI, Qt or SDL2 interface.'
+        ),
     )
     packaging.add_argument(
         '--docker',
@@ -155,7 +161,10 @@ def parse_args():
         action='store_true',
         dest='docker',
         default=False,
-        help='Include Docker packaging',
+        help=(
+            'Include Docker packaging.  Only valid if including a '
+            'REST or CLI interface.'
+        ),
     )
     packaging.add_argument(
         '--deb',
@@ -179,7 +188,10 @@ def parse_args():
         action='store_true',
         dest='macos',
         default=False,
-        help='Include Apple(tm) MacOS(tm) packaging',
+        help=(
+            'Include Apple(tm) MacOS(tm) packaging.  Only valid if including '
+            'a Qt or SDL interface.'
+        ),
     )
     packaging.add_argument(
         '--windows',
@@ -187,7 +199,10 @@ def parse_args():
         action='store_true',
         dest='windows',
         default=False,
-        help='Include Microsoft(tm) Windows(tm) packaging',
+        help=(
+            'Include Microsoft(tm) Windows(tm) packaging.  Only valid if '
+            'including a Qt, SDL or CLI interface.'
+        ),
     )
     packaging.add_argument(
         '--vendor',
@@ -226,16 +241,17 @@ def parse_args():
     args = parser.parse_args()
     if not any((
         args.library,
-        args.qt_ui,
+        args.qt,
         args.cli,
         args.rest_api,
         args.sdl2,
     )):
         print('Error: When you exclude everything, there is nothing of value')
         exit(1)
-    if not any((args.sdl2, args.qt_ui)):
+    if not any((args.sdl2, args.qt)):
         args.macos = False
         if not args.cli:
+            args.appimage = False
             args.windows = False
     return args
 
@@ -374,7 +390,7 @@ def main():
     update_shebang(args.shebang)
 
     # GUI applications
-    if any((args.sdl2, args.qt_ui)):
+    if any((args.sdl2, args.qt)):
         remove_lines('tools/rpm.spec', 'PT:GUI')
     else:
         remove_makefile_target('install_linux_icon')
@@ -390,19 +406,19 @@ def main():
         remove_lines_range('tools/rpm.spec', 'PT:GUI')
 
     # Applications that have a CLI
-    if any((args.cli, args.qt_ui, args.rest_api, args.sdl2)):
+    if any((args.cli, args.qt, args.rest_api, args.sdl2)):
         pass
     else:
         remove_lines('tools/rpm.spec', '_bindir')
 
     # Applications that require desktop launchers, use icons
-    if any((args.sdl2, args.qt_ui, (args.cli and args.windows))):
+    if any((args.sdl2, args.qt, (args.cli and args.windows))):
         _(f'mv files/icons/pytemplate.png files/icons/{name}.png')
         _(f'mv files/icons/pytemplate.ico files/icons/{name}.ico')
     else:
         _('rm -rf files/icons')
 
-    if args.qt_ui:
+    if args.qt:
         _(f'mv src/pytemplate_qt src/{name}_qt')
         _(f'mv scripts/pytemplate_qt scripts/{name}_qt')
         _(
@@ -568,7 +584,7 @@ def main():
     _('rm -rf .git tools/fork.py')
 
     if args.git_repo:
-        _('git init .')
+        _('git init -b main .')
         _('git add .')
         commit_msg = COMMIT_MSG.format(
             name=name,
