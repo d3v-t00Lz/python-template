@@ -32,3 +32,13 @@ pip3 install \
     --target="./${DIRNAME}" \
     "$@"
 
+set +x
+
+echo "
+Finished!
+
+You should now remove the vendored dependencies (if present) from
+requirements.txt:
+
+${@}
+"
