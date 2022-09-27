@@ -5,8 +5,8 @@ This project is meant to be forked into new Python3 projects using the
 options available.
 
 # Features
-- Comprehensive packaging options for all major platforms, easily deploy your
-  cross-platform code to nearly any computer in the world
+- Comprehensive packaging options for all major desktop platforms, easily
+  deploy your cross-platform code to nearly any computer in the world
 - 100% unit test coverage out of the box
 - Clean separation of business logic from presentation
 - Well organized and extensible structure
@@ -19,15 +19,23 @@ options available.
   available in the OS package manager
 - `Makefile`: Many development and build tasks are automated using the `make`
    command.  See the `Makefile` source code for details.
-- Advanced packaging for
-  - AppImage (one-file desktop and CLI portable executables for all
-    Linux distributions)
-  - Debian (Debian / Ubuntu / etc...)
-  - Docker
-  - MacOS
-  - pypi / pip
-  - RPM (Red Hat / Fedora / OpenSUSE / etc...)
-  - Windows
+
+## Advanced packaging
+- AppImage (one-file desktop and CLI portable executables for all
+  Linux distributions)
+- Debian (Debian / Ubuntu / etc...)
+- Docker
+- MacOS
+- pypi / pip
+- RPM (Red Hat / Fedora / OpenSUSE / etc...)
+- Windows
+
+## Included optional user interfaces
+- `command subcommand subcommand` CLI with tab completion
+- Qt5 and Qt6
+- SDL2
+- RESTful API
+- ...or build your own
 
 The `src/pytemplate` module is the base library.  "Interfaces" to the library
 are created as additional modules, for example: `src/pytemplate_cli`,
