@@ -566,7 +566,7 @@ def main():
         _('rm -rf appimage/')
         FILES_TO_UPDATE.remove("appimage/*/*")
     if not args.docker:
-        _('rm -f Dockerfile*')
+        _('rm -f Dockerfile* .dockerignore')
         remove_makefile_target('docker-cli')
         remove_makefile_target('docker-rest')
     if not args.vendor:
@@ -612,7 +612,10 @@ def main():
     _('rm -rf .git tools/fork.py')
 
     if args.git_repo:
-        _('git init -b main .')
+        # Don't use -b, it does not work on at least some modern platforms
+        # such as WSL2-Ubuntu
+        _('git init .')
+        _('git switch -c main || true')
         _('git add .')
         commit_msg = COMMIT_MSG.format(
             name=name,

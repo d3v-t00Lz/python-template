@@ -125,7 +125,7 @@ setup(
     packages=find_packages(where='src'),
     package_dir = {'': 'src'},
     include_package_data=True,
-	install_requires=load_requirements("requirements.txt"),
+    install_requires=load_requirements("requirements.txt"),
     tests_require=[
         'pytest',
         'pytest-cov',
