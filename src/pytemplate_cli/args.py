@@ -12,9 +12,7 @@ from pytemplate.config import Config
 from pytemplate.exc import BadArgsError
 
 
-def arg_parser(
-    _args: Optional[List[str]]=None,
-):
+def arg_parser():
     parser = argparse.ArgumentParser()
     parser.set_defaults(func=required_subcommand)
     subparsers = parser.add_subparsers(
@@ -39,8 +37,10 @@ def arg_parser(
     cli_subcommands(subparsers)
     return parser
 
-def parse_args(_args):
-    parser = arg_parser(_args)
+def parse_args(
+    _args: Optional[List[str]]=None,
+):
+    parser = arg_parser()
     try:
         return parser.parse_args(_args)
     except BadArgsError as ex:
