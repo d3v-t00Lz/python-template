@@ -3,10 +3,9 @@
 """
 
 import logging
+import logging.handlers
 import sys
-import traceback
 
-from pylogrus import PyLogrus, TextFormatter
 
 
 __all__ = [
@@ -14,29 +13,42 @@ __all__ = [
 ]
 
 LOG: logging.Logger = logging.getLogger(__name__)
-#_FORMAT = (
-#    '[%(asctime)s] %(levelname)s %(pathname)-30s: %(lineno)s - %(message)s'
-#)
+_FORMAT = (
+    '[%(asctime)s] %(levelname)s %(pathname)-30s: %(lineno)s - %(message)s'
+)
 
 def setup_logging(
-    #format: str=_FORMAT,
+    format: str=_FORMAT,
     level: int=logging.INFO,
     log: logging.Logger=LOG,
     stream=sys.stdout,
+    structured=True,
+    log_file=None,
+    log_file_max_bytes=1024*1024,
+    log_file_backup_count=5,
 ):
-    logging.setLoggerClass(PyLogrus)
+    if structured:
+        from pylogrus import PyLogrus, TextFormatter
+        logging.setLoggerClass(PyLogrus)
+        fmt = TextFormatter(datefmt='Z', colorize=True)
+    else:
+        fmt = logging.Formatter(format)
 
-    handler = logging.StreamHandler(
-        stream=stream,
-    )
-    fmt = TextFormatter(datefmt='Z', colorize=True)
-    # fmt = logging.Formatter(format)
-    handler.setFormatter(fmt)
-    log.addHandler(handler)
     log.setLevel(level)
-    sys.excepthook = _excepthook
 
-def _excepthook(exc_type, exc_value, tb):
-    exc = traceback.format_exception(exc_type, exc_value, tb)
-    LOG.error("\n".join(exc))
+    if stream:
+        handler = logging.StreamHandler(
+            stream=stream,
+        )
+        handler.setFormatter(fmt)
+        log.addHandler(handler)
+
+    if log_file:
+        handler = logging.handlers.RotatingFileHandler(
+            log_file,
+            maxBytes=log_file_max_bytes,
+            backupCount=log_file_backup_count,
+        )
+        handler.setFormatter(fmt)
+        log.addHandler(handler)
 

@@ -1,13 +1,20 @@
-from pytemplate.log import _excepthook, setup_logging
+import os
 import sys
+import tempfile
+
+from pytemplate.log import setup_logging
 
 def test_setup_logging():
-    setup_logging()
-
-def test_except_hook():
-    try:
-        raise Exception
-    except:
-        args = sys.exc_info()
-        _excepthook(*args)
+    for kwargs in (
+        {
+            'log_file': os.path.join(
+                tempfile.gettempdir(),
+                'pytemplate_test_log_file_setup_logging.log',
+            ),
+        },
+        {
+            'structured': False,
+        },
+    ):
+        setup_logging(**kwargs)
 
