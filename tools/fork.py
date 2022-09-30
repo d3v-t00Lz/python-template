@@ -436,6 +436,7 @@ def main():
     if any((args.sdl2, args.qt, (args.cli and args.windows))):
         _(f'mv files/icons/pytemplate.png files/icons/{name}.png')
         _(f'mv files/icons/pytemplate.ico files/icons/{name}.ico')
+        _(f'mv files/icons/pytemplate.icns files/icons/{name}.icns')
     else:
         _('rm -rf files/icons')
 
