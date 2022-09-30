@@ -61,7 +61,7 @@ ARCH_NAMES = {
     'arm64': 'm1',
 }
 
-DMG = f'pytemplate{VERSION}-macos-{ARCH_NAMES[ARCH]}-{ARCH}.dmg'
+DMG = f'pytemplate_{SUFFIX}-{VERSION}-macos-{ARCH_NAMES[ARCH]}-{ARCH}.dmg'
 if os.path.exists(DMG):
     os.remove(DMG)
 
