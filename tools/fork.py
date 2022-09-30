@@ -609,6 +609,8 @@ def main():
 
     with open('README.md', 'w') as f:
         f.write(f"# {name}\nTODO")
+    with open('LICENSE', 'w') as f:
+        f.write('Copyright the authors, all rights reserved\nTODO')
 
     _('rm -rf .git tools/fork.py')
 
