@@ -69,10 +69,6 @@ Section "Base Install" SEC01
     writeUninstaller "$INSTDIR\uninstall.exe"
     ; Delete the old program
     RMDir /r $INSTDIR\program
-    ; Clean up the old legacy file structure
-    ; TODO: Remove this in mid 2022
-    Delete $INSTDIR\${PRODUCT_NAME}.exe
-    Delete $INSTDIR\{{ MAJOR_VERSION }}.ico
     ; Install the program
     CreateDirectory $INSTDIR\program
     SetOutPath $INSTDIR\program
@@ -106,9 +102,7 @@ Section "Start Menu Shortcut" SEC02
 SectionEnd
 
 Section "uninstall"
-    ; We do not delete settings, projects or any other files the user may have
-    ; stored next to the application, only the application itself
-    RMDir /r $INSTDIR\program
+    RMDir /r $INSTDIR
     Delete "$SMPROGRAMS\${PRODUCT_NAME}.lnk"
     DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
 SectionEnd
