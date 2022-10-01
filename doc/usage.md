@@ -5,21 +5,24 @@ tooling.
 # Forking
 Forking is how you create a new repository from this template.  It will
 rename everything to the new project name, and remove components that are not
-needed.
+needed, based on the CLI flags that are passed to `tools/fork.py`.
 
 See `tools/fork.py --help` for many different options to customize the new
-repository.  Note that `tools/fork.py` deletes itself upon completion, as
-it would not be viable to run it a 2nd time.  If you wish to create custom
-forks of this repository to be forked again, do not use `tools/fork.py` to
-remove components.
+repository.  Note that `tools/fork.py` deletes itself upon completion, as it
+would not be viable to run it a 2nd time (the CLI options would no longer make
+sense after most of the items are gone).  If you wish to create custom forks of
+this repository to be forked again, do not use `tools/fork.py` to remove
+components.
 
 Example:
 ```
+ORG=myorgname
 NEW_PROJECT=some_name
 git clone https://github.com/d3v-t00Lz/python-template.git $NEW_PROJECT
 cd $NEW_PROJECT
-tools/fork.py -cqaDdrmwvP  myorgname $NEW_PROJECT
-git remote add origin git@github.com:someorg/some_name.git
+tools/fork.py -cqaDdrmwvP  $ORG $NEW_PROJECT
+# Assumes that this repository was already created
+git remote add origin git@github.com:$ORG/$NEW_PROJECT.git
 git push -u origin main
 ```
 
