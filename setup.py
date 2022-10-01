@@ -12,6 +12,7 @@ try:  # for pip >= 10
 except ImportError:  # for pip <= 9.0.3
     from pip.req import parse_requirements
 
+assert sys.version_info > (3, 7), f"Python >= 3.7 required, have {sys.version}"
 
 PT_EXCLUDE_LIBS = os.environ.get('PT_EXCLUDE_LIBS', '').strip()
 EXCLUDE_LIBS = set(
