@@ -170,7 +170,7 @@ def parse_args():
         default=False,
         help=(
             'Include AppImage packaging for Linux.  Only valid if '
-            'including a CLI, Qt or SDL2 interface.'
+            'including a CLI, Qt and/or SDL2 interface.'
         ),
     )
     packaging.add_argument(
@@ -208,7 +208,7 @@ def parse_args():
         default=False,
         help=(
             'Include Apple(tm) MacOS(tm) packaging.  Only valid if including '
-            'a Qt or SDL interface.'
+            'a Qt and/or SDL interface.'
         ),
     )
     packaging.add_argument(
@@ -219,7 +219,7 @@ def parse_args():
         default=False,
         help=(
             'Include Microsoft(tm) Windows(tm) packaging.  Only valid if '
-            'including a Qt, SDL or CLI interface.'
+            'including a Qt, SDL and/or CLI interface.'
         ),
     )
     packaging.add_argument(
@@ -228,7 +228,7 @@ def parse_args():
         action='store_true',
         dest='vendor',
         default=False,
-        help='Include vendored packages from pip',
+        help='Include tools for vendoring packages from pip',
     )
     packaging.add_argument(
         '--pypi',
@@ -247,7 +247,7 @@ def parse_args():
         default=False,
         help=(
             'Include a systemd service file.  Only valid if using '
-            'RPM or Debian packaging'
+            'RPM and/or Debian packaging'
         ),
     )
     services.add_argument(
@@ -256,7 +256,10 @@ def parse_args():
         action='store_true',
         dest='windows_service',
         default=False,
-        help='Configure as a Windows Service',
+        help=(
+            'Configure as a Windows Service.  Only valid if packaging '
+            'for Windows'
+        ),
     )
 
     args = parser.parse_args()
@@ -274,6 +277,9 @@ def parse_args():
         if not args.cli:
             args.appimage = False
             args.windows = False
+    if not any((args.cli, args.rest_api)):
+        args.docker = False
+
     return args
 
 def remove_text(path: str, string: str):

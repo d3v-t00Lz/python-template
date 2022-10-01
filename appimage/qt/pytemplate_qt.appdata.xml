@@ -6,12 +6,12 @@
     <name>pytemplate_qt</name>
     <summary>pytemplate_qt on Python {{ python-fullversion }}</summary>
     <description>
-		<p> Python {{ python-fullversion }} + pytemplate_qt bundled in
-			an AppImage.
+        <p> Python {{ python-fullversion }} + pytemplate_qt bundled in
+            an AppImage.
         </p>
     </description>
     <launchable type="desktop-id">pytemplate_qt.desktop</launchable>
-	<url type="homepage">https://github.com/d3v-t00Lz/python-template</url>
+    <url type="homepage">https://github.com/d3v-t00Lz/python-template</url>
     <provides>
         <binary>python{{ python-version }}</binary>
     </provides>

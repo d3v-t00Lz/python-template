@@ -1,8 +1,8 @@
 # AppImage packaging
-AppImage provides single-file application distribution on Linux.
+AppImage provides single-file portable executables on Linux, similar to
+app bundles on MacOS.
 
 # Instructions
-## Dependencies
 ```
 # Dependencies
 pip install -r appimage/requirements.txt

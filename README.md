@@ -22,20 +22,21 @@ options available.
 - Boilerplate configs for popular public cloud CI services
 
 ## Advanced packaging
-- AppImage (one-file desktop and CLI portable executables for all
-  Linux distributions)
+- AppImage (one-file desktop and CLI portable executables that work on nearly
+  all Linux distributions)
 - Debian (Debian / Ubuntu / etc...)
 - Docker
-- MacOS
+- MacOS app bundle
 - pypi / pip
 - RPM (Red Hat / Fedora / OpenSUSE / etc...)
-- Windows
+- Windows installer
 
 ## Included optional user interfaces
+- Shared library
 - `command subcommand subcommand` CLI with tab completion
-- Qt5 and Qt6, flexibly use either in the same codebase using our
+- Qt5 and Qt6 UI, flexibly use either in the same codebase using our
   compatibility layer
-- SDL2
+- SDL2 game
 - RESTful API
 - ...or build your own
 
