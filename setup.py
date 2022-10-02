@@ -43,7 +43,7 @@ def load_requirements(fname):
     return result
 
 NAME = "pytemplate"
-URL = 'https://gitlab.com/jaelen/python-template'  # TODO
+URL = 'https://github.com/d3v-t00Lz/python-template'  # TODO
 DESCRIPTION = (
     "TODO"
 )
