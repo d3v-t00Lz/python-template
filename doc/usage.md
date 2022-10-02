@@ -26,6 +26,23 @@ git remote add origin git@github.com:$ORG/$NEW_PROJECT.git
 git push -u origin main
 ```
 
+# Developing
+```
+# Create a venv
+python3 -m venv venv
+source venv/bin/activate
+# OR...
+python3 -m venv ~/venv/${PROJECT_NAME?}
+source ~/venv/${PROJECT_NAME?}/bin/activate
+
+# Install developer requirements
+python3 -m pip install -r requirements/devel.txt
+
+# Install the code to the venv using symlinking, so that any changes you
+# make locally can be used immediately without reinstalling
+python3 -m pip install -e .
+```
+
 # Additional tooling
 See the `Makefile` for additional tooling that can be used.  `tools/fork.py`
 will remove unused Makefile targets depending on the options that were chosen,

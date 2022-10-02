@@ -1,6 +1,7 @@
 pip
 pytest
 pytest-coverage
+pytest-runner
 sanic_testing<=22.8
 types-pyyaml
 urllib3

@@ -6,7 +6,6 @@
 import os
 import sys
 from setuptools import setup, find_packages
-from setuptools.command.test import test as TestCommand
 
 assert sys.version_info > (3, 7), f"Python >= 3.7 required, have {sys.version}"
 
@@ -92,19 +91,6 @@ def _github_download_url(
         version=version
     )
 
-
-class PyTest(TestCommand):
-    user_options = [('pytest-args=', 'a', "Arguments to pass to pytest")]
-
-    def initialize_options(self):
-        TestCommand.initialize_options(self)
-
-    def run_tests(self):
-        #import here, because outside the eggs aren't loaded
-        import pytest
-        errno = pytest.main()
-        sys.exit(errno)
-
 with open('README.md', 'rt') as f:
     LONG_DESC = f.read()
 
@@ -123,12 +109,6 @@ setup(
     install_requires=load_requirements("requirements/install.txt"),
     test_requires=load_requirements("requirements/test.txt"),
     extras_require={},
-    cmdclass={
-        'test': PyTest,
-    },
-    setup_requires=[
-        'pytest-runner',
-    ],
     scripts=SCRIPTS,
     # PT:PYPI
     # PyPI

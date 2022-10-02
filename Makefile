@@ -72,7 +72,7 @@ install_linux: \
 	install_linux_vendor \
 	install_systemd \
 	# Install various files for Linux,
-	# `setup.py install` must be run separately
+	# `pip install .` must be run separately
 
 install_linux_icon:
 	# Install the icon files on Linux
@@ -117,7 +117,6 @@ pypi: test type-check
 	# Requires `twine` to be installed, and a local twine config with your
 	# pypi username and password
 	rm -rf dist/*.tar.gz dist/*.whl
-	# python3 setup.py sdist
 	python3 -m build
 	twine upload dist/*
 
@@ -138,7 +137,7 @@ rpm: test type-check
 
 test:
 	# Run the unit tests
-	./setup.py test
+	tox -e $(shell python3 -c "import sys; v = sys.version_info; print(f'py{v[0]}{v[1]}')")
 
 type-check:
 	# Check typing of Python type hints
@@ -148,8 +147,8 @@ type-check:
 venv:
 	# Create a Python "virtual environment" aka venv
 	# Run this target before running:
-	# source venv/bin/activate
-	# ./setup.py develop
+	#     source venv/bin/activate
+	#     pip3 install -e .
 	python3 -m venv --system-site-packages venv
 
 override_dh_auto_build:
