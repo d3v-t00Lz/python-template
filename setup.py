@@ -7,7 +7,8 @@ import os
 import sys
 from setuptools import setup, find_packages
 
-assert sys.version_info > (3, 7), f"Python >= 3.7 required, have {sys.version}"
+assert sys.version_info >= (3, 7), \
+    f"Python >= 3.7 required, have {sys.version}"
 
 PT_EXCLUDE_LIBS = os.environ.get('PT_EXCLUDE_LIBS', '').strip()
 EXCLUDE_LIBS = set(
@@ -74,21 +75,14 @@ def _gitlab_download_url(
     url=URL,
     version=VERSION,
 ):
-    return "{url}/-/archive/{version}/{name}-{version}.tar.gz".format(
-        name=name,
-        url=url,
-        version=version,
-    )
+    return f"{url}/-/archive/{version}/{name}-{version}.tar.gz"
 
 
 def _github_download_url(
     url=URL,
     version=VERSION,
 ):
-    return "{url}/archive/{version}.tar.gz".format(
-        url=url,
-        version=version
-    )
+    return f"{url}/archive/{version}.tar.gz"
 
 with open('README.md', 'rt') as f:
     LONG_DESC = f.read()
