@@ -1,5 +1,0 @@
-# Run pip3 install -r devel_requirements.txt to install
-# You probably should use a venv
-
-mypy
-types-pyyaml

@@ -472,7 +472,7 @@ def main():
         _('rm -rf src/pytemplate_qt scripts/pytemplate_qt')
         _('rm -rf windows/*-qt.spec macos/*-qt.spec')
         _('rm -rf appimage/qt/')
-        remove_lines('requirements.txt', 'PyQt')
+        remove_lines('requirements/install.txt', 'PyQt')
         remove_lines('Makefile', 'UI=qt')
         remove_lines_range('tools/rpm.spec', 'PT:QT')
 
@@ -485,7 +485,8 @@ def main():
         _('rm -rf test/pytemplate_rest')
         _('rm -f Dockerfile-rest')
         remove_text('setup.cfg', '--cov=pytemplate_rest ')
-        remove_lines('requirements.txt', 'sanic')
+        remove_lines('requirements/install.txt', 'sanic')
+        remove_lines('requirements/test.txt', 'sanic')
         remove_makefile_target('docker-rest')
         replace_makefile_target('type-check', 'pytemplate_rest', '')
 
@@ -507,8 +508,8 @@ def main():
         _('rm -rf src/pytemplate_sdl2 scripts/pytemplate_sdl2')
         _('rm -rf windows/*sdl2.spec macos/*sdl2.spec')
         _('rm -rf appimage/sdl2/')
-        remove_lines('requirements.txt', 'PySDL2')
-        remove_lines('requirements.txt', 'sdl2')
+        remove_lines('requirements/install.txt', 'PySDL2')
+        remove_lines('requirements/install.txt', 'sdl2')
         remove_lines('Makefile', 'UI=sdl2')
         remove_lines_range('tools/rpm.spec', 'PT:SDL2')
 
@@ -537,7 +538,7 @@ def main():
         remove_makefile_target('install_completions')
         remove_lines('Makefile', 'COMPLETIONS')
         remove_lines_range('tools/rpm.spec', 'PT:CLI')
-        remove_lines('requirements.txt', 'shtab')
+        remove_lines('requirements/install.txt', 'shtab')
         replace_makefile_target('type-check', 'pytemplate_cli', '')
 
     if args.library:

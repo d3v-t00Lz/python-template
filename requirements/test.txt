@@ -1,0 +1,7 @@
+pip
+pytest-coverage
+pytest
+sanic_testing<=22.8
+types-pyyaml
+urllib3
+

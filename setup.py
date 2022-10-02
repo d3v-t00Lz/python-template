@@ -126,13 +126,8 @@ setup(
     packages=find_packages(where='src'),
     package_dir = {'': 'src'},
     include_package_data=True,
-    install_requires=load_requirements("requirements.txt"),
-    tests_require=[
-        'pytest',
-        'pytest-cov',
-        'sanic_testing<=22.8',
-        'types-pyyaml',
-    ],
+    install_requires=load_requirements("requirements/install.txt"),
+    test_requires=load_requirements("requirements/test.txt"),
     extras_require={},
     cmdclass={
         'test': PyTest,
