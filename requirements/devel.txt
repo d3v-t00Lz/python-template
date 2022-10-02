@@ -1,4 +1,5 @@
-pip
-wheel
 mypy
+pip
+tox
 types-pyyaml
+wheel
