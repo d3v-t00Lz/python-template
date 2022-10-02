@@ -120,14 +120,6 @@ def parse_args():
         default=False,
         help='Include a TravisCI config',
     )
-    cicd.add_argument(
-        '--tox',
-        '-X',
-        dest='tox',
-        action='store_true',
-        default=False,
-        help='Include a tox.ini config',
-    )
 
     pymodules.add_argument(
         '--no-library',
@@ -604,9 +596,6 @@ def main():
 
     if not args.travis_ci:
         _('rm -f .travis.yml')
-
-    if not args.tox:
-        _('rm -f tox.ini')
 
     if not args.circle_ci:
         _('rm -rf .circleci')
