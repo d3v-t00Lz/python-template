@@ -116,8 +116,9 @@ pypi: test type-check
 	# Upload your package to PyPi so that anybody can install using pip.
 	# Requires `twine` to be installed, and a local twine config with your
 	# pypi username and password
-	rm -rf dist/*
-	python3 setup.py sdist
+	rm -rf dist/*.tar.gz dist/*.whl
+	# python3 setup.py sdist
+	python3 -m build
 	twine upload dist/*
 
 rpm: test type-check

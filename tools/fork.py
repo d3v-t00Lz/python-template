@@ -600,6 +600,7 @@ def main():
     else:
         remove_makefile_target('pypi')
         remove_lines_range('setup.py', 'PT:PYPI')
+        remove_lines_range('requirements/devel.txt', 'PT:PYPI')
 
     if not args.travis_ci:
         _('rm -f .travis.yml')
