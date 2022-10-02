@@ -16,22 +16,24 @@ EXCLUDE_LIBS = set(
 )
 print(EXCLUDE_LIBS)
 
-def load_requirements(fname):
+def load_requirements(*fnames):
     if PT_EXCLUDE_LIBS == 'ALL':
         return []
-    with open(fname) as f:
-        reqs = [
-            x.strip() for x in f
-            if (
-                x.strip()
-                and
-                not x.strip().startswith('#')
-            )
-        ]
-    result = [
-        x for x in reqs
-        if x not in EXCLUDE_LIBS
-    ]
+    result = []
+    for fname in fnames:
+        with open(fname) as f:
+            reqs = [
+                x.strip() for x in f
+                if (
+                    x.strip()
+                    and
+                    not x.strip().startswith('#')
+                )
+            ]
+        result.extend([
+            x for x in reqs
+            if x not in EXCLUDE_LIBS
+        ])
     print(result)
     return result
 
@@ -103,7 +105,13 @@ setup(
     packages=find_packages(where='src'),
     package_dir = {'': 'src'},
     include_package_data=True,
-    install_requires=load_requirements("requirements/install.txt"),
+    install_requires=load_requirements(
+        "requirements/common.txt",
+        "requirements/cli.txt",
+        "requirements/qt.txt",
+        "requirements/rest.txt",
+        "requirements/sdl2.txt",
+    ),
     extras_require={},
     scripts=SCRIPTS,
     # PT:PYPI
