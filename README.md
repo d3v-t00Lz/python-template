@@ -2,7 +2,8 @@
 
 This project is meant to be forked into new Python3 projects using the
 `tools/fork.py` script.  See `tools/fork.py --help` for the many command line
-options available.
+options available.  See [the usage document](doc/usage.md) to understand the
+workflow of creating a new project and using the template and tooling.
 
 # Features
 - Comprehensive packaging options for all major desktop platforms, easily
