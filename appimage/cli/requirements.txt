@@ -1,1 +1,3 @@
 ${CURRENT_REPO}
+-r ${CURRENT_REPO}/requirements/common.txt
+-r ${CURRENT_REPO}/requirements/cli.txt

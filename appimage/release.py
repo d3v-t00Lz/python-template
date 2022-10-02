@@ -50,6 +50,7 @@ def build(args):
     )
     env = copy.deepcopy(os.environ)
     env['CURRENT_REPO'] = current_repo
+    env['PT_EXCLUDE_LIBS'] = 'ALL'
 
     for dirname in dirnames:
         print(f'Running python-appimage for {dirname}/')
