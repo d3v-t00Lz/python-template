@@ -7,10 +7,6 @@ import os
 import sys
 from setuptools import setup, find_packages
 from setuptools.command.test import test as TestCommand
-try:  # for pip >= 10
-    from pip._internal.req import parse_requirements
-except ImportError:  # for pip <= 9.0.3
-    from pip.req import parse_requirements
 
 assert sys.version_info > (3, 7), f"Python >= 3.7 required, have {sys.version}"
 
@@ -24,21 +20,19 @@ print(EXCLUDE_LIBS)
 def load_requirements(fname):
     if PT_EXCLUDE_LIBS == 'ALL':
         return []
-    reqs = parse_requirements(fname, session="test")
-    try:
-        result = [
-            str(x.requirement)
-            for x in reqs
-            if str(x.requirement) not in EXCLUDE_LIBS
+    with open(fname) as f:
+        reqs = [
+            x.strip() for x in f
+            if (
+                x.strip()
+                and
+                not x.strip().startswith('#')
+            )
         ]
-    except AttributeError as ex:
-        print(f'Assuming older Python version: {ex}')
-        result = [
-            str(x.req)
-            for x in reqs
-            if str(x.req) not in EXCLUDE_LIBS
-        ]
-
+    result = [
+        x for x in reqs
+        if x not in EXCLUDE_LIBS
+    ]
     print(result)
     return result
 

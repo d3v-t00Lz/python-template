@@ -1,2 +1,2 @@
 include README.md
-recursive-include requirements
+recursive-include requirements *.txt
