@@ -91,7 +91,7 @@ def parse_args():
         default=True,
         help=(
             'Do not create a git repo.  Useful when creating instances '
-            'inside a mono-repo'
+            'inside a mono-repo.  Mutually exclusive with --keep-git-history.'
         ),
     )
     features.add_argument(
@@ -103,7 +103,8 @@ def parse_args():
             'Retain git history from the python-template repo.  Useful if '
             'you may want to try to rebase against python-template later '
             'for updates.  Not recommended, as no efforts will be made to '
-            'preserve backwards or forward compatibility.'
+            'preserve backwards or forward compatibility.  Mutually '
+            'exclusvie with --no-git-repo'
         ),
     )
     features.add_argument(
@@ -282,8 +283,11 @@ def parse_args():
         args.rest_api,
         args.sdl2,
     )):
-        print('Error: When you exclude everything, there is nothing of value')
-        exit(1)
+        parser.error('When you exclude everything, there is nothing of value')
+    if args.git_history and not args.git_repo:
+        parser.error(
+            '--no-git-repo and --keep-git-history are mutually exclusive'
+        )
     if not any((args.sdl2, args.qt)):
         args.macos = False
         if not args.cli:
