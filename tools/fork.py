@@ -95,6 +95,18 @@ def parse_args():
         ),
     )
     features.add_argument(
+        '--keep-git-history',
+        action='store_true',
+        dest='git_history',
+        default=False,
+        help=(
+            'Retain git history from the python-template repo.  Useful if '
+            'you may want to try to rebase against python-template later '
+            'for updates.  Not recommended, as no efforts will be made to '
+            'preserve backwards or forward compatibility.'
+        ),
+    )
+    features.add_argument(
         '--shebang',
         dest='shebang',
         default=None,
@@ -625,20 +637,25 @@ def main():
     with open('LICENSE', 'w') as f:
         f.write('Copyright the authors, all rights reserved\nTODO')
 
-    _('rm -rf .git tools/fork.py')
+    _('rm -f tools/fork.py')
 
     if args.git_repo:
-        # Don't use -b, it does not work on at least some modern platforms
-        # such as WSL2-Ubuntu
-        _('git init .')
-        _('git switch -c main || true')
-        _('git add .')
+        if not args.git_history:
+            _('rm -rf .git')
+            # Don't use -b, it does not work on at least some modern platforms
+            # such as WSL2-Ubuntu
+            _('git init .')
+            _('git switch -c main || true')
+            _('git add .')
         commit_msg = COMMIT_MSG.format(
             name=name,
             commit_hash=COMMIT_HASH,
             argv=sys.argv,
         )
         _(f'git commit -am "{commit_msg}"')
+    else:
+        _('rm -rf .git')
+
     success_msg = SUCCESS_MSG
     success_msg += "\n".join(f'    {x}' for x in FILES_TO_UPDATE)
     print(success_msg)
