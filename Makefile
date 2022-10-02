@@ -33,7 +33,7 @@ clean:
 	# Remove temporary build files
 	rm -rf build/ dist/ htmlcov/ ./*.egg-info ./*.nsi .pytest_cache/ \
 		./.rpmbuild/ ./*.rpm ./*.deb
-	find test/ pytemplate* -name __pycache__ -type d \
+	find test/ src/ -name __pycache__ -type d \
 		-exec rm -rf {} \; 2>/dev/null \
 		|| true
 
