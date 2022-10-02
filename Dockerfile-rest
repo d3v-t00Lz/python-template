@@ -1,7 +1,7 @@
 FROM python:3.9-alpine
-COPY requirements.txt .
+COPY requirements/ ./requirements
 RUN pip3 install --no-cache-dir \
-	$(grep -ivE "PyQt[5-6]|PySDL2|#.*|^$" requirements.txt)
+	$(grep -ivE "PyQt[5-6]|PySDL2|#.*|^$" requirements/install.txt)
 COPY . .
-RUN PT_EXCLUDE_LIBS='ALL' python3 setup.py install
+RUN PT_EXCLUDE_LIBS='ALL' python3 -m pip install .
 ENTRYPOINT ["pytemplate_rest"]
