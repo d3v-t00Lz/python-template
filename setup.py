@@ -52,9 +52,6 @@ SCRIPTS = [
 ]
 
 def _version():
-    if 'test' in sys.argv:
-        # avoid triggering a pytest coverage report bug
-        return 'test'
     path = sys.path[:]
     dirname = os.path.dirname(__file__)
     abspath = os.path.abspath(dirname)
@@ -107,7 +104,6 @@ setup(
     package_dir = {'': 'src'},
     include_package_data=True,
     install_requires=load_requirements("requirements/install.txt"),
-    test_requires=load_requirements("requirements/test.txt"),
     extras_require={},
     scripts=SCRIPTS,
     # PT:PYPI
