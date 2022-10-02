@@ -83,6 +83,7 @@ install_linux: \
 	install_linux_icon \
 	install_linux_vendor \
 	install_systemd \
+
 	# Install various files for Linux,
 	# `pip install .` must be run separately
 

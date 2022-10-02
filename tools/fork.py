@@ -518,6 +518,7 @@ def main():
         _('rm -f requirements/rest.txt')
         remove_text('setup.cfg', '--cov=pytemplate_rest ')
         remove_lines('requirements/test.txt', 'sanic')
+        remove_lines('tox.ini', 'requirements/rest.txt')
         remove_makefile_target('docker-rest')
         replace_makefile_target('type-check', 'pytemplate_rest', '')
 
@@ -570,6 +571,7 @@ def main():
         remove_makefile_target('docker-cli')
         remove_makefile_target('install_completions')
         remove_lines('Makefile', 'COMPLETIONS')
+        remove_lines('tox.ini', 'requirements/cli.txt')
         remove_lines_range('tools/rpm.spec', 'PT:CLI')
         replace_makefile_target('type-check', 'pytemplate_cli', '')
 
