@@ -1,6 +1,6 @@
 import sys
 
-import .global_vars
+from . import global_vars
 from pytemplate.setup import setup
 from pytemplate.setup.excepthook import add_excepthook
 from pytemplate.log import LOG
