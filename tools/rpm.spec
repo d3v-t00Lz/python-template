@@ -66,7 +66,7 @@ desktop-file-install                                        \
 %check
 # Redundant of `make rpm`, and the target OS may not have all required
 # packages available in the repos
-#%{__python3} setup.py test
+#%{__python3} make test
 
 %files -n python3-%{modname}
 #%doc CHANGELOG

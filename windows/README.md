@@ -26,7 +26,7 @@ cd %DIRECTORY_OF_GIT_REPO%
 python -m venv venv
 venv\Scripts\activate.bat
 python -m pip install -r windows/requirements.txt
-python setup.py install
+python -m pip install .
 ```
 
 # Creating a new release
