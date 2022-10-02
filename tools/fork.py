@@ -318,6 +318,22 @@ def parse_args():
     if args.windows_service and not args.windows:
         parser.error('If using --win-service, must include --windows')
 
+    org = args.org
+    if not org:
+        parser.error("Org cannot be empty")
+    if len(org) > 20 or len(org) <= 3:
+        parser.error(f'{org} must be between 4 and 20 characters')
+
+    name = args.name
+    if not name:
+        parser.error("Name cannot be empty")
+    if not name.islower():
+        parser.error(f'{name} contains uppercase letters')
+    if not name.replace("_", "").isalnum():
+        parser.error(f'{name} is not alpha-numeric')
+    if len(name) > 20 or len(name) <= 3:
+        parser.error(f'{name} must be between 4 and 20 characters')
+
     return args
 
 def remove_text(path: str, string: str):
@@ -443,10 +459,6 @@ def main():
     args = parse_args()
 
     name = args.name
-    assert name
-    assert name.islower(), name
-    assert name.replace("_", "").isalnum(), name
-    assert len(name) < 20, len(name)
 
     # Delete Python bytecode files
     _("find . -name '*.pyc' -delete")
