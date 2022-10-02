@@ -313,6 +313,8 @@ def parse_args():
         parser.error(
             'If using --docker, must include one of: --cli, --rest-api'
         )
+    if args.systemd and not (args.deb or args.rpm):
+        parser.error('If using --systemd, must include one of: --deb, --rpm')
     if args.windows_service and not args.windows:
         parser.error('If using --win-service, must include --windows')
 
