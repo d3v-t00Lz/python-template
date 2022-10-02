@@ -106,11 +106,11 @@ setup(
     package_dir = {'': 'src'},
     include_package_data=True,
     install_requires=load_requirements(
-        "requirements/common.txt",
-        "requirements/cli.txt",
-        "requirements/qt.txt",
-        "requirements/rest.txt",
-        "requirements/sdl2.txt",
+        *(
+            os.path.join('requirements', x)
+            for x in os.listdir('requirements')
+            if x not in ('test.txt', 'devel.txt')
+        )
     ),
     extras_require={},
     scripts=SCRIPTS,

@@ -465,7 +465,6 @@ def main():
         _('rm -rf windows/*-qt.spec macos/*-qt.spec')
         _('rm -rf appimage/qt/')
         _('rm -f requirements/qt.txt')
-        remove_lines('setup.py', 'requirements/qt.txt')
         remove_lines('Makefile', 'UI=qt')
         remove_lines_range('tools/rpm.spec', 'PT:QT')
 
@@ -479,7 +478,6 @@ def main():
         _('rm -f Dockerfile-rest')
         _('rm -f requirements/rest.txt')
         remove_text('setup.cfg', '--cov=pytemplate_rest ')
-        remove_lines('setup.py', 'requirements/rest.txt')
         remove_lines('requirements/test.txt', 'sanic')
         remove_makefile_target('docker-rest')
         replace_makefile_target('type-check', 'pytemplate_rest', '')
@@ -503,7 +501,6 @@ def main():
         _('rm -rf windows/*sdl2.spec macos/*sdl2.spec')
         _('rm -rf appimage/sdl2/')
         _('rm -f requirements/sdl2.txt')
-        remove_lines('setup.py', 'requirements/sdl2.txt')
         remove_lines('Makefile', 'UI=sdl2')
         remove_lines_range('tools/rpm.spec', 'PT:SDL2')
 
@@ -533,7 +530,6 @@ def main():
         remove_makefile_target('install_completions')
         remove_lines('Makefile', 'COMPLETIONS')
         remove_lines_range('tools/rpm.spec', 'PT:CLI')
-        remove_lines('setup.py', 'requirements/cli.txt')
         replace_makefile_target('type-check', 'pytemplate_cli', '')
 
     if args.library:
