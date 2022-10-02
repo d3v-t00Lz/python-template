@@ -17,6 +17,18 @@ UI ?= qt
 
 .PHONY: test venv
 
+appimage-cli:
+	# Build the AppImage for the cli
+	./appimage/release.py cli
+
+appimage-qt:
+	# Build the AppImage for the Qt UI
+	./appimage/release.py qt
+
+appimage-sdl2:
+	# Build the AppImage for the SDL2 UI
+	./appimage/release.py sdl2
+
 clean:
 	# Remove temporary build files
 	rm -rf build/ dist/ htmlcov/ ./*.egg-info ./*.nsi .pytest_cache/ \

@@ -467,6 +467,7 @@ def main():
         _('rm -f requirements/qt.txt')
         remove_lines('Makefile', 'UI=qt')
         remove_lines_range('tools/rpm.spec', 'PT:QT')
+        remove_makefile_target('appimage-qt')
 
     if args.rest_api:
         _('mv src/pytemplate_rest src/{}_rest'.format(name))
@@ -503,6 +504,7 @@ def main():
         _('rm -f requirements/sdl2.txt')
         remove_lines('Makefile', 'UI=sdl2')
         remove_lines_range('tools/rpm.spec', 'PT:SDL2')
+        remove_makefile_target('appimage-sdl2')
 
     if args.cli:
         _('mv scripts/pytemplate_cli scripts/{}_cli'.format(name))
@@ -526,6 +528,7 @@ def main():
         _('rm -rf appimage/cli/')
         _('rm -f requirements/cli.txt')
         remove_text('setup.cfg', '--cov=pytemplate_cli ')
+        remove_makefile_target('appimage-cli')
         remove_makefile_target('docker-cli')
         remove_makefile_target('install_completions')
         remove_lines('Makefile', 'COMPLETIONS')
@@ -572,6 +575,9 @@ def main():
     if not args.appimage:
         _('rm -rf appimage/')
         FILES_TO_UPDATE.remove("appimage/*/*")
+        remove_makefile_target('appimage-cli')
+        remove_makefile_target('appimage-qt')
+        remove_makefile_target('appimage-sdl2')
     if not args.docker:
         _('rm -f Dockerfile* .dockerignore')
         remove_makefile_target('docker-cli')
