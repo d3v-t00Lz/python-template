@@ -2,10 +2,10 @@
 This document describes basic usage of the template repository and it's
 tooling.
 
-# Forking
-Forking is how you create a new repository from this template.  It will
-rename everything to the new project name, and remove components that are not
-needed, based on the CLI flags that are passed to `tools/fork.py`.
+# Creating a new project from this template
+`tools/fork.py` will convert this template to a new project, rename everything
+to the new project name, and remove components that are not needed, based on
+the CLI flags that are passed to `tools/fork.py`.
 
 See `tools/fork.py --help` for many different options to customize the new
 repository.  Note that `tools/fork.py` deletes itself upon completion, as it
@@ -27,6 +27,7 @@ git push -u origin main
 ```
 
 # Developing
+## Initial setup
 ```
 # Create a venv
 python3 -m venv venv
@@ -43,23 +44,30 @@ python3 -m pip install -r requirements/devel.txt
 python3 -m pip install -e .
 ```
 
-# Additional tooling
+## Dependency management
+The `requirements/` folder contains multiple pip `requirements.txt` files that
+are divided by which interface or workflow they pertain to.  A dependency used
+by all interfaces should go in `common.txt`, any others should go in the
+specific interface that needs it (or potentially, you can add the same
+dependency to more than one).
+
+## Additional tooling
 See the `Makefile` for additional tooling that can be used.  `tools/fork.py`
 will remove unused Makefile targets depending on the options that were chosen,
 so this may vary by repo.
 
-# Creating a new release
+## Creating a new release
 Update `src/${PROJECT_NAME}/__init__.py:__version__`, commit and then tag
 a new release with that version.  Package as required.
 
-# Running unit tests
+## Running unit tests
 ```
 make test
 # to open the coverage report:
 firefox htmlcov/index.html
 ```
 
-# Vendoring Dependencies
+## Vendoring Dependencies
 Store packages from pip locally in the project, instead of installing to the
 system or venv.
 
@@ -75,7 +83,7 @@ transparently, as that folder will be added as the first path in `sys.path`.
 tools/vendor.sh package-name-1 package-name-2
 ```
 
-# Generating Tab Completion Scripts
+## Generating Tab Completion Scripts
 This is done with the `install_completions` target in the `Makefile`.  It is
 controlled by the `DESTDIR`, `COMPLETIONS_DIR` and `COMPLETIONS_SHELL`
 variables.
