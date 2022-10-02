@@ -284,17 +284,37 @@ def parse_args():
         args.sdl2,
     )):
         parser.error('When you exclude everything, there is nothing of value')
+
     if args.git_history and not args.git_repo:
         parser.error(
             '--no-git-repo and --keep-git-history are mutually exclusive'
         )
     if not any((args.sdl2, args.qt)):
-        args.macos = False
+        if args.macos:
+            parser.error(
+                'If using --macos, must include one of: --qt, --sdl2'
+            )
         if not args.cli:
-            args.appimage = False
-            args.windows = False
-    if not any((args.cli, args.rest_api)):
-        args.docker = False
+            if args.appimage:
+                parser.error(
+                    'If using --appimage, must include one of: '
+                    '--cli, --qt, --sdl2'
+                )
+            if args.windows:
+                parser.error(
+                    'If using --windows, must include one of: '
+                    '--cli, --qt, --sdl2'
+                )
+    if (
+        not any((args.cli, args.rest_api))
+        and
+        args.docker
+    ):
+        parser.error(
+            'If using --docker, must include one of: --cli, --rest-api'
+        )
+    if args.windows_service and not args.windows:
+        parser.error('If using --win-service, must include --windows')
 
     return args
 
