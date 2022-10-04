@@ -38,6 +38,7 @@ delete itself.
 """
 
 FILES_TO_UPDATE = [
+    '.circleci/config.yml',
     "appimage/*/*",
     "debian/control",
     "LICENSE",
@@ -656,6 +657,7 @@ def main():
 
     if not args.circle_ci:
         _('rm -rf .circleci')
+        FILES_TO_UPDATE.remove('.circleci/config.yml')
 
     # After the original, to avoid moving the file when others need to write
     if args.deb:

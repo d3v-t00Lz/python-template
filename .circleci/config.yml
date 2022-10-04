@@ -1,43 +1,17 @@
-# Copied from: https://circleci.com/docs/language-python
-version: 2.1
-orbs:
-  python: circleci/python@2.0.3
-  heroku: circleci/heroku@1.2.6
+version: 2
 
 jobs:
-  build_and_test: # this can be any name you choose
-    executor: python/default
-    steps:
-      - checkout
-      - python/install-packages:
-          pkg-manager: pip
-      - run:
-          name: Run tests
-          command: python -m pytest
-      - persist_to_workspace:
-          root: ~/project
-          paths:
-            - .
-
-  deploy: # this can be any name you choose
-    executor: python/default
-    steps:
-      - attach_workspace:
-          at: ~/project
-      - heroku/deploy-via-git:
-		  # force push when pushing to the heroku remote, see:
-		  # https://devcenter.heroku.com/articles/git
-          force: true
+  tests:
+      docker:
+        - image: themattrix/tox
+      steps:
+        - checkout
+        - run: pip install tox
+        - run: git clone https://github.com/TODO/TODO.git
+        - run: tox
 
 workflows:
-  test_my_app:
+  version: 2
+  myproj:
     jobs:
-      - build_and_test
-      - deploy:
-          requires:
-			# only deploy if the build_and_test job has completed
-            - build_and_test
-          filters:
-            branches:
-			  # only deploy when on main
-              only: main
+      - tests
