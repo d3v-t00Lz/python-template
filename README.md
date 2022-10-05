@@ -18,6 +18,8 @@ workflow of creating a new project and using the template and tooling.
   dependencies within your own package, useful when packaging for Linux
   distros that do not have all of the required dependencies / versions
   available in the OS package manager
+- Run your unit tests against every version of Python that your code supports
+  using `make test-all`
 - `Makefile`: Many development and build tasks are automated using the `make`
   command.  See the `Makefile` source code for details.
 - Boilerplate configs for popular public cloud CI services
