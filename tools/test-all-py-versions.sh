@@ -16,7 +16,7 @@ for version in {7,8,9,10}; do
         -v ".:/src" \
         -e pyversion="py3${version}" \
         --entrypoint 'sh' \
-        python:3.${version}-alpine "/src/tools/test-all-helper.sh"
+        python:3.${version}-bullseye "/src/tools/test-all-helper.sh"
 done
 
 echo 'Finished!'
