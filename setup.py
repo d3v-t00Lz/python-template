@@ -57,12 +57,15 @@ SCRIPTS = [
 def _version():
     path = sys.path[:]
     dirname = os.path.dirname(__file__)
-    abspath = os.path.abspath(dirname)
+    abspath = os.path.join(
+        os.path.abspath(dirname),
+        'src',
+    )
     sys.path.insert(
         0,
         abspath,
     )
-    from src import pytemplate
+    import pytemplate
     version = pytemplate.__version__
     sys.path = path
     return version
