@@ -152,6 +152,10 @@ test:
 	# Run the unit tests
 	tox -e $(shell python3 -c "import sys; v = sys.version_info; print(f'py{v[0]}{v[1]}')")
 
+test-all:
+	# Test against all supported Python versions using Docker
+	tools/test-all-py-versions.sh
+
 type-check:
 	# Check typing of Python type hints
 	mypy --ignore-missing-imports \
