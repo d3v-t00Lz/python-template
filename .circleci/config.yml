@@ -1,17 +1,66 @@
-version: 2
+version: 2.1
+
+executors:
+  python-docker:
+    parameters:
+      pyversion:
+        description: Python version, ie:  3.8, 3.10
+        type: string
+    docker:
+      image: python:<< parameters.pyversion >>-bullseye
 
 jobs:
   tests:
-      docker:
-        - image: themattrix/tox
-      steps:
-        - checkout
-        - run: pip install tox
-        - run: git clone https://github.com/TODO/TODO.git
-        - run: tox
+    executor:
+      name: python-docker
+      pyversion: << parameters.pyversion >>
+    parameters:
+      pyversion:
+        description: Python version, ie:  3.8, 3.10
+        type: string
+    steps:
+      - checkout
+      - create_cache_key:
+          name: Create cache key
+          command: >
+              cat requirements/*
+              | sort
+              | uniq
+              | md5sum
+              | cut -d\' \' -f1
+              > CACHE_KEY
+      - restore_cache:
+          key: deps1-{{ .Branch }}-{{ checksum "CACHE_KEY" }}
+      - run:
+        name: Install Dependencies
+        command: |
+          pip install -r requirements/devel.txt
+          pip install -r requirements/common.txt
+          pip install -r requirements/cli.txt
+          pip install -r requirements/rest.txt
+          pip install -r requirements/test.txt
+          PT_EXCLUDE_LIBS=ALL pip install -e .
+      - run:
+        name: Run Tests
+        command: pytest
+      #- run: >
+      #    tox
+      #    --workdir .tox-workdir
+      #    -e py$(echo << parameters.pyversion | sed s/\.//)
+      - save_cache:
+          key: deps1-{{ .Branch }}-{{ checksum "CACHE_KEY" }}
+          paths:
+            - ".tox-workdir"
 
 workflows:
-  version: 2
   myproj:
     jobs:
-      - tests
+      - tests:
+        myproj:
+          parameters:
+            pyversion:
+              - 3.7
+              - 3.8
+              - 3.9
+              - 3.10
+
