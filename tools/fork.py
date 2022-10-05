@@ -118,6 +118,18 @@ def parse_args():
             '  For example:  --shebang="#!/usr/bin/env pypy3"'
         ),
     )
+    features.add_argument(
+        '--no-os-module',
+        action='store_false',
+        dest='os_module',
+        default=True,
+        help=(
+            'Do not include the OS module in the shared library for '
+            'detecting the current operating system and adding OS-specific '
+            'quirks.'
+        ),
+    )
+
     cicd.add_argument(
         '--circle-ci',
         '-C',
@@ -589,6 +601,8 @@ def main():
         replace_makefile_target('type-check', 'pytemplate_cli', '')
 
     if args.library:
+        if not args.os_module:
+            _('rm -f src/pytemplate/os.py test/pytemplate/test_os.py')
         _('mv src/pytemplate src/{}'.format(name))
         _('mv test/pytemplate test/{}'.format(name))
     else:
