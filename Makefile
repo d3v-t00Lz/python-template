@@ -150,7 +150,8 @@ rpm: test type-check
 
 test:
 	# Run the unit tests
-	tox -e $(shell python3 -c "import sys; v = sys.version_info; print(f'py{v[0]}{v[1]}')")
+	#tox -e $(shell python3 -c "import sys; v = sys.version_info; print(f'py{v[0]}{v[1]}')")
+	python3 -m pytest
 
 test-all:
 	# Test against all supported Python versions using Docker
