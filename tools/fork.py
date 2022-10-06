@@ -541,6 +541,7 @@ def main():
         _('rm -rf test/pytemplate_rest')
         _('rm -f Dockerfile-rest')
         _('rm -f requirements/rest.txt')
+        remove_lines('Makefile', 'src/pytemplate_rest')
         remove_text('setup.cfg', '--cov=pytemplate_rest ')
         remove_lines('requirements/test.txt', 'sanic')
         remove_lines('tox.ini', 'requirements/rest.txt')
@@ -595,6 +596,7 @@ def main():
         remove_makefile_target('appimage-cli')
         remove_makefile_target('docker-cli')
         remove_makefile_target('install_completions')
+        remove_lines('Makefile', 'src/pytemplate_cli')
         remove_lines('Makefile', 'COMPLETIONS')
         remove_lines('tox.ini', 'requirements/cli.txt')
         remove_lines_range('tools/rpm.spec', 'PT:CLI')
@@ -631,6 +633,8 @@ def main():
         _('rm -rf debian/')
         remove_lines('.dockerignore', '/debian')
         remove_makefile_target('deb')
+        remove_makefile_target('override_dh_auto_build')
+        remove_makefile_target('override_dh_auto_install')
         FILES_TO_UPDATE.remove('debian/control')
     if not args.macos:
         _('rm -rf macos/')
@@ -653,6 +657,7 @@ def main():
         _('rm -f Dockerfile* .dockerignore')
         remove_makefile_target('docker-cli')
         remove_makefile_target('docker-rest')
+        remove_lines('Makefile', 'DOCKER_TAG')
     if not args.vendor:
         _('rm -f tools/vendor.sh pytemplate/setup/vendor.py')
         remove_lines('pytemplate/setup/__init__.py', 'vendor')

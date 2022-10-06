@@ -6,7 +6,7 @@
 # version of Python that your application supports, and run the unit tests
 # to ensure compatibility with each Python version
 
-DOCKER=podman
+DOCKER=${1:-podman}
 
 cd "$(dirname -- ${BASH_SOURCE[0]:-${0:A:h}})/.."
 pwd

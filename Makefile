@@ -123,7 +123,7 @@ install_linux_desktop:
 
 pdb:
 	# Debug unit tests that raise Exceptions with PDB
-	pytest --pdb
+	python3 -m pytest --pdb
 
 pypi: test type-check
 	# Upload your package to PyPi so that anybody can install using pip.
@@ -155,7 +155,7 @@ test:
 
 test-all-docker:
 	# Test against all versions of Python supported by this code using Docker
-	tools/test-all-py-versions.sh
+	tools/test-all-py-versions.sh $(DOCKER)
 
 test-all-tox:
 	# Test against all versions of Python supported by this code using tox
@@ -166,17 +166,20 @@ test-all-tox:
 type-check:
 	# Check typing of Python type hints
 	mypy --ignore-missing-imports \
-		src/pytemplate src/pytemplate_cli src/pytemplate_rest
+		src/pytemplate \
+		src/pytemplate_cli \
+		src/pytemplate_rest \
 
 venv:
 	# Create a Python "virtual environment" aka venv
 	# Run this target before running:
 	#     source venv/bin/activate
 	#     pip3 install -e .
-	python3 -m venv --system-site-packages venv
+	python3 -m venv venv
 
 override_dh_auto_build:
 	# Debian shenanigans
 
 override_dh_auto_install:
 	# Debian shenanigans
+
