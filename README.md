@@ -1,4 +1,4 @@
-# The Rosetta Stone of Python Packaging
+# Comprehensive packaging and testing for your Python projects
 
 This project is meant to be forked into new Python3 projects using the
 `tools/fork.py` script.  See `tools/fork.py --help` for the many command line
@@ -19,7 +19,8 @@ workflow of creating a new project and using the template and tooling.
   distros that do not have all of the required dependencies / versions
   available in the OS package manager
 - Run your unit tests in Docker or Podman against every version of Python that
-  your code supports using `make test-all`
+  your code supports using `make test-all-docker`, or use `tox` if you have
+  all required Python versions installed locally
 - `Makefile`: Many development and build tasks are automated using the `make`
   command.  See the `Makefile` source code for details.
 - Boilerplate configs for popular public cloud CI services
@@ -32,7 +33,7 @@ workflow of creating a new project and using the template and tooling.
 - MacOS app bundle
 - pypi / pip
 - RPM (Red Hat / Fedora / OpenSUSE / etc...)
-- Windows installer
+- Windows installers and single-file portable executables
 
 ## Included optional user interfaces
 - Shared library
