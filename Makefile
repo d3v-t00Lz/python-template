@@ -121,10 +121,6 @@ install_linux_desktop:
 		--dir="$(LINUX_APPLICATIONS_DIR)"                   \
 		"$(LINUX_APPLICATIONS_DIR)/$(PRODUCT)_$(UI).desktop"
 
-pdb:
-	# Debug unit tests that raise Exceptions with PDB
-	python3 -m pytest --pdb
-
 pypi: test type-check
 	# Upload your package to PyPi so that anybody can install using pip.
 	# Requires `twine` to be installed, and a local twine config with your
@@ -162,6 +158,10 @@ test-all-tox:
 	# This only works if every supported version of Python is installed on
 	# this computer
 	tox
+
+test-pdb:
+	# Debug unit tests that raise Exceptions with PDB
+	python3 -m pytest --pdb
 
 type-check:
 	# Check typing of Python type hints
