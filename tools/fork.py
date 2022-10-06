@@ -357,7 +357,7 @@ def remove_dup_newlines(path: str):
             stripped = line.strip()
             if stripped or not last_line_empty:
                 result.append(line)
-            last_line_empty = bool(stripped)
+            last_line_empty = not stripped
     with open(path, 'w') as f:
         f.write("".join(result))
 
