@@ -629,15 +629,18 @@ def main():
 
     if not args.deb:
         _('rm -rf debian/')
+        remove_lines('.dockerignore', '/debian')
         remove_makefile_target('deb')
         FILES_TO_UPDATE.remove('debian/control')
     if not args.macos:
         _('rm -rf macos/')
         _('rm -f tools/*macos*')
         _('rm -f tools/*homebrew*')
+        remove_lines('.dockerignore', '/macos')
     if not args.windows:
         _('rm -rf windows/')
         _('rm -f tools/*windows*')
+        remove_lines('.dockerignore', '/windows')
         FILES_TO_UPDATE.remove('windows/nsis.jinja')
     if not args.appimage:
         _('rm -rf appimage/')
@@ -645,6 +648,7 @@ def main():
         remove_makefile_target('appimage-cli')
         remove_makefile_target('appimage-qt')
         remove_makefile_target('appimage-sdl2')
+        remove_lines('.dockerignore', '/appimage')
     if not args.docker:
         _('rm -f Dockerfile* .dockerignore')
         remove_makefile_target('docker-cli')
