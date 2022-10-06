@@ -153,9 +153,15 @@ test:
 	#tox -e $(shell python3 -c "import sys; v = sys.version_info; print(f'py{v[0]}{v[1]}')")
 	python3 -m pytest
 
-test-all:
-	# Test against all supported Python versions using Docker
+test-all-docker:
+	# Test against all versions of Python supported by this code using Docker
 	tools/test-all-py-versions.sh
+
+test-all-tox:
+	# Test against all versions of Python supported by this code using tox
+	# This only works if every supported version of Python is installed on
+	# this computer
+	tox
 
 type-check:
 	# Check typing of Python type hints
