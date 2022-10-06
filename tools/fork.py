@@ -349,6 +349,18 @@ def parse_args():
 
     return args
 
+def remove_dup_newlines(path: str):
+    result = []
+    with open(path) as f:
+        last_line_empty = False
+        for line in f:
+            stripped = line.strip()
+            if stripped or not last_line_empty:
+                result.append(line)
+            last_line_empty = bool(stripped)
+    with open(path, 'w') as f:
+        f.write("".join(result))
+
 def remove_text(path: str, string: str):
     """ Remove specific text from a file  """
     if not os.path.isfile(path):
@@ -681,6 +693,8 @@ def main():
     if not args.circle_ci:
         _('rm -rf .circleci')
         FILES_TO_UPDATE.remove('.circleci/config.yml')
+
+    remove_dup_newlines('Makefile')
 
     # After the original, to avoid moving the file when others need to write
     if args.deb:
