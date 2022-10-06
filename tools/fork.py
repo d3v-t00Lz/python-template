@@ -349,17 +349,15 @@ def parse_args():
 
     return args
 
-def remove_dup_newlines(path: str):
+def remove_dup_newlines(lines: list):
     result = []
-    with open(path) as f:
-        last_line_empty = False
-        for line in f:
-            stripped = line.strip()
-            if stripped or not last_line_empty:
-                result.append(line)
-            last_line_empty = not stripped
-    with open(path, 'w') as f:
-        f.write("".join(result))
+    last_line_empty = False
+    for line in lines:
+        stripped = line.strip()
+        if stripped or not last_line_empty:
+            result.append(line)
+        last_line_empty = not stripped
+    return result
 
 def remove_text(path: str, string: str):
     """ Remove specific text from a file  """
@@ -379,6 +377,7 @@ def remove_lines(path: str, string: str):
         return
     with open(path) as f:
         lines = [x for x in f if string not in x]
+    lines = remove_dup_newlines(lines)
     with open(path, 'w') as f:
         f.write("".join(lines))
 
@@ -412,6 +411,7 @@ def remove_lines_range(
                 else:
                     lines.append(line)
 
+    lines = remove_dup_newlines(lines)
     with open(path, 'w') as f:
         f.write("".join(lines))
 
@@ -429,6 +429,7 @@ def remove_makefile_target(name: str):
                 lines.append(
                     line.replace(f'{name}', ''),  # Remove calls to target
                 )
+    lines = remove_dup_newlines(lines)
     with open('Makefile', 'w') as f:
         f.write("".join(lines))
 
@@ -447,6 +448,7 @@ def replace_makefile_target(name: str, old: str, new: str):
                 lines.append(line.replace(old, new))
             else:
                 lines.append(line)
+    lines = remove_dup_newlines(lines)
     with open('Makefile', 'w') as f:
         f.write("".join(lines))
 
@@ -693,8 +695,6 @@ def main():
     if not args.circle_ci:
         _('rm -rf .circleci')
         FILES_TO_UPDATE.remove('.circleci/config.yml')
-
-    remove_dup_newlines('Makefile')
 
     # After the original, to avoid moving the file when others need to write
     if args.deb:
