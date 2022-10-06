@@ -4,16 +4,7 @@
 *.pyc
 *.pyd
 *.pyo
-.Python
-.cache
-.coverage
-.coverage.*
-.eggs
-.git
-.hypothesis
-.mypy_cache
-.pytest_cache
-.tox
+.*
 /appimage/
 /debian/
 /htmlcov/
@@ -22,6 +13,8 @@
 /venv/
 /windows/
 Dockerfile*
+Makefile
+TODO*
 __pycache__
 build/
 coverage.xml
