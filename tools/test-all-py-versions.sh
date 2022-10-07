@@ -11,7 +11,8 @@ DOCKER=${1:-podman}
 cd "$(dirname -- ${BASH_SOURCE[0]:-${0:A:h}})/.."
 pwd
 
-for version in {7,8,9,10}; do
+# Edit this range to include newer releases or remove older releases
+for version in {7..10}; do
     $DOCKER run \
         -v ".:/src" \
         -e pyversion="py3${version}" \
