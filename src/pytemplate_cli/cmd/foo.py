@@ -2,7 +2,7 @@
 
 """
 
-from pytemplate.cmd.foo import foo
+from pytemplate.cmd.foo import foo, FooStrings
 from pytemplate_cli.util import arg_force
 from pytemplate.types import Foo
 
@@ -13,7 +13,7 @@ def _cli_foo(
 ):
     parser = subparsers.add_parser(
         'foo',
-        help='A subcommand that does something'
+        description=FooStrings.main,
     )
     # main will call func() if this command is selected
     parser.set_defaults(func=func)
@@ -22,10 +22,7 @@ def _cli_foo(
     parser.add_argument(
         'foo',  # notice this lines up to 'foo' of mycmd()
         type=Foo.factory,
-        help=(
-            'Some required command line argument, in the format '
-            'something:something:something'
-        ),
+        help=FooStrings.foo,
     )
     parser.add_argument(
         '-s',
@@ -33,8 +30,7 @@ def _cli_foo(
         default=123,
         dest='something',  # notice this lines up to 'something' of mycmd()
         type=int,
-        help='Some command line option'
+        help=FooStrings.something,
     )
-    arg_force(
-        parser,
-    )
+    arg_force(parser, _help=FooStrings.force)
+

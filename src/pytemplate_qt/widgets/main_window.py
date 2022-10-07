@@ -6,7 +6,7 @@ from pytemplate_qt.qt import (
     QPushButton,
     QWidget,
 )
-from pytemplate.cmd.version import version
+from pytemplate.cmd.version import version, VersionStrings
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -16,6 +16,7 @@ class MainWindow(QMainWindow):
         main_layout = QGridLayout(cen_widget)
         version_button = QPushButton("Version")
         version_button.pressed.connect(self.on_version)
+        version_button.setToolTip(VersionStrings.main)
         main_layout.addWidget(version_button, 0, 0)
 
     def on_version(self):

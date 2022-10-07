@@ -2,7 +2,7 @@
 
 """
 
-from pytemplate.cmd.version import version
+from pytemplate.cmd.version import version, VersionStrings
 
 
 def _cli_version(
@@ -11,6 +11,7 @@ def _cli_version(
 ):
     parser = subparsers.add_parser(
         'version',
-        help='Print the package version and exit.'
+        description=VersionStrings.main,
     )
     parser.set_defaults(func=func)
+
