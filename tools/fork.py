@@ -639,9 +639,9 @@ def main():
         )
 
     if args.windows_service:
-        remove_lines('windows/nsis.jinja', 'PT:WINDOWS_SERVICE')
+        remove_lines('windows/nsis.jinja', 'PT:SERVICE')
     else:
-        remove_lines_range('windows/nsis.jinja', 'PT:WINDOWS_SERVICE')
+        remove_lines_range('windows/nsis.jinja', 'PT:SERVICE')
 
     if not args.deb:
         _('rm -rf debian/')
