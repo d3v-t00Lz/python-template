@@ -2,12 +2,13 @@
 
 This project is meant to be forked into new Python3 projects using the
 `tools/fork.py` script.  See `tools/fork.py --help` for the many command line
-options available.  See [the usage document](doc/usage.md) to understand the
+options available.  See [the usage document](/doc/usage.md) to understand the
 workflow of creating a new project and using the template and tooling.
 
 # Features
-- Comprehensive packaging options for all major desktop platforms, easily
-  deploy your cross-platform Python code to nearly any computer in the world
+- Comprehensive packaging options for all major desktop and server platforms,
+  easily deploy your cross-platform Python code to nearly any computer in the
+  world
 - 100% unit test coverage out of the box
 - Clean separation of business logic from presentation
 - Well organized and extensible structure
