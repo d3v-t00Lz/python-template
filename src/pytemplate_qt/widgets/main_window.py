@@ -16,7 +16,7 @@ class MainWindow(QMainWindow):
         main_layout = QGridLayout(cen_widget)
         version_button = QPushButton("Version")
         version_button.pressed.connect(self.on_version)
-        version_button.setToolTip(VersionStrings.main)
+        version_button.setToolTip(VersionStrings.description)
         main_layout.addWidget(version_button, 0, 0)
 
     def on_version(self):
