@@ -13,9 +13,8 @@ def parse_foo(
 ):
     parser = subparsers.add_parser(
         'foo',
-        description=FooStrings.main,
+        description=FooStrings.description,
     )
-    # main will call func() if this command is selected
     parser.set_defaults(func=func)
     # All of the arguments should line up 1-to-1 with the
     # function arguments to mycmd(...)

@@ -11,7 +11,7 @@ def parse_version(
 ):
     parser = subparsers.add_parser(
         'version',
-        description=VersionStrings.main,
+        description=VersionStrings.description,
     )
     parser.set_defaults(func=func)
 

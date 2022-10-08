@@ -6,7 +6,7 @@ from pytemplate.config import Config
 from pytemplate.types import Foo
 
 class FooStrings:
-    main = "Do the foo thing"
+    description = "Do the foo thing"
     foo = 'Some required argument, in the format something:something:something'
     something = "Some integer number"
     force = "Foo no matter what"

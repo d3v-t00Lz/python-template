@@ -11,7 +11,6 @@ def parse_baz(
 ):
     parser = subparsers.add_parser(
         'baz',
-        description=BazStrings.main,
+        description=BazStrings.description,
     )
-    # main will call func() if this command is selected
     parser.set_defaults(func=func)
