@@ -125,7 +125,7 @@ install_linux_desktop:
 # does not supply every needed Python version
 pypi: test-all-tox type-check
 	# Upload your package to PyPi so that anybody can install using pip.
-	# Requires `twine` to be installed, and a local twine config with your
+	# Requires `twine` to be installed, and a ~/.pypirc config with your
 	# pypi username and password
 	rm -rf dist/*.tar.gz dist/*.whl
 	python3 -m build
