@@ -376,13 +376,35 @@ def remove_text(path: str, string: str):
     with open(path, 'w') as f:
         f.write(text)
 
-def remove_lines(path: str, string: str):
-    """ Remove entire lines containing specific text """
+def remove_lines(
+    path: str,
+    string: str,
+    contains: bool=True,
+    strip: bool=False,
+):
+    """ Remove entire lines containing specific text
+
+        @path:   The path to a file
+        @string: The text to match
+        @contains:
+            True to remove lines containing the string, False to remove lines
+            matching the string
+        @strip:
+            strip the line before comparing, only makes sense
+            if @contains=False
+    """
     if not os.path.isfile(path):
         print(f'{path} does not exist, not editing')
         return
     with open(path) as f:
-        lines = [x for x in f if string not in x]
+        if contains:
+            lines = [x for x in f if string not in x]
+        elif strip:
+            lines = [x for x in f if string != x.strip()]
+        elif not strip:
+            lines = [x for x in f if string != x]
+        else:
+            raise Exception("How did we hit this line?")
     lines = remove_dup_newlines(lines)
     with open(path, 'w') as f:
         f.write("".join(lines))
@@ -734,6 +756,9 @@ def main():
             _(f'rm -rf {dirname}/')
 
     _('rm -f tools/fork.py')
+
+    # Remove empty line continuations
+    remove_lines('Makefile', '\\', contains=False, strip=True)
 
     if args.git_repo:
         if not args.git_history:
