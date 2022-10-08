@@ -30,5 +30,12 @@ def parse_args(args=None):
         default=False,
         help='Run server with debug logging output (slower)',
     )
+    parser.add_argument(
+        '--access-log',
+        dest='access_log',
+        action='store_true',
+        default=False,
+        help='Log accesses to the server',
+    )
     return parser.parse_args(args)
 
