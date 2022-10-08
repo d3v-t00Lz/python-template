@@ -44,15 +44,15 @@ DESCRIPTION = (
     "TODO"
 )
 
+CWD = os.path.abspath(
+    os.path.dirname(__file__),
+)
+SCRIPTS_DIR = os.path.join(CWD, 'scripts')
+
 SCRIPTS = [
     os.path.join('scripts', x)
-    for x in os.listdir(
-        os.path.join(
-            os.path.dirname(__file__),
-            'scripts',
-        )
-    )
-]
+    for x in os.listdir(SCRIPTS_DIR)
+] if os.path.isdir(SCRIPTS_DIR) else []
 
 def _version():
     path = sys.path[:]
@@ -95,9 +95,9 @@ setup(
     version=VERSION,
     author="TODO",
     author_email="TODO",
-    license="TODO",
     description=DESCRIPTION,
     long_description=LONG_DESC,
+    long_description_content_type='text/markdown',
     url=URL,
     packages=find_packages(where='src'),
     package_dir = {'': 'src'},
