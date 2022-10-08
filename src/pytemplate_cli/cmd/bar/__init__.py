@@ -2,11 +2,11 @@
 
 """
 
-from .baz import _cli_bar_baz
+from .baz import parse_baz
 from pytemplate_cli.util import required_subcommand
 
 
-def _cli_bar(
+def parse_bar(
    subparsers,
 ):
     parser = subparsers.add_parser(
@@ -17,4 +17,4 @@ def _cli_bar(
     subparsers2 = parser.add_subparsers(
         description='Subcommands (required)',
     )
-    _cli_bar_baz(subparsers2)
+    parse_baz(subparsers2)

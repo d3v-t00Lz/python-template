@@ -7,7 +7,7 @@ from pytemplate_cli.util import arg_force
 from pytemplate.types import Foo
 
 
-def _cli_foo(
+def parse_foo(
     subparsers,
     func=foo,
 ):

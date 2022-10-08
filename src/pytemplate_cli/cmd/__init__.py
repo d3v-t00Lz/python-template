@@ -28,15 +28,15 @@
 
 """
 
-from .bar import _cli_bar
-from .foo import _cli_foo
-from .version import _cli_version
+from .bar import parse_bar
+from .foo import parse_foo
+from .version import parse_version
 
 def cli_subcommands(subparsers):
     for func in (
-        _cli_bar,
-        _cli_foo,
-        _cli_version,
+        parse_bar,
+        parse_foo,
+        parse_version,
     ):
         func(subparsers)
 
