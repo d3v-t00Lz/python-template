@@ -653,6 +653,7 @@ def main():
     if not args.deb:
         _('rm -rf debian/')
         remove_lines('.dockerignore', '/debian')
+        remove_text('tools/debian_devel_deps.sh', 'devscripts ')
         remove_makefile_target('deb')
         remove_makefile_target('override_dh_auto_build')
         remove_makefile_target('override_dh_auto_install')
@@ -688,6 +689,7 @@ def main():
         _('rm -f tools/rpm.spec')
         remove_makefile_target('rpm')
         FILES_TO_UPDATE.remove('tools/rpm.spec')
+        remove_text('tools/fedora_devel_deps.sh', 'rpm-build ')
 
     if args.pypi:
         remove_lines('setup.py', 'PT:PYPI')
