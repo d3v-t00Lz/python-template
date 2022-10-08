@@ -121,7 +121,9 @@ install_linux_desktop:
 		--dir="$(LINUX_APPLICATIONS_DIR)"                   \
 		"$(LINUX_APPLICATIONS_DIR)/$(PRODUCT)_$(UI).desktop"
 
-pypi: test type-check
+# TODO: Replace test-all-tox with test-all-docker if using a system that
+# does not supply every needed Python version
+pypi: test-all-tox type-check
 	# Upload your package to PyPi so that anybody can install using pip.
 	# Requires `twine` to be installed, and a local twine config with your
 	# pypi username and password
