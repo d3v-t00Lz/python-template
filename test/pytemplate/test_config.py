@@ -4,6 +4,7 @@
 
 import os
 import pytest
+import tempfile
 
 from pytemplate import config
 
@@ -19,6 +20,9 @@ def test_singleton_file():
 
     option_a = config.get_option('option_a')
     assert option_a == 'something'
+
+    with tempfile.NamedTemporaryFile() as t:
+        cfg.save_to_file(t.name)
 
 def test_singleton_env_vars():
     environ = os.environ

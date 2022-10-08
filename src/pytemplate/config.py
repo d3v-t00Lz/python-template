@@ -8,7 +8,7 @@ import os
 from typing import Optional
 
 # JSON is compatible with YAML, you can use either format
-from pymarshal.json import type_assert, unmarshal_json
+from pymarshal.json import type_assert, unmarshal_json, marshal_json
 import yaml
 
 
@@ -43,6 +43,11 @@ class Config:
             env_var='OPTION_A',
             allow_none=False,
         )
+
+    def save_to_file(self, path: str):
+        y = marshal_json(self)
+        with open(path, 'w') as f:
+            yaml.safe_dump(y, f)
 
     @staticmethod
     def load_from_file(
