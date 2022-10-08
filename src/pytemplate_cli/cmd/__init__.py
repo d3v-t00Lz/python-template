@@ -41,5 +41,5 @@ def cli_subcommands(subparsers):
         func(subparsers)
 
 __all__ = [
-    'subcommands',
+    'cli_subcommands',
 ]
