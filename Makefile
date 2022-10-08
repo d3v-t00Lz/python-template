@@ -15,7 +15,7 @@ COMPLETIONS_SHELL ?= bash
 LINUX_APPLICATIONS_DIR ?= $(DESTDIR)/usr/share/applications
 UI ?= qt
 
-.PHONY: test venv
+.PHONY: requirements test venv
 
 appimage-cli:
 	# Build the AppImage for the cli
@@ -128,6 +128,10 @@ pypi: test type-check
 	rm -rf dist/*.tar.gz dist/*.whl
 	python3 -m build
 	twine upload dist/*
+
+requirements:
+	# Install all Python dependencies from pypi/pip
+	for x in requirements/*; do pip install -r $${x}; done
 
 rpm: test type-check
 	# Build the RPM package locally in .rpmbuild
