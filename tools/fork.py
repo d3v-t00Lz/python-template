@@ -349,6 +349,12 @@ def parse_args():
 
     return args
 
+def dir_has_files(dirname: str):
+    for dirpath, dirnames, filenames in os.walk(dirname):
+        if filenames:
+            return True
+    return False
+
 def remove_dup_newlines(lines: list):
     result = []
     last_line_empty = False
@@ -498,6 +504,7 @@ def main():
         remove_lines('tools/rpm.spec', 'PT:GUI')
     else:
         remove_makefile_target('install_linux_icon')
+        remove_makefile_target('install_linux_desktop')
         remove_lines(
             'debian/python3-pytemplate.install',
             '/usr/share/pixmaps/',
@@ -684,6 +691,7 @@ def main():
 
     if args.pypi:
         remove_lines('setup.py', 'PT:PYPI')
+        remove_lines('requirements/devel.txt', 'PT:PYPI')
     else:
         remove_makefile_target('pypi')
         remove_lines_range('setup.py', 'PT:PYPI')
@@ -715,6 +723,13 @@ def main():
         f.write(f"# {name}\nTODO")
     with open('LICENSE', 'w') as f:
         f.write('Copyright the authors, all rights reserved\nTODO')
+
+    if not any((args.cli, args.qt, args.sdl2, args.vendor, args.systemd)):
+        remove_makefile_target('install_linux')
+
+    for dirname in ('files', 'scripts'):
+        if not dir_has_files(dirname):
+            _(f'rm -rf {dirname}/')
 
     _('rm -f tools/fork.py')
 
