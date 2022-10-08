@@ -4,7 +4,6 @@
 
 from pytemplate.cmd.foo import foo, FooStrings
 from pytemplate_cli.util import arg_force
-from pytemplate.types import Foo
 
 
 def parse_foo(
@@ -20,7 +19,6 @@ def parse_foo(
     # function arguments to mycmd(...)
     parser.add_argument(
         'foo',  # notice this lines up to 'foo' of mycmd()
-        type=Foo.factory,
         help=FooStrings.foo,
     )
     parser.add_argument(

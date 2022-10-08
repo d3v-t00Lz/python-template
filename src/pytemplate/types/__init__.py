@@ -6,4 +6,3 @@
     and define your classes in custom submodules.
 """
 
-from .foo import Foo

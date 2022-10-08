@@ -9,7 +9,6 @@ from typing import List, Optional
 from pytemplate_cli.cmd import cli_subcommands
 from pytemplate_cli.util import required_subcommand
 from pytemplate.config import Config
-from pytemplate.exc import BadArgsError
 
 
 def arg_parser():
@@ -41,9 +40,5 @@ def parse_args(
     _args: Optional[List[str]]=None,
 ):
     parser = arg_parser()
-    try:
-        return parser.parse_args(_args)
-    except BadArgsError as ex:
-        ex.print_msg()
-        sys.exit(1)
+    return parser.parse_args(_args)
 

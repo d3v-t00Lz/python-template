@@ -5,7 +5,6 @@
 import pytest
 
 from pytemplate_cli.args import parse_args
-from pytemplate.types import Foo
 
 
 def test_parse_args():
@@ -16,11 +15,7 @@ def test_parse_args():
                 'some:value:blah',
             ],
             {
-                'foo': Foo(
-                    'some',
-                    'value',
-                    'blah',
-                ),
+                'foo': 'some:value:blah',
             },
         ),
     ]:
@@ -38,7 +33,9 @@ def test_parse_args_raises():
         (
             [
                 'foo',
-                'two:values-not-three',
+                'too',
+                'many',
+                'args',
             ],
             SystemExit,
         ),
