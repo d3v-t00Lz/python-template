@@ -11,10 +11,10 @@ def _cli_bar(
 ):
     parser = subparsers.add_parser(
         'bar',
-        help='A subcommand that does something'
+        description='A subcommand that does something'
     )
     parser.set_defaults(func=required_subcommand)
     subparsers2 = parser.add_subparsers(
-        help='Subcommands (required)',
+        description='Subcommands (required)',
     )
     _cli_bar_baz(subparsers2)
