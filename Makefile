@@ -129,7 +129,7 @@ pypi: test-all-tox type-check
 	# pypi username and password
 	rm -rf dist/*.tar.gz dist/*.whl
 	python3 -m build
-	twine upload dist/*
+	python3 -m twine upload dist/*
 
 requirements:
 	# Install all Python dependencies from pypi/pip
