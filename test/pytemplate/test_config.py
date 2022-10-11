@@ -21,8 +21,9 @@ def test_singleton_file():
     option_a = config.get_option('option_a')
     assert option_a == 'something'
 
-    with tempfile.NamedTemporaryFile() as t:
-        cfg.save_to_file(t.name)
+    with tempfile.TemporaryDirectory() as t:
+        name = os.path.join(t, 'test', 'test', 'config.yml')
+        cfg.save_to_file(name)
 
 def test_singleton_env_vars():
     environ = os.environ

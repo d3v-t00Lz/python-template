@@ -45,6 +45,9 @@ class Config:
         )
 
     def save_to_file(self, path: str):
+        dirname = os.path.dirname(path)
+        if not os.path.isdir(dirname):
+            os.makedirs(dirname)
         y = marshal_json(self)
         with open(path, 'w') as f:
             yaml.safe_dump(y, f)
