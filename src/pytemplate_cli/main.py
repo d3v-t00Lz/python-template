@@ -23,5 +23,6 @@ def main(
     # load_config(config_path)
     func = kwargs.pop('func')
     result = func(**kwargs)
-    print(result)
+    if result:
+        print(result)
 
