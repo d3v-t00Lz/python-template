@@ -12,7 +12,6 @@ workflow of creating a new project and using the template and tooling.
 - 100% unit test coverage out of the box
 - Clean separation of business logic from presentation
 - Well organized and extensible structure
-- Generate tab completion scripts for bash and zsh
 - `tools/fork.py`: Project forking script to customize which components
   your project includes
 - `tools/vendor.sh` Python package vendoring; Transparently store
@@ -25,6 +24,8 @@ workflow of creating a new project and using the template and tooling.
 - `Makefile`: Many development and build tasks are automated using the `make`
   command.  See the `Makefile` source code for details.
 - Boilerplate configs for popular public cloud CI services
+- Generate tab completion scripts for bash and zsh
++ Generate man pages for your CLI applications
 
 ## Advanced packaging
 - AppImage (one-file desktop and CLI portable executables that work on nearly

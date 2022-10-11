@@ -12,6 +12,8 @@ _COMPLETIONS_DIR ?= $(DESTDIR)/usr/share/bash-completions/completions
 COMPLETIONS_EXT ?=
 COMPLETIONS_SHELL ?= bash
 
+MAN_DIR ?= $(PREFIX)/share/man
+
 LINUX_APPLICATIONS_DIR ?= $(DESTDIR)/usr/share/applications
 UI ?= qt
 
@@ -63,6 +65,17 @@ deb: test type-check
 	DEB_BUILD_OPTIONS=nocheck debuild -i
 	rm ../*.orig ../python3-$(PRODUCT)* debian/*debhelper*
 
+generate-manpage:
+	# Generate a man page file.  Must be committed back to git
+	# Run this everytime you make changes to the the ArgumentParser
+	# Note that this will overwrite any changes you made by hand
+	argparse-manpage \
+		--pyfile src/pytemplate_cli/args.py \
+		--function arg_parser \
+		--prog pytemplate_cli \
+		--project-name pytemplate \
+		--output files/linux/manpage
+
 git-hooks:
 	# Install git hooks for this repository to enable running tests before
 	# committing, etc...
@@ -82,6 +95,7 @@ install_linux: \
 	install_completions \
 	install_linux_icon \
 	install_linux_vendor \
+	install_man_page\
 	install_systemd \
 
 	# Install various files for Linux,
@@ -101,6 +115,13 @@ install_linux_vendor:
 		install -d $(DESTDIR)/usr/lib/$(PRODUCT) ; \
 		cp -r vendor/ $(DESTDIR)/usr/lib/$(PRODUCT)/ ; \
 	fi
+
+install_man_page:
+	install -d $(DESTDIR)/$(MAN_DIR)
+	cp files/linux/manpage $(PRODUCT).1
+	gzip $(PRODUCT).1
+	install -m 0644 $(PRODUCT).1.gz $(DESTDIR)/$(MAN_DIR)/
+	rm $(PRODUCT).1.gz
 
 install_systemd:
 	# Install systemd service file on Linux or other UNIXes that use systemd

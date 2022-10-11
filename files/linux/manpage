@@ -1,0 +1,50 @@
+.TH PYTEMPLATE_CLI "1" Manual
+.SH NAME
+pytemplate_cli
+.SH SYNOPSIS
+.B pytemplate_cli
+[-h] [-c CONFIG] {bar,foo,version} ...
+.SH
+POSITIONAL ARGUMENTS
+
+.SH COMMAND \fI\,'pytemplate_cli bar'\/\fR
+usage: pytemplate_cli bar [-h] {baz} ...
+
+A subcommand that does something
+
+.SH
+SUBCOMMANDS \fI\,'pytemplate_cli bar'\/\fR
+
+.SH COMMAND \fI\,'pytemplate_cli bar baz'\/\fR
+usage: pytemplate_cli bar baz [-h]
+
+It does something
+
+.SH COMMAND \fI\,'pytemplate_cli foo'\/\fR
+usage: pytemplate_cli foo [-h] [-s SOMETHING] [-f] foo
+
+Do the foo thing
+
+.TP
+\fBfoo\fR
+Some required argument, in the format something:something:something
+
+.SH OPTIONS \fI\,'pytemplate_cli foo'\/\fR
+.TP
+\fB\-s\fR \fI\,SOMETHING\/\fR, \fB\-\-something\fR \fI\,SOMETHING\/\fR
+Some integer number
+
+.TP
+\fB\-f\fR, \fB\-\-force\fR
+Foo no matter what
+
+.SH COMMAND \fI\,'pytemplate_cli version'\/\fR
+usage: pytemplate_cli version [-h]
+
+Show the package version
+
+.SH OPTIONS
+.TP
+\fB\-c\fR \fI\,CONFIG\/\fR, \fB\-\-config\fR \fI\,CONFIG\/\fR
+The path to a config file. Default values will be used if it does not exist.
+

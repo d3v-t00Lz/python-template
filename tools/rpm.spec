@@ -33,7 +33,7 @@ TODO
 
 %install
 %py3_install
-DESTDIR="%{buildroot}" COMPLETIONS_DIR="%{completions_dir}" make install_linux
+DESTDIR="%{buildroot}" COMPLETIONS_DIR="%{completions_dir}" MAN_DIR=%{_mandir}/man1 make install_linux
 
 # PT:QT
 touch %{buildroot}/%{_datadir}/applications/%{modname}_qt.desktop
@@ -82,7 +82,11 @@ desktop-file-install                                        \
 # PT:SYSTEMD
 
 # PT:CLI
+%{_mandir}/man1/*
 %{completions_dir}/*
 # PT:CLI
+
+%exclude %dir %{_bindir}
+%exclude %dir /usr/lib
 
 %changelog

@@ -1,9 +1,9 @@
+argparse-manpage
 mypy
 pip>=22.2.2
 tox
 types-pyyaml
 wheel
-
 # PT:PYPI
 build
 twine

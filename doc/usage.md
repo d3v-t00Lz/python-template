@@ -97,3 +97,8 @@ dump it in the users' local tab completion script directory
 
 See the `Makefile` source for more details.
 
+## Generating man pages
+After modifying your CLI interface, run `make generate-manpage` to generate
+a new man page in `/files/linux/manpage`.  You can edit the man pages as
+needed, but note that they will be over-written next time you generate the
+page.
