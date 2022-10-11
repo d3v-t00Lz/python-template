@@ -36,6 +36,9 @@ def test_singleton_env_vars():
 
         option_a = config.get_option('option_a')
         assert option_a == 'lol'
+        with tempfile.NamedTemporaryFile() as t:
+            tmp = t.name
+        config.set_config(cfg, tmp)
     finally:
         os.environ = environ
 

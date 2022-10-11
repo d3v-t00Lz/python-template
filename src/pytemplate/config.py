@@ -12,6 +12,8 @@ from pymarshal.json import type_assert, unmarshal_json, marshal_json
 import yaml
 
 
+DEFAULT_CONFIG_PATH = '/etc/pytemplate/config.yml'
+
 # CLI arg access:
 __all__ = [
     'Config',
@@ -54,7 +56,7 @@ class Config:
 
     @staticmethod
     def load_from_file(
-        path: str='/etc/pytemplate/config.yml',
+        path: str=DEFAULT_CONFIG_PATH,
         allow_default: bool=False,
     ):
         exists = os.path.exists(path)
@@ -77,7 +79,7 @@ _CONFIG: Optional[Config] = None
 # Functions for the singleton access pattern
 
 def load_config_from_file(
-    path: str='/etc/pytemplate/config.yml',
+    path: str=DEFAULT_CONFIG_PATH,
     allow_default: bool=False,
 ):
     global _CONFIG
@@ -94,6 +96,13 @@ def load_config_from_env_vars():
 def get_config():
     return copy.deepcopy(_CONFIG)
 
+def set_config(
+    cfg: Config,
+    path: str=DEFAULT_CONFIG_PATH,
+):
+    global _CONFIG
+    cfg.save_to_file(path)
+    _CONFIG = cfg
 
 def get_option(name):
     attr = getattr(_CONFIG, name)
