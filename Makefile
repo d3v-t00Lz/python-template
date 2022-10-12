@@ -7,14 +7,15 @@ PREFIX ?= /usr
 DOCKER ?= podman
 DOCKER_TAG ?= $(ORG)/$(PRODUCT)
 
-COMPLETIONS_DIR ?= /usr/share/bash-completion/completions
-_COMPLETIONS_DIR ?= $(DESTDIR)/usr/share/bash-completions/completions
+COMPLETIONS_DIR ?= $(PREFIX)/share/bash-completion/completions
+_COMPLETIONS_DIR ?= $(DESTDIR)/$(PREFIX)/share/bash-completions/completions
 COMPLETIONS_EXT ?=
 COMPLETIONS_SHELL ?= bash
 
 MAN_DIR ?= $(PREFIX)/share/man
+SYSTEMD_DIR ?= $(PREFIX)/lib/systemd/system
 
-LINUX_APPLICATIONS_DIR ?= $(DESTDIR)/usr/share/applications
+LINUX_APPLICATIONS_DIR ?= $(DESTDIR)/$(PREFIX)/share/applications
 UI ?= qt
 
 .PHONY: requirements test venv
@@ -112,8 +113,8 @@ install_linux_icon:
 install_linux_vendor:
 	# Install vendored dependencies from pip on Linux
 	if [ -d "vendor" ]; then \
-		install -d $(DESTDIR)/usr/lib/$(PRODUCT) ; \
-		cp -r vendor/ $(DESTDIR)/usr/lib/$(PRODUCT)/ ; \
+		install -d $(DESTDIR)/$(PREFIX)/lib/$(PRODUCT) ; \
+		cp -r vendor/ $(DESTDIR)/$(PREFIX)/lib/$(PRODUCT)/ ; \
 	fi
 
 install_man_page:
@@ -125,10 +126,10 @@ install_man_page:
 
 install_systemd:
 	# Install systemd service file on Linux or other UNIXes that use systemd
-	install -d $(DESTDIR)/usr/lib/systemd/system
+	install -d $(DESTDIR)/$(SYSTEMD_DIR)
 	install -m 0644 \
 		files/linux/systemd.service\
-		$(DESTDIR)/usr/lib/systemd/system/$(PRODUCT).service
+		$(DESTDIR)/$(SYSTEMD_DIR)/$(PRODUCT).service
 
 install_linux_desktop:
 	touch "$(LINUX_APPLICATIONS_DIR)/$(PRODUCT)_$(UI).desktop"
