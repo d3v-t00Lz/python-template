@@ -82,6 +82,15 @@ def load_config_from_file(
     path: str=DEFAULT_CONFIG_PATH,
     allow_default: bool=False,
 ):
+    """ Load the configuration from disk, must be called before any calls
+        to get_config()
+
+        @path:         The path to the config file
+        @allow_default: Allow default values if @path does not exist
+        @raises:
+            FileNotFoundError:
+                If @path does not exist and @allow_default==False
+    """
     global _CONFIG
     _CONFIG = Config.load_from_file(
         path=path,
@@ -89,21 +98,42 @@ def load_config_from_file(
     )
 
 def load_config_from_env_vars():
+    """ For applications configured solely with environment variables.
+        Load the configuration assuming all env. vars. are present.
+
+        @raises:
+            TypeError:  If a required env. var. is not present
+    """
     global _CONFIG
     _CONFIG = Config()
 
 
 def get_config():
+    """ Return a copy of the configuration.  It is recommended to get a fresh
+        configuration at every call to a functino if your app expects to
+        be reconfigured without restarting the app.
+    """
     return copy.deepcopy(_CONFIG)
 
 def set_config(
     cfg: Config,
     path: str=DEFAULT_CONFIG_PATH,
 ):
+    """ For applications that manage their own configuration, such as GUI apps
+        Save the configuration to disk and set it as the new configuration
+
+        @cfg:  The new configuration
+        @path:
+    """
     global _CONFIG
     cfg.save_to_file(path)
     _CONFIG = cfg
 
 def get_option(name):
+    """ Return a single configuration attribute.  More eficient than returning
+        the entire config with get_config()
+
+        @name: The name of the config attribute
+    """
     attr = getattr(_CONFIG, name)
     return copy.deepcopy(attr)
