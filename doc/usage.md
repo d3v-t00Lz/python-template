@@ -98,7 +98,12 @@ dump it in the users' local tab completion script directory
 See the `Makefile` source for more details.
 
 ## Generating man pages
-After modifying your CLI interface, run `make generate-manpage` to generate
-a new man page in `/files/linux/manpage`.  You can edit the man pages as
-needed, but note that they will be over-written next time you generate the
+After modifying your CLI interface, run `make manpage-from argparse` to
+generate a new man page in `/files/linux/manpage`.  You can edit the man pages
+as needed, but note that they will be over-written next time you generate the
 page.
+
+To ease editing, you can first install `pandoc`,
+run `make markdown-from-manpage` to generate a markdown document
+at `/files/linux/manpage.md`, edit as needed in your text editor, then convert
+back to a man page using `make manpage-from-markdown`
