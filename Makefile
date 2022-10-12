@@ -66,17 +66,6 @@ deb: test type-check
 	DEB_BUILD_OPTIONS=nocheck debuild -i
 	rm ../*.orig ../python3-$(PRODUCT)* debian/*debhelper*
 
-generate-manpage:
-	# Generate a man page file.  Must be committed back to git
-	# Run this everytime you make changes to the the ArgumentParser
-	# Note that this will overwrite any changes you made by hand
-	argparse-manpage \
-		--pyfile src/pytemplate_cli/args.py \
-		--function arg_parser \
-		--prog pytemplate_cli \
-		--project-name pytemplate \
-		--output files/linux/manpage
-
 git-hooks:
 	# Install git hooks for this repository to enable running tests before
 	# committing, etc...
@@ -142,6 +131,34 @@ install_linux_desktop:
 		--delete-original                                   \
 		--dir="$(LINUX_APPLICATIONS_DIR)"                   \
 		"$(LINUX_APPLICATIONS_DIR)/$(PRODUCT)_$(UI).desktop"
+
+manpage-from-argparse:
+	# Generate a man page file.  Must be committed back to git
+	# Run this everytime you make changes to the the ArgumentParser
+	# Note that this will overwrite any changes you made by hand
+	argparse-manpage \
+		--pyfile src/pytemplate_cli/args.py \
+		--function arg_parser \
+		--prog pytemplate_cli \
+		--project-name pytemplate \
+		--output files/linux/manpage
+
+markdown-from-manpage:
+	# Create a markdown document that is easier to edit that the troff/groff
+	# format that man pages use.  Must have pandoc installed
+	pandoc \
+		-f man \
+		-t markdown \
+		-o files/linux/manpage.md \
+		files/linux/manpage
+
+manpage-from-markdown:
+	pandoc \
+		--standalone \
+		-f markdown \
+		-t man \
+		-o files/linux/manpage \
+		files/linux/manpage.md
 
 # TODO: Replace test-all-tox with test-all-docker if using a system that
 # does not supply every needed Python version
