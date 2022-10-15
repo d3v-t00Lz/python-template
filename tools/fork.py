@@ -566,6 +566,7 @@ def main():
             f'appimage/qt/{name}_qt.desktop'
         )
         remove_lines('tools/rpm.spec', 'PT:QT')
+        remove_lines('windows/nsis.jinja', 'PT:QT')
     else:
         _('rm -rf src/pytemplate_qt scripts/pytemplate_qt')
         _('rm -rf windows/*-qt.spec macos/*-qt.spec')
@@ -573,6 +574,7 @@ def main():
         _('rm -f requirements/qt.txt')
         remove_lines('Makefile', 'UI=qt')
         remove_lines_range('tools/rpm.spec', 'PT:QT')
+        remove_lines_range('windows/nsis.jinja', 'PT:QT')
         remove_makefile_target('appimage-qt')
 
     if args.rest_api:
@@ -595,6 +597,7 @@ def main():
         _('mv src/pytemplate_sdl2 src/{}_sdl2'.format(name))
         _('mv scripts/pytemplate_sdl2 scripts/{}_sdl2'.format(name))
         remove_lines('tools/rpm.spec', 'PT:SDL2')
+        remove_lines('windows/nsis.jinja', 'PT:SDL2')
         _(
             'mv '
             'appimage/sdl2/pytemplate_sdl2.appdata.xml '
@@ -612,6 +615,7 @@ def main():
         _('rm -f requirements/sdl2.txt')
         remove_lines('Makefile', 'UI=sdl2')
         remove_lines_range('tools/rpm.spec', 'PT:SDL2')
+        remove_lines_range('windows/nsis.jinja', 'PT:SDL2')
         remove_makefile_target('appimage-sdl2')
 
     if args.cli:
@@ -628,6 +632,7 @@ def main():
             'appimage/cli/pytemplate_cli.desktop '
             f'appimage/cli/{name}_cli.desktop'
         )
+        remove_lines('windows/nsis.jinja', 'PT:CLI')
     else:
         _('rm -rf src/pytemplate_cli test/pytemplate_cli')
         _('rm -f scripts/pytemplate_cli')
@@ -649,6 +654,7 @@ def main():
         remove_lines('Makefile', 'COMPLETIONS')
         remove_lines('tox.ini', 'requirements/cli.txt')
         remove_lines_range('tools/rpm.spec', 'PT:CLI')
+        remove_lines_range('windows/nsis.jinja', 'PT:CLI')
         replace_makefile_target('type-check', 'pytemplate_cli', '')
 
     if args.library:

@@ -1,4 +1,3 @@
-!define PRODUCT_NAME "{{ MAJOR_VERSION }}_{{ SUFFIX }}"
 !define PRODUCT_VERSION "{{ MAJOR_VERSION_NUM }}.0"
 !define PRODUCT_PUBLISHER "{{ ORG }}"
 ; PT:SERVICE
@@ -13,14 +12,16 @@ RequestExecutionLevel admin
 SetCompressor /SOLID lzma
 
 Name "{{ MAJOR_VERSION }} {{ MINOR_VERSION }}"
-OutFile "dist\${PRODUCT_NAME}-{{ MINOR_VERSION }}-win64-installer.exe"
-InstallDir "$PROGRAMFILES64\{{ ORG }}\${PRODUCT_NAME}"
+OutFile "dist\{{ MAJOR_VERSION }}-{{ MINOR_VERSION }}-win64-installer.exe"
+InstallDir "$PROGRAMFILES64\{{ ORG }}\{{ MAJOR_VERSION }}"
 
 ;--------------------------------
 ;Interface Settings
   !define MUI_ABORTWARNING
   !define MUI_LICENSEPAGE_CHECKBOX
-  !define MUI_FINISHPAGE_RUN "$INSTDIR\program\${PRODUCT_NAME}.exe"
+  ; PT:QT
+  !define MUI_FINISHPAGE_RUN "$INSTDIR\{{ MAJOR_VERSION }}_qt\{{ MAJOR_VERSION }}_qt.exe"
+  ; PT:QT
   !define MUI_STARTMENUPAGE_DEFAULTFOLDER "{{ MAJOR_VERSION }}"
 
 !include MUI2.nsh
@@ -65,45 +66,78 @@ FunctionEnd
 
 Section "Base Install" SEC01
     SectionIn RO
+    CreateDirectory $INSTDIR
     SetOutPath $INSTDIR
     writeUninstaller "$INSTDIR\uninstall.exe"
     ; Delete the old program
-    RMDir /r $INSTDIR\program
+    RMDir /r $INSTDIR
     ; Install the program
-    CreateDirectory $INSTDIR\program
-    SetOutPath $INSTDIR\program
-    File /r "dist\${PRODUCT_NAME}\"
     File "files\icons\{{ MAJOR_VERSION }}.ico"
+
+    ; PT:CLI
+    SetOutPath $INSTDIR\{{ MAJOR_VERSION }}_cli
+    File /r "dist\{{ MAJOR_VERSION }}_cli\"
+    ; EnvVar::AddValue "path" "$INSTDIR\{{ MAJOR_VERSION }}_cli"
+    ; PT:CLI
+
+    ; PT:QT
+    SetOutPath $INSTDIR\{{ MAJOR_VERSION }}_qt
+    File /r "dist\{{ MAJOR_VERSION }}_qt\"
+    ; PT:QT
+
+    ; PT:SDL2
+    SetOutPath $INSTDIR\{{ MAJOR_VERSION }}_sdl2
+    File /r "dist\{{ MAJOR_VERSION }}_sdl2\"
+    ; PT:SDL2
+
     ; Add to the "Add or remove programs" dialog
     WriteRegStr HKLM \
-        "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
+        "Software\Microsoft\Windows\CurrentVersion\Uninstall\{{ MAJOR_VERSION }}" \
         "DisplayName" \
-        "${PRODUCT_NAME}"
+        "{{ MAJOR_VERSION }}"
     WriteRegStr HKLM \
-        "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
+        "Software\Microsoft\Windows\CurrentVersion\Uninstall\{{ MAJOR_VERSION }}" \
         "DisplayIcon" \
-        "$\"$INSTDIR\program\files\icons\{{ MAJOR_VERSION }}.ico$\""
+        "$\"$INSTDIR\{{ MAJOR_VERSION }}.ico$\""
     WriteRegStr HKLM \
-        "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}" \
+        "Software\Microsoft\Windows\CurrentVersion\Uninstall\{{ MAJOR_VERSION }}" \
         "UninstallString" \
         "$\"$INSTDIR\uninstall.exe$\""
     ; PT:SERVICE
-    ExecWait 'sc create ${serviceName} error= "severe" displayname= "${displayName}" type= "own" start= "auto" binpath= "$INSTDIR\program\${PRODUCT_NAME}.exe"'
+    ExecWait 'sc create ${serviceName} error= "severe" displayname= "${displayName}" type= "own" start= "auto" binpath= "$INSTDIR\{{ MAJOR_VERSION }}.exe"'
 
     ; PT:SERVICE
 SectionEnd
 
 Section "Start Menu Shortcut" SEC02
+    ; PT:QT
     createShortCut \
-      "$SMPROGRAMS\${PRODUCT_NAME}.lnk" \
-      "$INSTDIR\program\${PRODUCT_NAME}.exe" \
+      "$SMPROGRAMS\{{ MAJOR_VERSION }}_qt.lnk" \
+      "$INSTDIR\{{ MAJOR_VERSION }}_qt\{{ MAJOR_VERSION }}_qt.exe" \
       "" \
-      "$INSTDIR\program\{{ MAJOR_VERSION }}.ico"
+      "$INSTDIR\{{ MAJOR_VERSION }}.ico"
+    ; PT:QT
+    ; PT:SDL2
+    createShortCut \
+      "$SMPROGRAMS\{{ MAJOR_VERSION }}_sdl2.lnk" \
+      "$INSTDIR\{{ MAJOR_VERSION }}_sdl2\{{ MAJOR_VERSION }}_sdl2.exe" \
+      "" \
+      "$INSTDIR\{{ MAJOR_VERSION }}.ico"
+    ; PT:SDL2
 SectionEnd
 
 Section "uninstall"
     RMDir /r $INSTDIR
-    Delete "$SMPROGRAMS\${PRODUCT_NAME}.lnk"
-    DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\${PRODUCT_NAME}"
+    ; PT:QT
+    Delete "$SMPROGRAMS\{{ MAJOR_VERSION }}_qt.lnk"
+    ; PT:QT
+    ; PT:SDL2
+    Delete "$SMPROGRAMS\{{ MAJOR_VERSION }}_sdl2.lnk"
+    ; PT:SDL2
+    ; PT:CLI
+    ; EnvVar::SetHKLM
+    ; EnvVar::DeleteValue "path" "$INSTDIR\{{ MAJOR_VERSION }}_cli"
+    ; PT:CLI
+    DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\{{ MAJOR_VERSION }}"
 SectionEnd
 
