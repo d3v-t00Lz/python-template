@@ -76,7 +76,8 @@ Section "Base Install" SEC01
     ; PT:CLI
     SetOutPath $INSTDIR\{{ MAJOR_VERSION }}_cli
     File /r "dist\{{ MAJOR_VERSION }}_cli\"
-    ; EnvVar::AddValue "path" "$INSTDIR\{{ MAJOR_VERSION }}_cli"
+    EnVar::SetHKLM
+    EnVar::AddValue "path" "$INSTDIR\{{ MAJOR_VERSION }}_cli"
     ; PT:CLI
 
     ; PT:QT
@@ -134,8 +135,8 @@ Section "uninstall"
     Delete "$SMPROGRAMS\{{ MAJOR_VERSION }}_sdl2.lnk"
     ; PT:SDL2
     ; PT:CLI
-    ; EnvVar::SetHKLM
-    ; EnvVar::DeleteValue "path" "$INSTDIR\{{ MAJOR_VERSION }}_cli"
+    EnVar::SetHKLM
+    EnVar::DeleteValue "path" "$INSTDIR\{{ MAJOR_VERSION }}_cli"
     ; PT:CLI
     DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\{{ MAJOR_VERSION }}"
 SectionEnd

@@ -19,6 +19,8 @@ The VM should have at least 100GB of hard disk space
 - Install [Python3 64bit](https://www.python.org/downloads/windows/), be sure
   to select the option to add Python to PATH / environment variables
 - Install [NSIS](https://nsis.sourceforge.io/Download)
+- Install the [EnVar NSIS plugin](https://nsis.sourceforge.io/EnVar_plug-in)
+  (note that a version is kept in the /windows/ directory for safe keeping)
 
 ## Windows cmd.exe
 ```
