@@ -1,6 +1,10 @@
 # -*- mode: python ; coding: utf-8 -*-
 
 
+import importlib
+import os
+import pkgutil
+
 block_cipher = None
 
 PROJECT_ROOT = os.path.abspath(
@@ -10,6 +14,20 @@ PROJECT_ROOT = os.path.abspath(
     )
 )
 
+def recurse_modules(
+    root_name: str='pytemplate_cli.cmd',
+):
+    yield root_name
+    root_mod = importlib.import_module(root_name)
+    for sub_info in pkgutil.iter_modules(root_mod.__path__):
+        sub_name = '.'.join((root_name, sub_info.name))
+        yield sub_name
+        sub_mod = importlib.import_module(sub_name)
+        if sub_info.ispkg:
+            for mod_name in recurse_modules(sub_name):
+                yield mod_name
+
+CMD_MODULES = list(recurse_modules())
 
 a = Analysis(
     ['..\\scripts\\pytemplate_cli'],
@@ -20,7 +38,8 @@ a = Analysis(
     ],
     datas=[
     ],
-    hiddenimports=[],
+    hiddenimports=[
+    ] + CMD_MODULES,
     hookspath=[],
     hooksconfig={},
     runtime_hooks=[],
