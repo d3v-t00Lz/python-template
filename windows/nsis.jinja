@@ -128,6 +128,9 @@ SectionEnd
 
 Section "uninstall"
     RMDir /r $INSTDIR
+    ; Call without /r, only delete if empty
+    RMDir "$PROGRAMFILES64\{{ ORG }}"
+
     ; PT:QT
     Delete "$SMPROGRAMS\{{ MAJOR_VERSION }}_qt.lnk"
     ; PT:QT
