@@ -26,7 +26,7 @@ cd %DIRECTORY_OF_GIT_REPO%
 python -m venv venv
 venv\Scripts\activate.bat
 python -m pip install -r windows/requirements.txt
-python -m pip install .
+python -m pip install -e .
 ```
 
 # Creating a new release
@@ -34,8 +34,8 @@ python -m pip install .
 ```
 cd %DIRECTORY_OF_GIT_REPO%
 venv\Scripts\activate.bat
-# Build the portable exe and installer exe
-python windows\release.py
+# Build the portable exe or installer exe
+python windows\release.py [name-of-spec-file]
 ```
 
 The release artifacts are now in `dist/`
