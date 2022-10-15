@@ -5,7 +5,7 @@
 from pytemplate.cmd.bar.baz import bar_baz, BazStrings
 
 
-def parse_baz(
+def subcommand(
     subparsers,
     func=bar_baz,
 ):

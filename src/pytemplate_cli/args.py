@@ -3,13 +3,34 @@ Parse command line arguments using the subcommands defined in the cmd module
 """
 
 import argparse
+import importlib
+import pkgutil
 import sys
 from typing import List, Optional
 
-from pytemplate_cli.cmd import cli_subcommands
 from pytemplate_cli.util import required_subcommand
 from pytemplate.config import Config
 
+
+def recurse_modules(
+    subparsers,
+    root_name: str='pytemplate_cli.cmd',
+):
+    """ Recursively add subcommands to an argparse.ArgumentParser
+        Any submodules should have a function called subcommand that
+        adds a parser to @subparsers.  Any folder should contain in
+        it's __init__.py a function called subparsers that creates a
+        parser and returns it's subparsers
+    """
+    root_mod = importlib.import_module(root_name)
+    for sub_info in pkgutil.iter_modules(root_mod.__path__):
+        sub_name = '.'.join((root_name, sub_info.name))
+        sub_mod = importlib.import_module(sub_name)
+        if sub_info.ispkg:
+            child_subparsers = sub_mod.subparsers(subparsers)
+            recurse_modules(child_subparsers, sub_name)
+        else:
+            sub_mod.subcommand(subparsers)
 
 def arg_parser():
     parser = argparse.ArgumentParser()
@@ -33,7 +54,7 @@ def arg_parser():
         ),
     )
 
-    cli_subcommands(subparsers)
+    recurse_modules(subparsers)
     return parser
 
 def parse_args(
