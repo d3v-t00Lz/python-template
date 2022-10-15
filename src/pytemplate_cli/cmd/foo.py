@@ -6,7 +6,7 @@ from pytemplate.cmd.foo import foo, FooStrings
 from pytemplate_cli.util import arg_force
 
 
-def parse_foo(
+def subcommand(
     subparsers,
     func=foo,
 ):

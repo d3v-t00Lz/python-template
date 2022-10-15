@@ -5,7 +5,7 @@
 from pytemplate.cmd.version import version, VersionStrings
 
 
-def parse_version(
+def subcommand(
     subparsers,
     func=version,
 ):
