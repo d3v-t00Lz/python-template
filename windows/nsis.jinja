@@ -66,12 +66,11 @@ FunctionEnd
 
 Section "Base Install" SEC01
     SectionIn RO
+    ; Delete the old program
+    RMDir /r $INSTDIR
     CreateDirectory $INSTDIR
     SetOutPath $INSTDIR
     writeUninstaller "$INSTDIR\uninstall.exe"
-    ; Delete the old program
-    RMDir /r $INSTDIR
-    ; Install the program
     File "files\icons\{{ MAJOR_VERSION }}.ico"
 
     ; PT:CLI
@@ -104,7 +103,7 @@ Section "Base Install" SEC01
         "UninstallString" \
         "$\"$INSTDIR\uninstall.exe$\""
     ; PT:SERVICE
-    ExecWait 'sc create ${serviceName} error= "severe" displayname= "${displayName}" type= "own" start= "auto" binpath= "$INSTDIR\{{ MAJOR_VERSION }}.exe"'
+    ExecWait 'sc create ${serviceName} error= "severe" displayname= "${displayName}" type= "own" start= "auto" binpath= "$INSTDIR\{{ MAJOR_VERSION }}_cli\{{ MAJOR_VERSION }}_cli.exe"'
 
     ; PT:SERVICE
 SectionEnd
