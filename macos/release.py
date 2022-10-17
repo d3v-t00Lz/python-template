@@ -10,7 +10,6 @@ import shutil
 import subprocess
 
 
-HOME = os.path.expanduser('~')
 ARCH = platform.machine()
 
 CWD = os.path.abspath(
@@ -41,12 +40,15 @@ else:
     SPEC_FILE = args.spec_file
 SUFFIX = re.match('.*-([a-z0-9]+).spec', SPEC_FILE).groups()[0]
 
-MAJOR_VERSION = 'pytemplate'
+with open('meta.json') as f:
+    META = json.load(f)
+PRODUCT = META['product']
+
 from pytemplate import __version__ as VERSION
 
-BUNDLE = f'dist/{MAJOR_VERSION}.app'
-if os.path.isdir(BUNDLE):
-    shutil.rmtree(BUNDLE)
+#for BUNDLE in glob('dist/*.app'):
+#    if os.path.isdir(BUNDLE):
+#        shutil.rmtree(BUNDLE)
 
 retcode = subprocess.check_call([
     'pyinstaller',
@@ -61,7 +63,7 @@ ARCH_NAMES = {
     'arm64': 'm1',
 }
 
-DMG = f'pytemplate_{SUFFIX}-{VERSION}-macos-{ARCH_NAMES[ARCH]}-{ARCH}.dmg'
+DMG = f'{PRODUCT}_{SUFFIX}-{VERSION}-macos-{ARCH_NAMES[ARCH]}-{ARCH}.dmg'
 if os.path.exists(DMG):
     os.remove(DMG)
 
@@ -69,6 +71,6 @@ subprocess.check_call([
     'create-dmg',
     '--format', 'UDBZ',
     DMG,
-    f'{MAJOR_VERSION}_{SUFFIX}.app',
+    f'{PRODUCT}_{SUFFIX}.app',
 ])
 
