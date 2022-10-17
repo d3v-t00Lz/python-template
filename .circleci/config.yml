@@ -32,25 +32,30 @@ jobs:
       - restore_cache:
           key: deps1-{{ .Branch }}-{{ checksum "CACHE_KEY" }}
       - run:
+        name: Create venv
+        command: |
+          if [ ! -d venv/ ]; then
+            python3 -m venv venv
+          fi
+      - run:
         name: Install Dependencies
         command: |
-          pip install -r requirements/devel.txt
-          pip install -r requirements/common.txt
-          pip install -r requirements/cli.txt
-          pip install -r requirements/rest.txt
-          pip install -r requirements/test.txt
-          PT_EXCLUDE_LIBS=ALL pip install -e .
+          source venv/bin/activate
+          pip3 install -r requirements/devel.txt
+          pip3 install -r requirements/common.txt
+          pip3 install -r requirements/cli.txt
+          pip3 install -r requirements/rest.txt
+          pip3 install -r requirements/test.txt
+          PT_EXCLUDE_LIBS=ALL pip3 install -e .
       - run:
         name: Run Tests
-        command: pytest
-      #- run: >
-      #    tox
-      #    --workdir .tox-workdir
-      #    -e py$(echo << parameters.pyversion | sed s/\.//)
+        command: |
+          source venv/bin/activate
+          pytest
       - save_cache:
           key: deps1-{{ .Branch }}-{{ checksum "CACHE_KEY" }}
           paths:
-            - ".tox-workdir"
+            - "venv/"
 
 workflows:
   myproj:
