@@ -11,6 +11,7 @@ from pytemplate.cmd.version import version, VersionStrings
 class MainWindow(QMainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
+        self.setWindowTitle('pytemplate')
         cen_widget = QWidget()
         self.setCentralWidget(cen_widget)
         main_layout = QGridLayout(cen_widget)
