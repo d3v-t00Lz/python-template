@@ -39,9 +39,9 @@ InstallDir "$PROGRAMFILES64\{{ ORG }}\{{ MAJOR_VERSION }}"
 ;Interface Settings
   !define MUI_ABORTWARNING
   !define MUI_LICENSEPAGE_CHECKBOX
-  ; PT:QT
+  ; PT:GUI
   !define MUI_FINISHPAGE_RUN "$INSTDIR\{{ MAJOR_VERSION }}_qt\{{ MAJOR_VERSION }}_qt.exe"
-  ; PT:QT
+  ; PT:GUI
   !define MUI_STARTMENUPAGE_DEFAULTFOLDER "{{ MAJOR_VERSION }}"
 
 !include MUI2.nsh

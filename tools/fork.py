@@ -376,6 +376,29 @@ def remove_text(path: str, string: str):
     with open(path, 'w') as f:
         f.write(text)
 
+def replace_lines(
+    path: str,
+    contains: str,
+    find: str,
+    replace: str,
+):
+    """ Find/replace text, only within lines containing @contains
+        @path:     The file to search
+        @contains: Only replace text in lines containing this string
+        @find:     Text to be replaced
+        @replace:  Text to replace @find with
+    """
+    lines = []
+    with open(path) as f:
+        for line in f:
+            if contains in line:
+                line = line.replace(find, replace)
+            lines.append(line)
+    lines = remove_dup_newlines(lines)
+    text = ''.join(lines)
+    with open(path, 'w') as f:
+        f.write(text)
+
 def remove_lines(
     path: str,
     string: str,
@@ -521,10 +544,19 @@ def main():
     meta_json(args.org, args.name)
     update_shebang(args.shebang)
 
+    if args.sdl2 and not args.qt:
+        replace_lines(
+            'windows/nsis.jinja',
+            'MUI_FINISHPAGE_RUN',
+            '_qt',
+            '_sdl2',
+        )
+
     # GUI applications
     if any((args.sdl2, args.qt)):
         remove_lines('tools/rpm.spec', 'PT:GUI')
         remove_lines('windows/nsis.jinja', 'PT:GUI')
+        remove_lines('windows/nsis.jinja', 'MUI_FINISHPAGE_RUN')
     else:
         remove_makefile_target('install_linux_icon')
         remove_makefile_target('install_linux_desktop')
