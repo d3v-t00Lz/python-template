@@ -107,23 +107,6 @@ Section "Base Install" SEC01
     writeUninstaller "$INSTDIR\uninstall.exe"
     File "files\icons\{{ MAJOR_VERSION }}.ico"
 
-    ; PT:CLI
-    SetOutPath $INSTDIR\{{ MAJOR_VERSION }}_cli
-    File /r "dist\{{ MAJOR_VERSION }}_cli\"
-    EnVar::SetHKLM
-    EnVar::AddValue "path" "$INSTDIR\{{ MAJOR_VERSION }}_cli"
-    ; PT:CLI
-
-    ; PT:QT
-    SetOutPath $INSTDIR\{{ MAJOR_VERSION }}_qt
-    File /r "dist\{{ MAJOR_VERSION }}_qt\"
-    ; PT:QT
-
-    ; PT:SDL2
-    SetOutPath $INSTDIR\{{ MAJOR_VERSION }}_sdl2
-    File /r "dist\{{ MAJOR_VERSION }}_sdl2\"
-    ; PT:SDL2
-
     ; Add to the "Add or remove programs" dialog
     WriteRegStr ${INSTDIR_REG_ROOT} \
         "Software\Microsoft\Windows\CurrentVersion\Uninstall\{{ MAJOR_VERSION }}" \
@@ -137,13 +120,37 @@ Section "Base Install" SEC01
         "Software\Microsoft\Windows\CurrentVersion\Uninstall\{{ MAJOR_VERSION }}" \
         "UninstallString" \
         "$\"$INSTDIR\uninstall.exe$\""
+SectionEnd
+
+; PT:CLI
+Section "Command Line Interface" SEC02
+    SetOutPath $INSTDIR\{{ MAJOR_VERSION }}_cli
+    File /r "dist\{{ MAJOR_VERSION }}_cli\"
+    EnVar::SetHKLM
+    EnVar::AddValue "path" "$INSTDIR\{{ MAJOR_VERSION }}_cli"
+
     ; PT:SERVICE
     ExecWait 'sc create ${serviceName} error= "severe" displayname= "${displayName}" type= "own" start= "auto" binpath= "$INSTDIR\{{ MAJOR_VERSION }}_cli\{{ MAJOR_VERSION }}_cli.exe"'
 
     ; PT:SERVICE
 SectionEnd
+; PT:CLI
 
-Section "Start Menu Shortcut" SEC02
+; PT:QT
+Section "Qt User Interface" SEC03
+    SetOutPath $INSTDIR\{{ MAJOR_VERSION }}_qt
+    File /r "dist\{{ MAJOR_VERSION }}_qt\"
+SectionEnd
+; PT:QT
+
+; PT:SDL2
+Section "SDL2 Game" SEC04
+    SetOutPath $INSTDIR\{{ MAJOR_VERSION }}_sdl2
+    File /r "dist\{{ MAJOR_VERSION }}_sdl2\"
+SectionEnd
+; PT:SDL2
+
+Section "Start Menu Shortcut" SEC05
     ; PT:QT
     createShortCut \
       "$SMPROGRAMS\{{ MAJOR_VERSION }}_qt.lnk" \
