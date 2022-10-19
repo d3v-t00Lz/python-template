@@ -1,18 +1,38 @@
 !define PRODUCT_VERSION "{{ MAJOR_VERSION_NUM }}.0"
 !define PRODUCT_PUBLISHER "{{ ORG }}"
+!define INSTDIR_REG_ROOT "SHELL_CONTEXT"
+
 ; PT:SERVICE
 !define displayName "{{ MAJOR_VERSION }}"
 !define serviceName "{{ MAJOR_VERSION }}"
 ; PT:SERVICE
+!define MULTIUSER_EXECUTIONLEVEL Highest
+!define MULTIUSER_MUI
+!define MULTIUSER_INSTALLMODE_COMMANDLINE
+!define  MULTIUSER_INSTALLMODE_FUNCTION onMultiUserModeChanged
+!include MultiUser.nsh
 
-
-;Require admin rights on NT6+ (When UAC is turned on)
-RequestExecutionLevel admin
+!macro GetUserProgramFiles outvar
+	!define /IfNDef KF_FLAG_CREATE 0x00008000
+	!define /IfNDef FOLDERID_UserProgramFiles {5CD7AEE2-2219-4A67-B85D-6C9CE15660CB}
+	System::Store S
+	System::Call 'SHELL32::SHGetKnownFolderPath(g "${FOLDERID_UserProgramFiles}", i ${KF_FLAG_CREATE}, p 0, *p .r2)i.r1' ; This will only work on Win7+
+	${If} $1 == 0
+		System::Call '*$2(&w${NSIS_MAX_STRLEN} .s)'
+		System::Call 'OLE32::CoTaskMemFree(p r2)'
+	${Else}
+		Push "$LocalAppData\Programs"
+	${EndIf}
+	System::Store L
+	Pop ${outvar}
+!macroend
 
 SetCompressor /SOLID lzma
 
 Name "{{ MAJOR_VERSION }} {{ MINOR_VERSION }}"
 OutFile "dist\{{ MAJOR_VERSION }}-{{ MINOR_VERSION }}-win64-installer.exe"
+ShowInstDetails show
+ShowUninstDetails show
 InstallDir "$PROGRAMFILES64\{{ ORG }}\{{ MAJOR_VERSION }}"
 
 ;--------------------------------
@@ -34,8 +54,9 @@ InstallDir "$PROGRAMFILES64\{{ ORG }}\{{ MAJOR_VERSION }}"
 !insertmacro MUI_PAGE_WELCOME
 !insertmacro MUI_PAGE_LICENSE "LICENSE"
 
-!insertmacro MUI_PAGE_COMPONENTS
+!insertmacro MULTIUSER_PAGE_INSTALLMODE
 !insertmacro MUI_PAGE_DIRECTORY
+!insertmacro MUI_PAGE_COMPONENTS
 
 !insertmacro MUI_PAGE_INSTFILES
 !insertmacro MUI_PAGE_FINISH
@@ -53,15 +74,28 @@ InstallDir "$PROGRAMFILES64\{{ ORG }}\{{ MAJOR_VERSION }}"
 ;Languages
   !insertmacro MUI_LANGUAGE "English"
 
+Function onMultiUserModeChanged
+    ${If} $MultiUser.InstallMode == "CurrentUser"
+        !insertmacro GetUserProgramFiles $InstDir
+        StrCpy $InstDir "$InstDir\{{ ORG }}\{{ MAJOR_VERSION }}"
+    ${EndIf}
+FunctionEnd
+
 Function .onInit
-  ${IfNot} ${AtLeastWin10}
-    MessageBox MB_OK "Windows 10 or later required, 64 bit only"
-    Quit
-  ${EndIf}
-  ${IfNot} ${RunningX64}
-    MessageBox MB_OK "64 bit Windows 10 or later required, 32 bit is not supported"
-    Quit
-  ${EndIf}
+    !insertmacro MULTIUSER_INIT
+    ${IfNot} ${AtLeastWin10}
+        MessageBox MB_OK "Windows 10 or later required, 64 bit only"
+        Quit
+    ${EndIf}
+    ${IfNot} ${RunningX64}
+        MessageBox MB_OK \
+            "64 bit Windows 10 or later required, 32 bit is not supported"
+        Quit
+    ${EndIf}
+FunctionEnd
+
+Function un.onInit
+    !insertmacro MULTIUSER_UNINIT
 FunctionEnd
 
 Section "Base Install" SEC01
@@ -91,15 +125,15 @@ Section "Base Install" SEC01
     ; PT:SDL2
 
     ; Add to the "Add or remove programs" dialog
-    WriteRegStr HKLM \
+    WriteRegStr ${INSTDIR_REG_ROOT} \
         "Software\Microsoft\Windows\CurrentVersion\Uninstall\{{ MAJOR_VERSION }}" \
         "DisplayName" \
         "{{ MAJOR_VERSION }}"
-    WriteRegStr HKLM \
+    WriteRegStr ${INSTDIR_REG_ROOT} \
         "Software\Microsoft\Windows\CurrentVersion\Uninstall\{{ MAJOR_VERSION }}" \
         "DisplayIcon" \
         "$\"$INSTDIR\{{ MAJOR_VERSION }}.ico$\""
-    WriteRegStr HKLM \
+    WriteRegStr ${INSTDIR_REG_ROOT} \
         "Software\Microsoft\Windows\CurrentVersion\Uninstall\{{ MAJOR_VERSION }}" \
         "UninstallString" \
         "$\"$INSTDIR\uninstall.exe$\""
@@ -141,6 +175,7 @@ Section "uninstall"
     EnVar::SetHKLM
     EnVar::DeleteValue "path" "$INSTDIR\{{ MAJOR_VERSION }}_cli"
     ; PT:CLI
-    DeleteRegKey HKLM "Software\Microsoft\Windows\CurrentVersion\Uninstall\{{ MAJOR_VERSION }}"
+    DeleteRegKey ${INSTDIR_REG_ROOT} \
+        "Software\Microsoft\Windows\CurrentVersion\Uninstall\{{ MAJOR_VERSION }}"
 SectionEnd
 
