@@ -13,18 +13,18 @@
 !include MultiUser.nsh
 
 !macro GetUserProgramFiles outvar
-	!define /IfNDef KF_FLAG_CREATE 0x00008000
-	!define /IfNDef FOLDERID_UserProgramFiles {5CD7AEE2-2219-4A67-B85D-6C9CE15660CB}
-	System::Store S
-	System::Call 'SHELL32::SHGetKnownFolderPath(g "${FOLDERID_UserProgramFiles}", i ${KF_FLAG_CREATE}, p 0, *p .r2)i.r1' ; This will only work on Win7+
-	${If} $1 == 0
-		System::Call '*$2(&w${NSIS_MAX_STRLEN} .s)'
-		System::Call 'OLE32::CoTaskMemFree(p r2)'
-	${Else}
-		Push "$LocalAppData\Programs"
-	${EndIf}
-	System::Store L
-	Pop ${outvar}
+    !define /IfNDef KF_FLAG_CREATE 0x00008000
+    !define /IfNDef FOLDERID_UserProgramFiles {5CD7AEE2-2219-4A67-B85D-6C9CE15660CB}
+    System::Store S
+    System::Call 'SHELL32::SHGetKnownFolderPath(g "${FOLDERID_UserProgramFiles}", i ${KF_FLAG_CREATE}, p 0, *p .r2)i.r1' ; This will only work on Win7+
+    ${If} $1 == 0
+        System::Call '*$2(&w${NSIS_MAX_STRLEN} .s)'
+        System::Call 'OLE32::CoTaskMemFree(p r2)'
+    ${Else}
+        Push "$LocalAppData\Programs"
+    ${EndIf}
+    System::Store L
+    Pop ${outvar}
 !macroend
 
 SetCompressor /SOLID lzma
@@ -150,6 +150,7 @@ Section "SDL2 Game" SEC04
 SectionEnd
 ; PT:SDL2
 
+; PT:GUI
 Section "Start Menu Shortcut" SEC05
     ; PT:QT
     createShortCut \
@@ -166,6 +167,7 @@ Section "Start Menu Shortcut" SEC05
       "$INSTDIR\{{ MAJOR_VERSION }}.ico"
     ; PT:SDL2
 SectionEnd
+; PT:GUI
 
 Section "uninstall"
     RMDir /r $INSTDIR
@@ -186,3 +188,23 @@ Section "uninstall"
         "Software\Microsoft\Windows\CurrentVersion\Uninstall\{{ MAJOR_VERSION }}"
 SectionEnd
 
+!insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
+    !insertmacro MUI_DESCRIPTION_TEXT ${SEC01} \
+        "Basic components required by all other components"
+    ; PT:CLI
+    !insertmacro MUI_DESCRIPTION_TEXT ${SEC02} \
+        "A command line interface to use from cmd.exe"
+    ; PT:CLI
+    ; PT:QT
+    !insertmacro MUI_DESCRIPTION_TEXT ${SEC03} \
+        "A Qt graphical user interface"
+    ; PT:QT
+    ; PT:SDL2
+    !insertmacro MUI_DESCRIPTION_TEXT ${SEC04} \
+        "A game written with SDL2"
+    ; PT:SDL2
+    ; PT:GUI
+    !insertmacro MUI_DESCRIPTION_TEXT ${SEC05} \
+        "Add shortcut(s) to the start menu for each component"
+    ; PT:GUI
+!insertmacro MUI_FUNCTION_DESCRIPTION_END

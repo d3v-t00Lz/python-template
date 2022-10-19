@@ -524,6 +524,7 @@ def main():
     # GUI applications
     if any((args.sdl2, args.qt)):
         remove_lines('tools/rpm.spec', 'PT:GUI')
+        remove_lines('windows/nsis.jinja', 'PT:GUI')
     else:
         remove_makefile_target('install_linux_icon')
         remove_makefile_target('install_linux_desktop')
@@ -537,6 +538,7 @@ def main():
         )
         remove_lines('debian/control', 'desktop-file-utils')
         remove_lines_range('tools/rpm.spec', 'PT:GUI')
+        remove_lines_range('windows/nsis.jinja', 'PT:GUI')
 
     # Applications that have a CLI
     if any((args.cli, args.qt, args.rest_api, args.sdl2)):
