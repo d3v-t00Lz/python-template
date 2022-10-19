@@ -556,7 +556,6 @@ def main():
     if any((args.sdl2, args.qt)):
         remove_lines('tools/rpm.spec', 'PT:GUI')
         remove_lines('windows/nsis.jinja', 'PT:GUI')
-        remove_lines('windows/nsis.jinja', 'MUI_FINISHPAGE_RUN')
     else:
         remove_makefile_target('install_linux_icon')
         remove_makefile_target('install_linux_desktop')
