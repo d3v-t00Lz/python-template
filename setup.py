@@ -96,12 +96,12 @@ setup(
     author="TODO",
     author_email="TODO",
     description=DESCRIPTION,
+    include_package_data=True,
     long_description=LONG_DESC,
     long_description_content_type='text/markdown',
     url=URL,
     packages=find_packages(where='src'),
     package_dir = {'': 'src'},
-    include_package_data=True,
     install_requires=load_requirements(
         *(
             os.path.join('requirements', x)
