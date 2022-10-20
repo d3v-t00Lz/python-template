@@ -5,6 +5,7 @@
 import logging
 import logging.handlers
 import sys
+from platform import platform
 
 
 
@@ -30,7 +31,10 @@ def setup_logging(
     if structured:
         from pylogrus import PyLogrus, TextFormatter
         logging.setLoggerClass(PyLogrus)
-        fmt = TextFormatter(datefmt='Z', colorize=True)
+        fmt = TextFormatter(
+            datefmt='Z',
+            colorize=not platform().startswith('Windows'),
+        )
     else:
         fmt = logging.Formatter(format)
 
