@@ -69,6 +69,12 @@ if os.path.exists(DMG):
 
 subprocess.check_call([
     'create-dmg',
+    '--volname', f'{PRODUCT}',
+    '--volicon', '../folder.icns',
+    '--icon', f'{PRODUCT}_{SUFFIX}.app', '50', '90',
+    '--hide-extension', f'{PRODUCT}_{SUFFIX}.app',
+    '--background', '../background.png',
+    '--app-drop-link', '420', '90',
     '--format', 'UDBZ',
     DMG,
     f'{PRODUCT}_{SUFFIX}.app',
