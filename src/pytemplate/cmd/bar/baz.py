@@ -4,7 +4,7 @@
 
 from pytemplate.config import Config
 
-class BazStrings:
+class Strings:
     description = 'It does something'
 
 def bar_baz(

@@ -2,7 +2,7 @@
 
 """
 
-from pytemplate.cmd.bar.baz import bar_baz, BazStrings
+from pytemplate.cmd.bar.baz import bar_baz, Strings
 
 
 def subcommand(
@@ -11,6 +11,6 @@ def subcommand(
 ):
     parser = subparsers.add_parser(
         'baz',
-        description=BazStrings.description,
+        description=Strings.description,
     )
     parser.set_defaults(func=func)

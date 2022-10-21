@@ -2,7 +2,7 @@
 
 """
 
-from pytemplate.cmd.foo import foo, FooStrings
+from pytemplate.cmd.foo import foo, Strings
 from pytemplate_cli.util import arg_force
 
 
@@ -12,14 +12,14 @@ def subcommand(
 ):
     parser = subparsers.add_parser(
         'foo',
-        description=FooStrings.description,
+        description=Strings.description,
     )
     parser.set_defaults(func=func)
     # All of the arguments should line up 1-to-1 with the
     # function arguments to mycmd(...)
     parser.add_argument(
         'foo',  # notice this lines up to 'foo' of mycmd()
-        help=FooStrings.foo,
+        help=Strings.foo,
     )
     parser.add_argument(
         '-s',
@@ -27,7 +27,7 @@ def subcommand(
         default=123,
         dest='something',  # notice this lines up to 'something' of mycmd()
         type=int,
-        help=FooStrings.something,
+        help=Strings.something,
     )
-    arg_force(parser, _help=FooStrings.force)
+    arg_force(parser, _help=Strings.force)
 

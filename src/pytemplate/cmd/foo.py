@@ -5,7 +5,7 @@
 from pytemplate.config import Config
 
 
-class FooStrings:
+class Strings:
     description = "Do the foo thing"
     foo = 'Some required argument, in the format something:something:something'
     something = "Some integer number"

@@ -3,13 +3,14 @@ import sys
 
 from pytemplate_qt.qt import (
     QGridLayout,
+    QIcon,
     QLabel,
     QMainWindow,
     QMessageBox,
     QPushButton,
     QWidget,
 )
-from pytemplate.cmd.version import version, VersionStrings
+from pytemplate.cmd.version import version, Strings as VersionStrings
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -69,6 +70,6 @@ class MainWindow(QMainWindow):
         ):
             path = os.path.abspath(path)
             if os.path.exists(path):
-                self.setWindowIcon(path)
+                self.setWindowIcon(QIcon(path))
                 return
 

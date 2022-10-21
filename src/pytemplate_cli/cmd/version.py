@@ -2,7 +2,7 @@
 
 """
 
-from pytemplate.cmd.version import version, VersionStrings
+from pytemplate.cmd.version import version, Strings
 
 
 def subcommand(
@@ -11,7 +11,7 @@ def subcommand(
 ):
     parser = subparsers.add_parser(
         'version',
-        description=VersionStrings.description,
+        description=Strings.description,
     )
     parser.set_defaults(func=func)
 
