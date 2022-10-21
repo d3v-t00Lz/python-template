@@ -14,7 +14,8 @@ Recursively re-link executables and libraries
 MacOS app bundles that contain binary executables and libraries must
 have their linkage changed from system paths to relative paths.  This
 script will recursively copy and relink all required binaries to an
-app bundle.
+app bundle.  You must keep the dylibs and executables in the same
+directory
 """
 
 def parse_args():
@@ -24,17 +25,17 @@ def parse_args():
         nargs='+',
         help='One or more binaries to relink'
     )
+    parser.add_argument(
+        '--outdir',
+        '-o',
+        default='.',
+        dest='outdir',
+        help='The directory to output relinked executables and libraries to'
+    )
     return parser.parse_args()
 
 args = parse_args()
-
-CWD = os.path.abspath(
-    os.path.join(
-        os.path.dirname(__file__),
-        '..',
-    ),
-)
-os.chdir(CWD)
+os.chdir(args.outdir)
 
 def relink(binary):
     otool = subprocess.check_output([
@@ -47,13 +48,10 @@ def relink(binary):
         if not arr:
             continue
         dylib = arr[0]
-        if (
-            (
-                dylib.startswith('/usr/local/')
-                or
-                dylib.startswith('/opt/homebrew/')
-            ) and
-            dylib.endswith('.dylib')
+        if dylib.endswith('.dylib') and (
+            dylib.startswith('/usr/local/')
+            or
+            dylib.startswith('/opt/homebrew/')
         ):
             basename = os.path.basename(dylib)
             print(
@@ -72,5 +70,6 @@ def relink(binary):
                 relink(basename)
 
 for binary in args.binaries:
+    assert os.path.exists(binary), binary
     relink(binary)
 
