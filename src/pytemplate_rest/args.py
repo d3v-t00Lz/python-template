@@ -1,6 +1,6 @@
 import argparse
 
-def parse_args(args=None):
+def arg_parser():
     # host='0.0.0.0', port=1337, access_log=False
     parser = argparse.ArgumentParser('pytemplate REST server')
     parser.add_argument(
@@ -37,5 +37,9 @@ def parse_args(args=None):
         default=False,
         help='Log accesses to the server',
     )
+    return parser
+
+def parse_args(args=None):
+    parser = arg_parser()
     return parser.parse_args(args)
 

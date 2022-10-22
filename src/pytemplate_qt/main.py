@@ -10,10 +10,8 @@ def parse_args():
     parser = argparse.ArgumentParser("pytemplate Qt application")
     return parser.parse_args()
 
-def main():
-    parse_args()
+def _main(*args, **kwargs):
     # Before Qt imports, to ensure that we can log the outcome
-    setup()
     from .qt import QApplication, QGuiApplication, QtCore
     try:
         QGuiApplication.setHighDpiScaleFactorRoundingPolicy(
@@ -34,3 +32,9 @@ def main():
     window.show()
     global_vars.MAIN_WINDOW = window
     sys.exit(app.exec())
+
+def main():
+    parse_args()
+    setup()
+    _main()
+
