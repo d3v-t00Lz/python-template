@@ -78,6 +78,13 @@ def parse_args():
             'discouraged.  A good name will be ~4-12 characters'
         ),
     )
+    parser.add_argument(
+        'display_name',
+        help=(
+            'The display name for the project.  If @name is "python-template" '
+            'then display name might be "Python Template"'
+        ),
+    )
 
     features = parser.add_argument_group('Features')
     cicd = parser.add_argument_group('CI/CD')
@@ -175,7 +182,7 @@ def parse_args():
         '--rest-api',
         '-R',
         action='store_true',
-        dest='rest_api',
+        dest='rest',
         default=False,
         help='Include a REST API',
     )
@@ -293,7 +300,7 @@ def parse_args():
         args.library,
         args.qt,
         args.cli,
-        args.rest_api,
+        args.rest,
         args.sdl2,
     )):
         parser.error('When you exclude everything, there is nothing of value')
@@ -319,7 +326,7 @@ def parse_args():
                     '--cli, --qt, --sdl2'
                 )
     if (
-        not any((args.cli, args.rest_api))
+        not any((args.cli, args.rest))
         and
         args.docker
     ):
@@ -503,11 +510,16 @@ def replace_makefile_target(name: str, old: str, new: str):
     with open('Makefile', 'w') as f:
         f.write("".join(lines))
 
-def meta_json(org, name):
+def meta_json(args):
     with open('meta.json') as f:
         j = json.load(f)
-    j['org'] = org
-    j['product'] = name
+    j['org'] = args.org
+    j['product'] = args.name
+    j['display_name'] = {
+        k: v.replace('Python Template', args.display_name)
+        for k, v in j['display_name'].items()
+        if k == 'all' or getattr(args, k)
+    }
     with open('meta.json', 'w') as f:
         json.dump(j, f, sort_keys=True, indent=4)
 
@@ -541,7 +553,7 @@ def main():
     # Delete Python bytecode files
     _("find . -name '*.pyc' -delete")
 
-    meta_json(args.org, args.name)
+    meta_json(args)
     update_shebang(args.shebang)
 
     if args.sdl2 and not args.qt:
@@ -572,7 +584,7 @@ def main():
         remove_lines_range('windows/nsis.jinja', 'PT:GUI')
 
     # Applications that have a CLI
-    if any((args.cli, args.qt, args.rest_api, args.sdl2)):
+    if any((args.cli, args.qt, args.rest, args.sdl2)):
         pass
     else:
         remove_lines('tools/rpm.spec', '_bindir')
@@ -610,7 +622,7 @@ def main():
         remove_lines_range('windows/nsis.jinja', 'PT:QT')
         remove_makefile_target('appimage-qt')
 
-    if args.rest_api:
+    if args.rest:
         _('mv src/pytemplate_rest src/{}_rest'.format(name))
         _('mv test/pytemplate_rest test/{}_rest'.format(name))
         _('mv scripts/pytemplate_rest scripts/{}_rest'.format(name))

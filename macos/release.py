@@ -43,6 +43,8 @@ SUFFIX = re.match('.*-([a-z0-9]+).spec', SPEC_FILE).groups()[0]
 with open('meta.json') as f:
     META = json.load(f)
 PRODUCT = META['product']
+DISPLAY_NAME = META['display_name'][SUFFIX]
+BUNDLE = f"{DISPLAY_NAME}.app"
 
 from pytemplate import __version__ as VERSION
 
@@ -69,12 +71,12 @@ if os.path.exists(DMG):
 
 subprocess.check_call([
     'create-dmg',
-    '--volname', f'{PRODUCT}',
-    '--icon', f'{PRODUCT}_{SUFFIX}.app', '50', '120',
-    '--hide-extension', f'{PRODUCT}_{SUFFIX}.app',
+    '--volname', f'{DISPLAY_NAME}',
+    '--icon', BUNDLE, '50', '90',
+    '--hide-extension', BUNDLE,
     '--app-drop-link', '300', '120',
     '--format', 'UDBZ',
     DMG,
-    f'{PRODUCT}_{SUFFIX}.app',
+    BUNDLE,
 ])
 

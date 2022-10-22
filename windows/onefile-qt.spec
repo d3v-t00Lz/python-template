@@ -1,4 +1,6 @@
 # -*- mode: python ; coding: utf-8 -*-
+import json
+import os
 
 block_cipher = None
 
@@ -8,6 +10,11 @@ PROJECT_ROOT = os.path.abspath(
         '..',
     )
 )
+#META_FILE = os.path.join(PROJECT_ROOT, 'meta.json')
+META_FILE = 'meta.json'
+with open(META_FILE) as f:
+    META = json.load(f)
+PRODUCT = META['product']
 
 a = Analysis(
     ['..\\scripts\\pytemplate_qt'],
@@ -43,7 +50,7 @@ exe = EXE(
     a.zipfiles,
     a.datas,
     [],
-    name='pytemplate_qt',
+    name=f'{PRODUCT}_qt',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,

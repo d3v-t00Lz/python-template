@@ -34,7 +34,8 @@ with open('meta.json') as f:
     META = json.load(f)
 
 args = parse_args()
-MAJOR_VERSION = 'pytemplate'
+MAJOR_VERSION = META['product']
+DISPLAY_NAME = META['display_name']['all']
 from pytemplate import __version__ as MINOR_VERSION
 
 for SPEC_FILE in SPEC_FILES:
@@ -52,6 +53,7 @@ with open('windows/nsis.jinja') as f:
     TEMPLATE = Template(f.read())
 
 template = TEMPLATE.render(
+    DISPLAY_NAME=DISPLAY_NAME,
     MINOR_VERSION=MINOR_VERSION,
     MAJOR_VERSION=MAJOR_VERSION,
     MAJOR_VERSION_NUM=1,

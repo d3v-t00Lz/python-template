@@ -1,4 +1,5 @@
 # -*- mode: python ; coding: utf-8 -*-
+import json
 import os
 import platform
 ARCH = platform.machine()
@@ -12,6 +13,11 @@ PROJECT_ROOT = os.path.abspath(
         '..',
     )
 )
+#META_FILE = os.path.join(PROJECT_ROOT, 'meta.json')
+META_FILE = 'meta.json'
+with open(META_FILE) as f:
+    META = json.load(f)
+DISPLAY_NAME = META['display_name']['qt']
 
 a = Analysis(
     ['../scripts/pytemplate_qt'],
@@ -67,7 +73,7 @@ coll = COLLECT(
 )
 app = BUNDLE(
     coll,
-    name='pytemplate_qt.app',
+    name=f'{DISPLAY_NAME}.app',
     icon='../files/icons/pytemplate.icns',
     bundle_identifier='com.gitlab.pytemplate_qt'
 )

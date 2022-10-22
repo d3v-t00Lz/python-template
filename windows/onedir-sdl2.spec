@@ -1,4 +1,6 @@
 # -*- mode: python ; coding: utf-8 -*-
+import json
+import os
 
 block_cipher = None
 
@@ -8,6 +10,11 @@ PROJECT_ROOT = os.path.abspath(
         '..',
     )
 )
+#META_FILE = os.path.join(PROJECT_ROOT, 'meta.json')
+META_FILE = 'meta.json'
+with open(META_FILE) as f:
+    META = json.load(f)
+PRODUCT = META['product']
 
 import sdl2dll
 sdl2dll_path = sdl2dll.get_dllpath()
@@ -47,7 +54,7 @@ exe = EXE(
     [],
     exclude_binaries=True,
     icon='..\\files\\icons\\pytemplate.ico',
-    name='pytemplate_sdl2',
+    name=f'{PRODUCT}_sdl2',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,

@@ -1,6 +1,5 @@
 # -*- mode: python ; coding: utf-8 -*-
-
-
+import json
 import importlib
 import os
 import pkgutil
@@ -13,6 +12,11 @@ PROJECT_ROOT = os.path.abspath(
         '..',
     )
 )
+#META_FILE = os.path.join(PROJECT_ROOT, 'meta.json')
+META_FILE = 'meta.json'
+with open(META_FILE) as f:
+    META = json.load(f)
+PRODUCT = META['product']
 
 def recurse_modules(
     root_name: str='pytemplate_cli.cmd',
@@ -67,7 +71,7 @@ exe = EXE(
     [],
     exclude_binaries=True,
     icon='..\\files\\icons\\pytemplate.ico',
-    name='pytemplate_cli',
+    name=f'{PRODUCT}_cli',
     debug=False,
     bootloader_ignore_signals=False,
     strip=False,
