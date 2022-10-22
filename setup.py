@@ -87,6 +87,20 @@ def _github_download_url(
 ):
     return f"{url}/archive/{version}.tar.gz"
 
+def package_data(*paths):
+    result = []
+    for path in paths:
+        for (root, dirs, fnames) in os.walk(path):
+            for fname in fnames:
+                if os.path.basename(fname) == '__init__.py':
+                    continue
+                result.append(
+                    os.path.join(CWD, root, fname)
+                )
+    for fname in result:
+        assert os.path.isfile(fname), fname
+    return result
+
 with open('README.md', 'rt') as f:
     LONG_DESC = f.read()
 
@@ -97,6 +111,9 @@ setup(
     author_email="TODO",
     description=DESCRIPTION,
     include_package_data=True,
+    package_data={
+        'pytemplate': package_data('src/pytemplate/files'),
+    },
     long_description=LONG_DESC,
     long_description_content_type='text/markdown',
     url=URL,
