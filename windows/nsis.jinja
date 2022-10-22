@@ -164,14 +164,14 @@ SectionEnd
 Section "Start Menu Shortcut" SEC05
     ; PT:QT
     createShortCut \
-      "$SMPROGRAMS\{{ MAJOR_VERSION }}_qt.lnk" \
+      "$SMPROGRAMS\{{ DISPLAY_NAME }} Qt.lnk" \
       "$INSTDIR\{{ MAJOR_VERSION }}_qt\{{ MAJOR_VERSION }}_qt.exe" \
       "" \
       "$INSTDIR\{{ MAJOR_VERSION }}.ico"
     ; PT:QT
     ; PT:SDL2
     createShortCut \
-      "$SMPROGRAMS\{{ MAJOR_VERSION }}_sdl2.lnk" \
+      "$SMPROGRAMS\{{ DISPLAY_NAME }} SDL2.lnk" \
       "$INSTDIR\{{ MAJOR_VERSION }}_sdl2\{{ MAJOR_VERSION }}_sdl2.exe" \
       "" \
       "$INSTDIR\{{ MAJOR_VERSION }}.ico"
