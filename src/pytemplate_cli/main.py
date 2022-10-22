@@ -3,6 +3,7 @@
 """
 
 import copy
+import sys
 from typing import List, Optional
 
 # For the singleton config access pattern
@@ -22,7 +23,8 @@ def main(
     # config_path = kwargs.pop('config')
     # load_config(config_path)
     func = kwargs.pop('func')
-    result = func(**kwargs)
+    retcode, result = func(**kwargs)
     if result:
         print(result)
+    sys.exit(retcode)
 

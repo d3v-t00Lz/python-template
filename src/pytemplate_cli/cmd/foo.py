@@ -6,9 +6,12 @@ from pytemplate.cmd.foo import foo, Strings
 from pytemplate_cli.util import arg_force
 
 
+def wrapper(*args, **kwargs):
+    return 0, foo(*args, **kwargs)
+
 def subcommand(
     subparsers,
-    func=foo,
+    func=wrapper,
 ):
     parser = subparsers.add_parser(
         'foo',

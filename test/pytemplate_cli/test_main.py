@@ -12,10 +12,17 @@ def test_main():
         [
             'version',
         ],
+        [
+            'foo',
+            's:s:s',
+        ],
+        [
+            'bar',
+            'baz',
+        ]
     ):
-        main(
-            _args=_args,
-        )
+        with pytest.raises(SystemExit):
+            main(_args=_args)
 
 
 def test_main_raises():
