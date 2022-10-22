@@ -72,9 +72,11 @@ if os.path.exists(DMG):
 subprocess.check_call([
     'create-dmg',
     '--volname', f'{DISPLAY_NAME}',
-    '--icon', BUNDLE, '50', '90',
+    '--icon', BUNDLE, '128', '128',
     '--hide-extension', BUNDLE,
-    '--app-drop-link', '300', '120',
+    '--app-drop-link', '384', '128',
+    '--icon-size', '128',
+    '--window-size', '512', '384',
     '--format', 'UDBZ',
     DMG,
     BUNDLE,
