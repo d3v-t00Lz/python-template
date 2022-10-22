@@ -46,11 +46,12 @@ class MainWindow(QMainWindow):
             # Windows
             os.path.join(
                 os.path.dirname(sys.executable),
+                '..',
                 'pytemplate.ico',
             ),
             # MacOS
             os.path.join(
-                os.path.dirname(__file__),
+                os.path.dirname(sys.executable),
                 '..',
                 'Resources',
                 'files',
