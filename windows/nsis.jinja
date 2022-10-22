@@ -1,6 +1,8 @@
 !define PRODUCT_VERSION "{{ MAJOR_VERSION_NUM }}.0"
 !define PRODUCT_PUBLISHER "{{ ORG }}"
-!define INSTDIR_REG_ROOT "SHELL_CONTEXT"
+!define REG_ROOT "SHELL_CONTEXT"
+!define UNINST_REG_KEY \
+    "Software\Microsoft\Windows\CurrentVersion\Uninstall\{{ MAJOR_VERSION }}"
 
 ; PT:SERVICE
 !define displayName "{{ MAJOR_VERSION }}"
@@ -76,8 +78,14 @@ InstallDir "$PROGRAMFILES64\{{ ORG }}\{{ MAJOR_VERSION }}"
 
 Function onMultiUserModeChanged
     ${If} $MultiUser.InstallMode == "CurrentUser"
+        SetShellVarContext current
         !insertmacro GetUserProgramFiles $InstDir
         StrCpy $InstDir "$InstDir\{{ ORG }}\{{ MAJOR_VERSION }}"
+		EnVar::SetHKCU
+    ${Else}
+        SetShellVarContext all
+        StrCpy $InstDir "$PROGRAMFILES64\{{ ORG }}\{{ MAJOR_VERSION }}"
+		EnVar::SetHKLM
     ${EndIf}
 FunctionEnd
 
@@ -108,16 +116,19 @@ Section "Base Install" SEC01
     File "files\icons\{{ MAJOR_VERSION }}.ico"
 
     ; Add to the "Add or remove programs" dialog
-    WriteRegStr ${INSTDIR_REG_ROOT} \
-        "Software\Microsoft\Windows\CurrentVersion\Uninstall\{{ MAJOR_VERSION }}" \
+    WriteRegStr \
+        "${REG_ROOT}" \
+        "${UNINST_REG_KEY}" \
         "DisplayName" \
-        "{{ MAJOR_VERSION }}"
-    WriteRegStr ${INSTDIR_REG_ROOT} \
-        "Software\Microsoft\Windows\CurrentVersion\Uninstall\{{ MAJOR_VERSION }}" \
+        "{{ DISPLAY_NAME }}"
+    WriteRegStr \
+        "${REG_ROOT}" \
+        "${UNINST_REG_KEY}" \
         "DisplayIcon" \
         "$\"$INSTDIR\{{ MAJOR_VERSION }}.ico$\""
-    WriteRegStr ${INSTDIR_REG_ROOT} \
-        "Software\Microsoft\Windows\CurrentVersion\Uninstall\{{ MAJOR_VERSION }}" \
+    WriteRegStr \
+        "${REG_ROOT}" \
+        "${UNINST_REG_KEY}" \
         "UninstallString" \
         "$\"$INSTDIR\uninstall.exe$\""
 SectionEnd
@@ -126,7 +137,6 @@ SectionEnd
 Section "Command Line Interface" SEC02
     SetOutPath $INSTDIR\{{ MAJOR_VERSION }}_cli
     File /r "dist\{{ MAJOR_VERSION }}_cli\"
-    EnVar::SetHKLM
     EnVar::AddValue "path" "$INSTDIR\{{ MAJOR_VERSION }}_cli"
 
     ; PT:SERVICE
@@ -172,7 +182,7 @@ SectionEnd
 Section "uninstall"
     RMDir /r $INSTDIR
     ; Call without /r, only delete if empty
-    RMDir "$PROGRAMFILES64\{{ ORG }}"
+    RMDir "$INSTDIR\.."
 
     ; PT:QT
     Delete "$SMPROGRAMS\{{ MAJOR_VERSION }}_qt.lnk"
@@ -181,11 +191,9 @@ Section "uninstall"
     Delete "$SMPROGRAMS\{{ MAJOR_VERSION }}_sdl2.lnk"
     ; PT:SDL2
     ; PT:CLI
-    EnVar::SetHKLM
     EnVar::DeleteValue "path" "$INSTDIR\{{ MAJOR_VERSION }}_cli"
     ; PT:CLI
-    DeleteRegKey ${INSTDIR_REG_ROOT} \
-        "Software\Microsoft\Windows\CurrentVersion\Uninstall\{{ MAJOR_VERSION }}"
+    DeleteRegKey "${REG_ROOT}" "${UNINST_REG_KEY}"
 SectionEnd
 
 !insertmacro MUI_FUNCTION_DESCRIPTION_BEGIN
