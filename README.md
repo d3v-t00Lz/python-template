@@ -1,3 +1,4 @@
+![](/files/icons/pytemplate.png)
 # Comprehensive packaging and testing for your Python projects
 
 This project is meant to be forked into new Python3 projects using the
