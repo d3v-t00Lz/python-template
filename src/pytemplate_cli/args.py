@@ -32,9 +32,11 @@ def recurse_modules(
         else:
             sub_mod.subcommand(subparsers)
 
-def arg_parser():
+def arg_parser(
+    default_func=required_subcommand,
+):
     parser = argparse.ArgumentParser()
-    parser.set_defaults(func=required_subcommand)
+    parser.set_defaults(func=default_func)
     subparsers = parser.add_subparsers(
         help='Subcommands',
     )
@@ -59,7 +61,14 @@ def arg_parser():
 
 def parse_args(
     _args: Optional[List[str]]=None,
+    default_func=required_subcommand,
 ):
-    parser = arg_parser()
+    """
+    @default_func:
+        The function to call when the CLI is invoked without a subcommand.
+        Default: Show an error message.  To use this with other interfaces
+        like the Qt GUI, pass in the main() function of that interface.
+    """
+    parser = arg_parser(default_func)
     return parser.parse_args(_args)
 
