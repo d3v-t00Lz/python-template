@@ -1,6 +1,4 @@
-:------------------------------:|:-----------------------------------------------
-![](/files/icons/pytemplate.png)|# Comprehensive packaging and testing for
-                                |# your Python projects
+# ![](/files/icons/pytemplate.png)Comprehensive packaging and testing for your Python projects
 
 This project is meant to be forked into new Python3 projects using the
 `tools/fork.py` script.  See `tools/fork.py --help` for the many command line
