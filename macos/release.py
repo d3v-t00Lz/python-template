@@ -10,6 +10,14 @@ import shutil
 import subprocess
 
 
+def suffix(
+    spec_file,
+    pattern='.*-([a-z0-9]+).spec',
+):
+    match = re.match(pattern, spec_file)
+    assert match, f'"{spec_file}" does not match pattern {pattern}'
+    return match.groups()[0]
+
 ARCH = platform.machine()
 
 CWD = os.path.abspath(
@@ -22,14 +30,15 @@ os.chdir(CWD)
 
 SPEC_FILES = [os.path.basename(x) for x in glob('macos/onedir*.spec')]
 assert len(SPEC_FILES) >= 1, 'no spec_files available'
+CHOICES = {suffix(x): x for x in SPEC_FILES}
 
 def parse_args():
     parser = argparse.ArgumentParser('Create MacOS packages')
     if len(SPEC_FILES) > 1:
         parser.add_argument(
-            'spec_file',
-            choices=SPEC_FILES,
-            help='The Pyinstaller spec file to use.',
+            'choice',
+            choices=list(CHOICES),
+            help='The user interface to build and package',
         )
     return parser.parse_args()
 
@@ -37,9 +46,8 @@ args = parse_args()
 if len(SPEC_FILES) == 1:
     SPEC_FILE = SPEC_FILES[0]
 else:
-    SPEC_FILE = args.spec_file
-SUFFIX = re.match('.*-([a-z0-9]+).spec', SPEC_FILE).groups()[0]
-
+    SPEC_FILE = CHOICES[args.choice]
+SUFFIX = args.choice
 with open('meta.json') as f:
     META = json.load(f)
 PRODUCT = META['product']
