@@ -3,6 +3,6 @@ Type=Application
 Name=pytemplate_cli
 Exec=pytemplate_cli
 Comment=pytemplate_cli on Python {{ python-fullversion }}
-Icon=python
+Icon=pytemplate
 Categories=System;
 Terminal=true

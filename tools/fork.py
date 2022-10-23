@@ -747,7 +747,9 @@ def main():
         _('rm -f tools/*windows*')
         remove_lines('.dockerignore', '/windows')
         FILES_TO_UPDATE.remove('windows/nsis.jinja')
-    if not args.appimage:
+    if args.appimage:
+        _(f'for x in appimage/*/; do mv $x/pytemplate.png $x/{name}.png; done')
+    else:
         _('rm -rf appimage/')
         FILES_TO_UPDATE.remove("appimage/*/*")
         remove_makefile_target('appimage-cli')
