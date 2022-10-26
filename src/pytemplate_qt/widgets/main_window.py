@@ -10,13 +10,14 @@ from pytemplate_qt.qt import (
     QPushButton,
     QWidget,
 )
+from .icon import set_icon
 from pytemplate.cmd.version import version, Strings as VersionStrings
 
 class MainWindow(QMainWindow):
     def __init__(self):
         QMainWindow.__init__(self)
         self.setWindowTitle('pytemplate')
-        self.set_icon()
+        set_icon(self)
         cen_widget = QWidget()
         self.setCentralWidget(cen_widget)
         main_layout = QGridLayout(cen_widget)
@@ -27,50 +28,4 @@ class MainWindow(QMainWindow):
 
     def on_version(self):
         QMessageBox.information(self, "Version", version(None))
-
-    def set_icon(self):
-        try:
-            import importlib.resources as importlib_resources
-        except ImportError:
-            import importlib_resources
-        # setuptools package
-        path = importlib_resources.files(
-            'pytemplate'
-        ) / 'files' / 'icons' / 'pytemplate.ico'
-        path = str(path)
-        print(path)
-        if os.path.exists(path):
-            self.setWindowIcon(QIcon(path))
-            return
-        for path in (
-            # Windows
-            os.path.join(
-                os.path.dirname(sys.executable),
-                '..',
-                'pytemplate.ico',
-            ),
-            # MacOS
-            os.path.join(
-                os.path.dirname(sys.executable),
-                '..',
-                'Resources',
-                'files',
-                'icons',
-                'pytemplate.ico',
-            ),
-            # Devel
-            os.path.join(
-                os.path.dirname(__file__),
-                '..',
-                '..',
-                '..',
-                'files',
-                'icons',
-                'pytemplate.ico',
-            ),
-        ):
-            path = os.path.abspath(path)
-            if os.path.exists(path):
-                self.setWindowIcon(QIcon(path))
-                return
 
