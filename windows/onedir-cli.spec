@@ -46,6 +46,7 @@ a = Analysis(
     binaries=[
     ],
     datas=[
+        ('../files/', 'files'),
     ],
     hiddenimports=[
     ] + CMD_MODULES,
