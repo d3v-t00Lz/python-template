@@ -1,3 +1,4 @@
+importlib_resources
 pylogrus==0.4.0
 pymarshal>=2.2.1
 pyyaml==5.4.1

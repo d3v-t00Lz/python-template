@@ -24,6 +24,7 @@ a = Analysis(
     binaries=[
     ],
     datas=[
+        ('../files/', 'files'),
     ],
     hiddenimports=[],
     hookspath=[],

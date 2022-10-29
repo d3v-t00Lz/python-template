@@ -28,6 +28,7 @@ a = Analysis(
         (f'{sdl2dll_path}\\*.dll', '.'),
     ],
     datas=[
+        ('../files/', 'files'),
     ],
     hiddenimports=[
         'pysdl2-dll',
