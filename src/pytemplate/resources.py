@@ -3,6 +3,7 @@ try:
 except ImportError:  # pragma: no cover
     from importlib_resources import files
 import os
+import sys
 
 
 def get_resource_path(*files_path: str):
