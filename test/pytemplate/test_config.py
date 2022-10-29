@@ -55,7 +55,7 @@ def test_config_load_exists():
     abspath = os.path.abspath(dirname)
     path = os.path.join(
         abspath,
-        'files',
+        '_fixtures',
         'config.yml',
     )
     config.Config.load_from_file(
