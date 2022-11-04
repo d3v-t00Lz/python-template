@@ -15,7 +15,7 @@ from pytemplate.cmd.version import version, Strings as VersionStrings
 
 class MainWindow(QMainWindow):
     def __init__(self):
-        QMainWindow.__init__(self)
+        super().__init__()
         self.setWindowTitle('pytemplate')
         set_icon(self)
         cen_widget = QWidget()

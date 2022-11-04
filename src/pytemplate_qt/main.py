@@ -9,9 +9,18 @@ from pytemplate.log import LOG
 
 def parse_args():
     parser = argparse.ArgumentParser("pytemplate Qt application")
+    parser.add_argument(
+        '--system-tray',
+        '-s',
+        action='store_true',
+        default=False,
+        dest='systray',
+        help='Run as a background service in the system tray',
+    )
     return parser.parse_args()
 
 def _main(*args, **kwargs):
+    args = parse_args()
     # Before Qt imports, to ensure that we can log the outcome
     from .qt import (
         QApplication,
@@ -33,26 +42,32 @@ def _main(*args, **kwargs):
     from .widgets.excepthook import qt_excepthook
     add_excepthook(qt_excepthook)
 
-    from .widgets.main_window import MainWindow
     app = QApplication(sys.argv)
 
-    logo_path = get_resource_path('icons', 'pytemplate.png')
-    pixmap = QPixmap(logo_path).scaled(
-        600,
-        600,
-        transformMode=QtCore.Qt.TransformationMode.SmoothTransformation,
-    )
-    splash = QSplashScreen(pixmap)
-    splash.show()
-    QApplication.processEvents()
-    window = MainWindow()
-    timer = QtCore.QTimer()
-    timer.setSingleShot(True)
-    timer.timeout.connect(
-        lambda: show_main_window(window, splash)
-    )
-    timer.start(2000)
-    global_vars.MAIN_WINDOW = window
+    if args.systray:
+        QApplication.setQuitOnLastWindowClosed(False)
+        from .widgets.systray import SystemTray
+        global_vars.SYSTEM_TRAY = SystemTray()
+        global_vars.SYSTEM_TRAY.show()
+    else:
+        from .widgets.main_window import MainWindow
+        logo_path = get_resource_path('icons', 'pytemplate.png')
+        pixmap = QPixmap(logo_path).scaled(
+            600,
+            600,
+            transformMode=QtCore.Qt.TransformationMode.SmoothTransformation,
+        )
+        splash = QSplashScreen(pixmap)
+        splash.show()
+        QApplication.processEvents()
+        window = MainWindow()
+        timer = QtCore.QTimer()
+        timer.setSingleShot(True)
+        timer.timeout.connect(
+            lambda: show_main_window(window, splash)
+        )
+        timer.start(2000)
+        global_vars.MAIN_WINDOW = window
     sys.exit(app.exec())
 
 def show_main_window(window, splash):
@@ -60,7 +75,6 @@ def show_main_window(window, splash):
     splash.finish(window)
 
 def main():
-    parse_args()
     setup()
     _main()
 
