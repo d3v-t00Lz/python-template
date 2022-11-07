@@ -138,11 +138,6 @@ Section "Command Line Interface" SEC02
     SetOutPath $INSTDIR\{{ MAJOR_VERSION }}_cli
     File /r "dist\{{ MAJOR_VERSION }}_cli\"
     EnVar::AddValue "path" "$INSTDIR\{{ MAJOR_VERSION }}_cli"
-
-    ; PT:SERVICE
-    ExecWait 'sc create ${serviceName} error= "severe" displayname= "${displayName}" type= "own" start= "auto" binpath= "\"$INSTDIR\{{ MAJOR_VERSION }}_qt\{{ MAJOR_VERSION }}_qt.exe\" -s"'
-
-    ; PT:SERVICE
 SectionEnd
 ; PT:CLI
 
@@ -150,6 +145,10 @@ SectionEnd
 Section "Qt User Interface" SEC03
     SetOutPath $INSTDIR\{{ MAJOR_VERSION }}_qt
     File /r "dist\{{ MAJOR_VERSION }}_qt\"
+    ; PT:SERVICE
+    ExecWait 'sc create "${serviceName}" error= "severe" displayname= "${displayName}" type= "own" start= "auto" binpath= "$INSTDIR\{{ MAJOR_VERSION }}_qt\{{ MAJOR_VERSION }}_qt.exe"'
+    ExecWait 'sc start "${serviceName}"'
+    ; PT:SERVICE
 SectionEnd
 ; PT:QT
 
@@ -193,6 +192,9 @@ Section "uninstall"
     ; PT:CLI
     EnVar::DeleteValue "path" "$INSTDIR\{{ MAJOR_VERSION }}_cli"
     ; PT:CLI
+    ; PT:SERVICE
+    ExecWait 'sc delete "${serviceName}"'
+    ; PT:SERVICE
     DeleteRegKey "${REG_ROOT}" "${UNINST_REG_KEY}"
 SectionEnd
 
