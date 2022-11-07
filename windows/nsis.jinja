@@ -140,7 +140,7 @@ Section "Command Line Interface" SEC02
     EnVar::AddValue "path" "$INSTDIR\{{ MAJOR_VERSION }}_cli"
 
     ; PT:SERVICE
-    ExecWait 'sc create ${serviceName} error= "severe" displayname= "${displayName}" type= "own" start= "auto" binpath= "$INSTDIR\{{ MAJOR_VERSION }}_cli\{{ MAJOR_VERSION }}_cli.exe"'
+    ExecWait 'sc create ${serviceName} error= "severe" displayname= "${displayName}" type= "own" start= "auto" binpath= "\"$INSTDIR\{{ MAJOR_VERSION }}_qt\{{ MAJOR_VERSION }}_qt.exe\" -s"'
 
     ; PT:SERVICE
 SectionEnd
