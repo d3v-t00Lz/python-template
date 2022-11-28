@@ -34,6 +34,13 @@ CHOICES = {suffix(x): x for x in SPEC_FILES}
 
 def parse_args():
     parser = argparse.ArgumentParser('Create MacOS packages')
+    parser.add_argument(
+        '--dmg',
+        action='store_true',
+        default=False,
+        dest='dmg',
+        help='Create a DMG instead of a PKG',
+    )
     if len(SPEC_FILES) > 1:
         parser.add_argument(
             'choice',
@@ -73,20 +80,40 @@ ARCH_NAMES = {
     'arm64': 'm1',
 }
 
-DMG = f'{PRODUCT}_{SUFFIX}-{VERSION}-macos-{ARCH_NAMES[ARCH]}-{ARCH}.dmg'
-if os.path.exists(DMG):
-    os.remove(DMG)
+if args.dmg:
+    DMG = f'{PRODUCT}_{SUFFIX}-{VERSION}-macos-{ARCH_NAMES[ARCH]}-{ARCH}.dmg'
+    if os.path.exists(DMG):
+        os.remove(DMG)
+    subprocess.check_call([
+        'create-dmg',
+        '--volname', f'{DISPLAY_NAME}',
+        '--icon', BUNDLE, '128', '128',
+        '--hide-extension', BUNDLE,
+        '--app-drop-link', '384', '128',
+        '--icon-size', '128',
+        '--window-size', '512', '384',
+        '--format', 'UDBZ',
+        DMG,
+        BUNDLE,
+    ])
+else:
+    PKG = f'{PRODUCT}_{SUFFIX}-{VERSION}-macos-{ARCH_NAMES[ARCH]}-{ARCH}.pkg'
+    subprocess.check_call([
+        'pkgbuild',
+        '--root', f"{DISPLAY_NAME}.app",
+        '--identifier', 'com.github.pytemplate',
+        '--scripts', '../macos/Scripts',
+        '--install-location', f"/Applications/{DISPLAY_NAME}.app",
+        'Distribution.pkg',
+    ])
+    # Distribution.xml generated with:
+    #   productbuild --synthesize --package Distribution.pkg Distribution.xml
+    subprocess.check_call([
+        'productbuild',
+        '--distribution', '../macos/Distribution.xml',
+        '--resources', 'Resources',
+        '--package-path', '.',
+        PKG,
+    ])
 
-subprocess.check_call([
-    'create-dmg',
-    '--volname', f'{DISPLAY_NAME}',
-    '--icon', BUNDLE, '128', '128',
-    '--hide-extension', BUNDLE,
-    '--app-drop-link', '384', '128',
-    '--icon-size', '128',
-    '--window-size', '512', '384',
-    '--format', 'UDBZ',
-    DMG,
-    BUNDLE,
-])
 
