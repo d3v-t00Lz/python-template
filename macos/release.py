@@ -99,6 +99,15 @@ def create_dmg():
         DMG,
         BUNDLE,
     ])
+    # 
+    #subprocess.check_call([
+    #    'codesign',
+    #    '--force',
+    #    '--sign',
+    #    'TODO: Add your codesiging identity',
+    #    DMG,
+    #])
+
 
 def create_pkg():
     PKG = f'{PRODUCT}-{VERSION}-macos-{ARCH_NAMES[ARCH]}-{ARCH}.pkg'
@@ -123,6 +132,7 @@ def create_pkg():
     os.chdir('dist')
     subprocess.check_call([
         'productbuild',
+        # '--sign', 'TODO: Add your codesigning identity',
         *pb_args,
         PKG,
     ])

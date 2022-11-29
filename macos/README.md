@@ -1,6 +1,10 @@
 # Description
 This document describes the process for building on Mac OS X.
 
+# Code Signing
+Update all .spec files with your `codesign_identity`.
+Update `release.py`, update any TODO items related to code signing
+
 # Procedure
 Note that you will need to install [Homebrew](https://brew.sh/) first, as it
 will be used to download dependencies.
