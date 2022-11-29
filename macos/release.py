@@ -21,7 +21,7 @@ def suffix(
 ARCH = platform.machine()
 
 CWD = os.path.abspath(
-        os.path.join(
+    os.path.join(
         os.path.dirname(__file__),
         '..',
     ),
@@ -34,53 +34,56 @@ CHOICES = {suffix(x): x for x in SPEC_FILES}
 
 def parse_args():
     parser = argparse.ArgumentParser('Create MacOS packages')
-    parser.add_argument(
-        '--dmg',
-        action='store_true',
-        default=False,
-        dest='dmg',
-        help='Create a DMG instead of a PKG',
+    parser.set_defaults(func=parser.print_help)
+    subparsers = parser.add_subparsers()
+    dmg = subparsers.add_parser(
+        'dmg',
+        description='Create a DMG installer of a single user interface',
     )
+    dmg.set_defaults(func=create_dmg)
     if len(SPEC_FILES) > 1:
-        parser.add_argument(
+        dmg.add_argument(
             'choice',
             choices=list(CHOICES),
             help='The user interface to build and package',
         )
+    pkg = subparsers.add_parser(
+        'pkg',
+        description='Create a PKG installer of all user interfaces',
+    )
+    pkg.set_defaults(func=create_pkg)
     return parser.parse_args()
 
-args = parse_args()
-if len(SPEC_FILES) == 1:
-    SPEC_FILE = SPEC_FILES[0]
-else:
-    SPEC_FILE = CHOICES[args.choice]
-SUFFIX = args.choice
 with open('meta.json') as f:
     META = json.load(f)
 PRODUCT = META['product']
-DISPLAY_NAME = META['display_name'][SUFFIX]
-BUNDLE = f"{DISPLAY_NAME}.app"
-
 from pytemplate import __version__ as VERSION
-
-#for BUNDLE in glob('dist/*.app'):
-#    if os.path.isdir(BUNDLE):
-#        shutil.rmtree(BUNDLE)
-
-retcode = subprocess.check_call([
-    'pyinstaller',
-    '--noconfirm',
-    f'macos/{SPEC_FILE}',
-])
-
-os.chdir('dist')
 
 ARCH_NAMES = {
     'x86_64': 'intel',
     'arm64': 'm1',
 }
 
-if args.dmg:
+def create_dmg():
+    if len(SPEC_FILES) == 1:
+        SPEC_FILE = SPEC_FILES[0]
+    else:
+        SPEC_FILE = CHOICES[args.choice]
+    SUFFIX = args.choice
+    DISPLAY_NAME = META['display_name'][SUFFIX]
+    BUNDLE = f"{DISPLAY_NAME}.app"
+
+    #for BUNDLE in glob('dist/*.app'):
+    #    if os.path.isdir(BUNDLE):
+    #        shutil.rmtree(BUNDLE)
+
+    subprocess.check_call([
+        'pyinstaller',
+        '--noconfirm',
+        f'macos/{SPEC_FILE}',
+    ])
+
+    os.chdir('dist')
     DMG = f'{PRODUCT}_{SUFFIX}-{VERSION}-macos-{ARCH_NAMES[ARCH]}-{ARCH}.dmg'
     if os.path.exists(DMG):
         os.remove(DMG)
@@ -96,24 +99,34 @@ if args.dmg:
         DMG,
         BUNDLE,
     ])
-else:
-    PKG = f'{PRODUCT}_{SUFFIX}-{VERSION}-macos-{ARCH_NAMES[ARCH]}-{ARCH}.pkg'
-    subprocess.check_call([
-        'pkgbuild',
-        '--root', f"{DISPLAY_NAME}.app",
-        '--identifier', 'com.github.pytemplate',
-        '--scripts', '../macos/Scripts',
-        '--install-location', f"/Applications/{DISPLAY_NAME}.app",
-        'Distribution.pkg',
-    ])
-    # Distribution.xml generated with:
-    #   productbuild --synthesize --package Distribution.pkg Distribution.xml
+
+def create_pkg():
+    PKG = f'{PRODUCT}-{VERSION}-macos-{ARCH_NAMES[ARCH]}-{ARCH}.pkg'
+    pb_args = []
+    for SUFFIX, SPEC_FILE in CHOICES.items():
+        pb_args.append('--package')
+        pb_args.append(f'{SUFFIX}.pkg')
+        DISPLAY_NAME = META['display_name'][SUFFIX]
+        subprocess.check_call([
+            'pyinstaller',
+            '--noconfirm',
+            f'macos/{SPEC_FILE}',
+        ])
+        subprocess.check_call([
+            'pkgbuild',
+            '--root', f"dist/{DISPLAY_NAME}.app",
+            '--identifier', f'com.github.pytemplate_{SUFFIX}',
+            '--scripts', 'macos/Scripts',
+            '--install-location', f"/Applications/{DISPLAY_NAME}.app",
+            f'dist/{SUFFIX}.pkg',
+        ])
+    os.chdir('dist')
     subprocess.check_call([
         'productbuild',
-        '--distribution', '../macos/Distribution.xml',
-        '--resources', 'Resources',
-        '--package-path', '.',
+        *pb_args,
         PKG,
     ])
 
-
+if __name__ == '__main__':
+    args = parse_args()
+    args.func()

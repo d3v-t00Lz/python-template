@@ -612,6 +612,7 @@ def main():
         )
         remove_lines('tools/rpm.spec', 'PT:QT')
         remove_lines('windows/nsis.jinja', 'PT:QT')
+        remove_lines('macos/Distribution.xml', 'PT:QT')
     else:
         _('rm -rf src/pytemplate_qt scripts/pytemplate_qt')
         _('rm -rf windows/*-qt.spec macos/*-qt.spec')
@@ -620,6 +621,7 @@ def main():
         remove_lines('Makefile', 'UI=qt')
         remove_lines_range('tools/rpm.spec', 'PT:QT')
         remove_lines_range('windows/nsis.jinja', 'PT:QT')
+        remove_lines_range('macos/Distribution.xml', 'PT:QT')
         remove_makefile_target('appimage-qt')
 
     if args.rest:
@@ -643,6 +645,7 @@ def main():
         _('mv scripts/pytemplate_sdl2 scripts/{}_sdl2'.format(name))
         remove_lines('tools/rpm.spec', 'PT:SDL2')
         remove_lines('windows/nsis.jinja', 'PT:SDL2')
+        remove_lines('macos/Distribution.xml', 'PT:SDL2')
         _(
             'mv '
             'appimage/sdl2/pytemplate_sdl2.appdata.xml '
@@ -661,6 +664,7 @@ def main():
         remove_lines('Makefile', 'UI=sdl2')
         remove_lines_range('tools/rpm.spec', 'PT:SDL2')
         remove_lines_range('windows/nsis.jinja', 'PT:SDL2')
+        remove_lines_range('macos/Distribution.xml', 'PT:SDL2')
         remove_makefile_target('appimage-sdl2')
 
     if args.cli:
