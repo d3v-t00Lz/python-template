@@ -11,6 +11,7 @@
 """
 
 from pytemplate.log import LOG
+from pymarshal.util.pm_assert import pm_assert
 import os
 import sys
 
@@ -57,6 +58,7 @@ if True:  # PyQt
             else:
                 return x.position().toPoint()
         from PyQt6 import QtGui, QtWidgets, QtCore
+        from PyQt6.QtQuick import QQuickView
         from PyQt6.QtCore import pyqtSignal as Signal, pyqtSlot as Slot
         from PyQt6.QtGui import *
         from PyQt6.QtWidgets import *
@@ -65,8 +67,30 @@ if True:  # PyQt
 else:  # PySide
     LOG.info("Using PySide6")
     from PySide6 import QtGui, QtWidgets, QtCore
+    from PySide6.QtQuick import QQuickView
     from PySide6.QtCore import Signal, Slot
     from PySide6.QtGui import *
     from PySide6.QtWidgets import *
     from PySide6.QtSvg import QSvgRenderer
+
+
+def get_qml(path: str) -> QtCore.QUrl:
+    """ Take a relative path in the qml directory and convert to a QUrl
+        suitable for loading
+    """
+    pm_assert(
+        '..' not in path,
+        ValueError,
+        path,
+        f"Use of '..' in {path} is not allowed",
+    )
+    dirname = os.path.abspath(os.path.dirname(__file__))
+    path = os.path.join(dirname, 'qml', path)
+    pm_assert(
+        os.path.isfile(path),
+        FileNotFoundError,
+        path,
+        f'"{path}" does not exist',
+    )
+    return QtCore.QUrl(path)
 

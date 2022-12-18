@@ -7,9 +7,11 @@ from pytemplate.setup import setup
 from pytemplate.setup.excepthook import add_excepthook
 from pytemplate.log import LOG
 from .qt import (
+    get_qml,
     QApplication,
     QGuiApplication,
     QPixmap,
+    QQuickView,
     QSplashScreen,
     QtCore,
 )
@@ -17,12 +19,11 @@ from .qt import (
 def parse_args():
     parser = argparse.ArgumentParser("pytemplate Qt application")
     parser.add_argument(
-        '--system-tray',
-        '-s',
-        action='store_true',
-        default=False,
-        dest='systray',
-        help='Run as a background service in the system tray',
+        '--app',
+        '-a',
+        choices=['widgets', 'qml', 'systray'],
+        default='widgets',
+        help='The application to run',
     )
     return parser.parse_args()
 
@@ -55,6 +56,12 @@ def _systray():
     global_vars.SYSTEM_TRAY = SystemTray()
     global_vars.SYSTEM_TRAY.show()
 
+
+def _qml():
+    global_vars.QML = QQuickView()
+    global_vars.QML.setSource(get_qml("main.qml"))
+    global_vars.QML.show()
+
 def _main(*args, **kwargs):
     args = parse_args()
     try:
@@ -72,8 +79,10 @@ def _main(*args, **kwargs):
 
     app = QApplication(sys.argv)
 
-    if args.systray:
+    if args.app == 'systray':
         _systray()
+    elif args.app == 'qml':
+        _qml()
     else:
         _main_window()
     sys.exit(app.exec())
