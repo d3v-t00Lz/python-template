@@ -2,6 +2,7 @@
 
 import argparse
 import copy
+import json
 import os
 import shutil
 import subprocess
@@ -14,6 +15,13 @@ CWD = os.path.abspath(
     ),
 )
 os.chdir(CWD)
+
+META_PATH = os.path.join(CWD, '..', 'meta.json')
+with open(META_PATH) as f:
+    META = json.load(f)
+PRODUCT = META['product']
+
+from pytemplate import __version__ as VERSION
 
 DIRS = tuple(sorted(x for x in os.listdir() if os.path.isdir(x)))
 
@@ -33,7 +41,7 @@ def parse_args():
     )
     if len(DIRS) > 1:
         parser.add_argument(
-            'dirname',
+            'dirnames',
             choices=DIRS,
             nargs='+',
             help='The appimage directory to build',
@@ -41,7 +49,9 @@ def parse_args():
     return parser.parse_args()
 
 def build(args):
-    dirnames = args.dirname if len(DIRS) > 1 else DIRS
+    if not os.path.isdir('../dist'):
+        os.mkdir('../dist')
+    dirnames = args.dirnames if len(DIRS) > 1 else DIRS
     current_repo = os.path.abspath(
         os.path.join(
             os.path.dirname(__file__),
@@ -64,8 +74,6 @@ def build(args):
             ],
             env=env,
         )
-    if not os.path.isdir('../dist'):
-        os.mkdir('../dist')
 
     for appimage in glob('*.AppImage'):
         dest = os.path.join('..', 'dist', appimage)
@@ -74,6 +82,23 @@ def build(args):
             os.remove(dest)
         print(f'Moving {appimage} to ../dist/')
         shutil.move(appimage, '../dist/')
+
+    os.chdir('../dist')
+    if len(dirnames) > 1:
+        def _filter(tarinfo):
+            tarinfo.mode = int('0755', base=8)
+            return tarinfo
+        tarpath = f'{PRODUCT}-{VERSION}-x86_64.AppImage.tar.gz'
+        if os.path.isfile(tarpath):
+            os.remove(tarpath)
+        import tarfile
+        with tarfile.open(tarpath, 'w:gz') as f:
+            for appimage in glob('*.AppImage'):
+                f.add(
+                    appimage,
+                    arcname=os.path.basename(appimage),
+                    filter=_filter,
+                )
 
     print('Finished!  AppImage files are in [project_root]/dist')
 
