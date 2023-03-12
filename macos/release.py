@@ -47,6 +47,15 @@ def parse_args():
             choices=list(CHOICES),
             help='The user interface to build and package',
         )
+    else:
+        dmg.add_argument(
+            '--choice',
+            choices=list(CHOICES),
+            default=list(CHOICES.keys())[0],
+            dest='choice',
+            help='The user interface to build and package',
+        )
+
     pkg = subparsers.add_parser(
         'pkg',
         description='Create a PKG installer of all user interfaces',
@@ -99,7 +108,7 @@ def create_dmg():
         DMG,
         BUNDLE,
     ])
-    # 
+    #
     #subprocess.check_call([
     #    'codesign',
     #    '--force',
