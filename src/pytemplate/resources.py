@@ -1,3 +1,4 @@
+# type: ignore
 try:
     from importlib.resources import files
 except ImportError:  # pragma: no cover
