@@ -592,10 +592,31 @@ def main():
     # Applications that require desktop launchers, use icons
     if any((args.sdl2, args.qt, (args.cli and args.windows))):
         _(f'mv files/icons/pytemplate.png files/icons/{name}.png')
+        _(
+            'mv '
+            'files/icons/pytemplate-systray.png '
+            f'files/icons/{name}-systray.png'
+        )
         _(f'mv files/icons/pytemplate.ico files/icons/{name}.ico')
         _(f'mv files/icons/pytemplate.icns files/icons/{name}.icns')
+        _(
+            'mv '
+            'src/pytemplate/files/icons/pytemplate.png '
+            f'src/pytemplate/files/icons/{name}.png'
+        )
+        _(
+            'mv '
+            'src/pytemplate/files/icons/pytemplate-systray.png '
+            f'src/pytemplate/files/icons/{name}-systray.png'
+        )
+        _(
+            'mv '
+            'src/pytemplate/files/icons/pytemplate.ico '
+            f'src/pytemplate/files/icons/{name}.ico'
+        )
     else:
         _('rm -rf files/icons')
+        _('rm -rf src/pytemplate/files/icons')
 
     if args.qt:
         _(f'mv src/pytemplate_qt src/{name}_qt')
