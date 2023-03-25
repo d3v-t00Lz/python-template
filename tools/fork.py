@@ -4,6 +4,7 @@ from typing import Optional
 import argparse
 import json
 import os
+from shutil import move as mv
 import subprocess
 import sys
 
@@ -591,45 +592,39 @@ def main():
 
     # Applications that require desktop launchers, use icons
     if any((args.sdl2, args.qt, (args.cli and args.windows))):
-        _(f'mv files/icons/pytemplate.png files/icons/{name}.png')
-        _(
-            'mv '
-            'files/icons/pytemplate-systray.png '
-            f'files/icons/{name}-systray.png'
+        mv('files/icons/pytemplate.png', f'files/icons/{name}.png')
+        mv(
+            'files/icons/pytemplate-systray.png',
+            f'files/icons/{name}-systray.png',
         )
-        _(f'mv files/icons/pytemplate.ico files/icons/{name}.ico')
-        _(f'mv files/icons/pytemplate.icns files/icons/{name}.icns')
-        _(
-            'mv '
-            'src/pytemplate/files/icons/pytemplate.png '
-            f'src/pytemplate/files/icons/{name}.png'
+        mv('files/icons/pytemplate.ico', f'files/icons/{name}.ico')
+        mv('files/icons/pytemplate.icns', f'files/icons/{name}.icns')
+        mv(
+            'src/pytemplate/files/icons/pytemplate.png',
+            f'src/pytemplate/files/icons/{name}.png',
         )
-        _(
-            'mv '
-            'src/pytemplate/files/icons/pytemplate-systray.png '
-            f'src/pytemplate/files/icons/{name}-systray.png'
+        mv(
+            'src/pytemplate/files/icons/pytemplate-systray.png',
+            f'src/pytemplate/files/icons/{name}-systray.png',
         )
-        _(
-            'mv '
-            'src/pytemplate/files/icons/pytemplate.ico '
-            f'src/pytemplate/files/icons/{name}.ico'
+        mv(
+            'src/pytemplate/files/icons/pytemplate.ico',
+            f'src/pytemplate/files/icons/{name}.ico',
         )
     else:
         _('rm -rf files/icons')
         _('rm -rf src/pytemplate/files/icons')
 
     if args.qt:
-        _(f'mv src/pytemplate_qt src/{name}_qt')
-        _(f'mv scripts/pytemplate_qt scripts/{name}_qt')
-        _(
-            'mv '
-            'appimage/qt/pytemplate_qt.appdata.xml '
-            f'appimage/qt/{name}_qt.appdata.xml'
+        mv('src/pytemplate_qt', f'src/{name}_qt')
+        mv('scripts/pytemplate_qt', f'scripts/{name}_qt')
+        mv(
+            'appimage/qt/pytemplate_qt.appdata.xml',
+            f'appimage/qt/{name}_qt.appdata.xml',
         )
-        _(
-            'mv '
-            'appimage/qt/pytemplate_qt.desktop '
-            f'appimage/qt/{name}_qt.desktop'
+        mv(
+            'appimage/qt/pytemplate_qt.desktop',
+            f'appimage/qt/{name}_qt.desktop',
         )
         remove_lines('tools/rpm.spec', 'PT:QT')
         remove_lines('windows/nsis.jinja', 'PT:QT')
@@ -646,9 +641,9 @@ def main():
         remove_makefile_target('appimage-qt')
 
     if args.rest:
-        _('mv src/pytemplate_rest src/{}_rest'.format(name))
-        _('mv test/pytemplate_rest test/{}_rest'.format(name))
-        _('mv scripts/pytemplate_rest scripts/{}_rest'.format(name))
+        mv('src/pytemplate_rest', f'src/{name}_rest')
+        mv('test/pytemplate_rest', f'test/{name}_rest')
+        mv('scripts/pytemplate_rest', f'scripts/{name}_rest')
     else:
         _('rm -rf src/pytemplate_rest scripts/pytemplate_rest')
         _('rm -rf test/pytemplate_rest')
@@ -662,20 +657,18 @@ def main():
         replace_makefile_target('type-check', 'pytemplate_rest', '')
 
     if args.sdl2:
-        _('mv src/pytemplate_sdl2 src/{}_sdl2'.format(name))
-        _('mv scripts/pytemplate_sdl2 scripts/{}_sdl2'.format(name))
+        mv('src/pytemplate_sdl2', f'src/{name}_sdl2')
+        mv('scripts/pytemplate_sdl2', f'scripts/{name}_sdl2')
         remove_lines('tools/rpm.spec', 'PT:SDL2')
         remove_lines('windows/nsis.jinja', 'PT:SDL2')
         remove_lines('macos/Distribution.xml', 'PT:SDL2')
-        _(
-            'mv '
-            'appimage/sdl2/pytemplate_sdl2.appdata.xml '
-            f'appimage/sdl2/{name}_sdl2.appdata.xml'
+        mv(
+            'appimage/sdl2/pytemplate_sdl2.appdata.xml',
+            f'appimage/sdl2/{name}_sdl2.appdata.xml',
         )
-        _(
-            'mv '
-            'appimage/sdl2/pytemplate_sdl2.desktop '
-            f'appimage/sdl2/{name}_sdl2.desktop'
+        mv(
+            'appimage/sdl2/pytemplate_sdl2.desktop',
+            f'appimage/sdl2/{name}_sdl2.desktop',
         )
     else:
         _('rm -rf src/pytemplate_sdl2 scripts/pytemplate_sdl2')
@@ -689,18 +682,16 @@ def main():
         remove_makefile_target('appimage-sdl2')
 
     if args.cli:
-        _('mv scripts/pytemplate_cli scripts/{}_cli'.format(name))
-        _('mv src/pytemplate_cli src/{}_cli'.format(name))
-        _('mv test/pytemplate_cli test/{}_cli'.format(name))
-        _(
-            'mv '
-            'appimage/cli/pytemplate_cli.appdata.xml '
-            f'appimage/cli/{name}_cli.appdata.xml'
+        mv('scripts/pytemplate_cli', f'scripts/{name}_cli')
+        mv('src/pytemplate_cli', f'src/{name}_cli')
+        mv('test/pytemplate_cli', f'test/{name}_cli')
+        mv(
+            'appimage/cli/pytemplate_cli.appdata.xml',
+            f'appimage/cli/{name}_cli.appdata.xml',
         )
-        _(
-            'mv '
-            'appimage/cli/pytemplate_cli.desktop '
-            f'appimage/cli/{name}_cli.desktop'
+        mv(
+            'appimage/cli/pytemplate_cli.desktop',
+            f'appimage/cli/{name}_cli.desktop',
         )
         remove_lines('windows/nsis.jinja', 'PT:CLI')
     else:
@@ -730,8 +721,8 @@ def main():
     if args.library:
         if not args.os_module:
             _('rm -f src/pytemplate/os.py test/pytemplate/test_os.py')
-        _('mv src/pytemplate src/{}'.format(name))
-        _('mv test/pytemplate test/{}'.format(name))
+        mv('src/pytemplate', f'src/{name}')
+        mv('test/pytemplate', f'test/{name}')
     else:
         remove_text('setup.cfg', ' --cov=pytemplate')
         _('rm -rf src/pytemplate test/pytemplate')
@@ -814,10 +805,9 @@ def main():
 
     # After the original, to avoid moving the file when others need to write
     if args.deb:
-        _(
-            'mv '
-            'debian/python3-pytemplate.install '
-            f'debian/python3-{name}.install'
+        mv(
+            'debian/python3-pytemplate.install',
+            f'debian/python3-{name}.install',
         )
 
     _(
