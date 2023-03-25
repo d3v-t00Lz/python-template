@@ -2,9 +2,10 @@
 
 from typing import Optional
 import argparse
+from glob import glob
 import json
 import os
-from shutil import move as mv
+from shutil import move as mv, rmtree
 import subprocess
 import sys
 
@@ -51,6 +52,20 @@ FILES_TO_UPDATE = [
     'windows/nsis.jinja',
 ]
 
+def rm(*paths):
+    for path in paths:
+        _glob = glob(path)
+        for _path in _glob:
+            if not os.path.exists(_path):
+                print(f'WARNING: "{_path}" does not exist')
+            elif os.path.isdir(_path):
+                rmtree(_path)
+            elif os.path.isfile(_path):
+                os.remove(_path)
+            elif os.path.islink(_path):
+                os.unlink(_path)
+            else:
+                raise OSError(_path)
 
 def _(x):
     """ Run a shell command """
@@ -612,8 +627,7 @@ def main():
             f'src/pytemplate/files/icons/{name}.ico',
         )
     else:
-        _('rm -rf files/icons')
-        _('rm -rf src/pytemplate/files/icons')
+        rm('files/icons', 'src/pytemplate/files/icons')
 
     if args.qt:
         mv('src/pytemplate_qt', f'src/{name}_qt')
@@ -630,10 +644,14 @@ def main():
         remove_lines('windows/nsis.jinja', 'PT:QT')
         remove_lines('macos/Distribution.xml', 'PT:QT')
     else:
-        _('rm -rf src/pytemplate_qt scripts/pytemplate_qt')
-        _('rm -rf windows/*-qt.spec macos/*-qt.spec')
-        _('rm -rf appimage/qt/')
-        _('rm -f requirements/qt.txt')
+        rm(
+            'src/pytemplate_qt',
+            'scripts/pytemplate_qt',
+            'windows/*-qt.spec',
+            'macos/*-qt.spec',
+            'appimage/qt',
+            'requirements/qt.txt',
+        )
         remove_lines('Makefile', 'UI=qt')
         remove_lines_range('tools/rpm.spec', 'PT:QT')
         remove_lines_range('windows/nsis.jinja', 'PT:QT')
@@ -645,10 +663,13 @@ def main():
         mv('test/pytemplate_rest', f'test/{name}_rest')
         mv('scripts/pytemplate_rest', f'scripts/{name}_rest')
     else:
-        _('rm -rf src/pytemplate_rest scripts/pytemplate_rest')
-        _('rm -rf test/pytemplate_rest')
-        _('rm -f Dockerfile-rest')
-        _('rm -f requirements/rest.txt')
+        rm(
+            'src/pytemplate_rest',
+            'scripts/pytemplate_rest',
+            'test/pytemplate_rest',
+            'Dockerfile-rest',
+            'requirements/rest.txt',
+        )
         remove_lines('Makefile', 'src/pytemplate_rest')
         remove_text('setup.cfg', '--cov=pytemplate_rest ')
         remove_lines('requirements/test.txt', 'sanic')
@@ -671,10 +692,14 @@ def main():
             f'appimage/sdl2/{name}_sdl2.desktop',
         )
     else:
-        _('rm -rf src/pytemplate_sdl2 scripts/pytemplate_sdl2')
-        _('rm -rf windows/*sdl2.spec macos/*sdl2.spec')
-        _('rm -rf appimage/sdl2/')
-        _('rm -f requirements/sdl2.txt')
+        rm(
+            'src/pytemplate_sdl2',
+            'scripts/pytemplate_sdl2',
+            'windows/*sdl2.spec',
+            'macos/*sdl2.spec',
+            'appimage/sdl2',
+            'requirements/sdl2.txt',
+        )
         remove_lines('Makefile', 'UI=sdl2')
         remove_lines_range('tools/rpm.spec', 'PT:SDL2')
         remove_lines_range('windows/nsis.jinja', 'PT:SDL2')
@@ -695,13 +720,16 @@ def main():
         )
         remove_lines('windows/nsis.jinja', 'PT:CLI')
     else:
-        _('rm -rf src/pytemplate_cli test/pytemplate_cli')
-        _('rm -f scripts/pytemplate_cli')
-        _('rm -f Dockerfile-cli')
-        _('rm -f windows/*-cli.spec')
-        _('rm -rf appimage/cli/')
-        _('rm -f requirements/cli.txt')
-        _('rm -f files/linux/manpage')
+        rm(
+            'src/pytemplate_cli',
+            'test/pytemplate_cli',
+            'scripts/pytemplate_cli',
+            'Dockerfile-cli',
+            'windows/*-cli.spec',
+            'appimage/cli/',
+            'requirements/cli.txt',
+            'files/linux/manpage',
+        )
         remove_text('setup.cfg', '--cov=pytemplate_cli ')
         remove_makefile_target('appimage-cli')
         remove_makefile_target('docker-cli')
@@ -720,18 +748,21 @@ def main():
 
     if args.library:
         if not args.os_module:
-            _('rm -f src/pytemplate/os.py test/pytemplate/test_os.py')
+            rm(
+                'src/pytemplate/os.py',
+                'test/pytemplate/test_os.py',
+            )
         mv('src/pytemplate', f'src/{name}')
         mv('test/pytemplate', f'test/{name}')
     else:
         remove_text('setup.cfg', ' --cov=pytemplate')
-        _('rm -rf src/pytemplate test/pytemplate')
+        rm('src/pytemplate', 'test/pytemplate')
         replace_makefile_target('type-check', 'pytemplate ', '')
 
     if args.systemd:
         remove_lines('tools/rpm.spec', 'PT:SYSTEMD')
     else:
-        _('rm -f files/linux/systemd.service')
+        rm('files/linux/systemd.service')
         remove_makefile_target('install_systemd')
         remove_lines_range('tools/rpm.spec', 'PT:SYSTEMD')
         FILES_TO_UPDATE.remove('files/linux/systemd.service')
@@ -746,7 +777,7 @@ def main():
         remove_lines_range('windows/nsis.jinja', 'PT:SERVICE')
 
     if not args.deb:
-        _('rm -rf debian/')
+        rm('debian')
         remove_lines('.dockerignore', '/debian')
         remove_text('tools/debian_devel_deps.sh', 'devscripts ')
         remove_makefile_target('deb')
@@ -754,36 +785,33 @@ def main():
         remove_makefile_target('override_dh_auto_install')
         FILES_TO_UPDATE.remove('debian/control')
     if not args.macos:
-        _('rm -rf macos/')
-        _('rm -f tools/*macos*')
-        _('rm -f tools/*homebrew*')
+        rm('macos/', 'tools/*macos*', 'tools/*homebrew*')
         remove_lines('.dockerignore', '/macos')
     if not args.windows:
-        _('rm -rf windows/')
-        _('rm -f tools/*windows*')
+        rm('windows/', 'tools/*windows*')
         remove_lines('.dockerignore', '/windows')
         FILES_TO_UPDATE.remove('windows/nsis.jinja')
     if args.appimage:
         _(f'for x in appimage/*/; do mv $x/pytemplate.png $x/{name}.png; done')
     else:
-        _('rm -rf appimage/')
+        rm('appimage')
         FILES_TO_UPDATE.remove("appimage/*/*")
         remove_makefile_target('appimage-cli')
         remove_makefile_target('appimage-qt')
         remove_makefile_target('appimage-sdl2')
         remove_lines('.dockerignore', '/appimage')
     if not args.docker:
-        _('rm -f Dockerfile* .dockerignore')
+        rm('Dockerfile*', '.dockerignore')
         remove_makefile_target('docker-cli')
         remove_makefile_target('docker-rest')
         remove_lines('Makefile', 'DOCKER_TAG')
     if not args.vendor:
-        _('rm -f tools/vendor.sh pytemplate/setup/vendor.py')
+        rm('tools/vendor.sh', 'pytemplate/setup/vendor.py')
         remove_lines('pytemplate/setup/__init__.py', 'vendor')
         remove_makefile_target('install_linux_vendor')
 
     if not args.rpm:
-        _('rm -f tools/rpm.spec')
+        rm('tools/rpm.spec')
         remove_makefile_target('rpm')
         FILES_TO_UPDATE.remove('tools/rpm.spec')
         remove_text('tools/fedora_devel_deps.sh', 'rpm-build ')
@@ -797,10 +825,10 @@ def main():
         remove_lines_range('requirements/devel.txt', 'PT:PYPI')
 
     if not args.travis_ci:
-        _('rm -f .travis.yml')
+        rm('.travis.yml')
 
     if not args.circle_ci:
-        _('rm -rf .circleci')
+        rm('.circleci')
         FILES_TO_UPDATE.remove('.circleci/config.yml')
 
     # After the original, to avoid moving the file when others need to write
@@ -827,16 +855,16 @@ def main():
 
     for dirname in ('files', 'scripts'):
         if not dir_has_files(dirname):
-            _(f'rm -rf {dirname}/')
+            rm(f'{dirname}/')
 
-    _('rm -f tools/fork.py')
+    rm('tools/fork.py')
 
     # Remove empty line continuations
     remove_lines('Makefile', '\\', contains=False, strip=True)
 
     if args.git_repo:
         if not args.git_history:
-            _('rm -rf .git')
+            rm('.git')
             # Don't use -b, it does not work on at least some modern platforms
             # such as WSL2-Ubuntu
             _('git init .')
@@ -849,7 +877,7 @@ def main():
         )
         _(f'git commit -am "{commit_msg}"')
     else:
-        _('rm -rf .git')
+        rm('.git')
 
     success_msg = SUCCESS_MSG
     success_msg += "\n".join(f'    {x}' for x in FILES_TO_UPDATE)
