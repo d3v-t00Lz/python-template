@@ -729,6 +729,7 @@ def main():
             'appimage/cli/',
             'requirements/cli.txt',
             'files/linux/manpage',
+            'files/linux/manpage.md',
         )
         remove_text('setup.cfg', '--cov=pytemplate_cli ')
         remove_makefile_target('appimage-cli')
