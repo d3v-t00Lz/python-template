@@ -49,8 +49,7 @@ def setup_logging(
 
     if log_file:
         dirname = os.path.dirname(log_file)
-        if not os.path.isdir(dirname):
-            os.makedirs(dirname)
+        os.makedirs(dirname, exist_ok=True)
         handler = logging.handlers.RotatingFileHandler(
             log_file,
             maxBytes=log_file_max_bytes,
