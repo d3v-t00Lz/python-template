@@ -4,6 +4,7 @@
 
 import logging
 import logging.handlers
+import os
 import sys
 from platform import platform
 
@@ -48,6 +49,9 @@ def setup_logging(
         log.addHandler(handler)
 
     if log_file:
+        dirname = os.path.dirname(log_file)
+        if not os.path.isdir(dirname):
+            os.makedirs(dirname)
         handler = logging.handlers.RotatingFileHandler(
             log_file,
             maxBytes=log_file_max_bytes,
