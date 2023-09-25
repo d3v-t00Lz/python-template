@@ -6,8 +6,6 @@ import logging
 import logging.handlers
 import os
 import sys
-from platform import platform
-
 
 
 __all__ = [
@@ -31,6 +29,7 @@ def setup_logging(
 ):
     if structured:
         from pylogrus import PyLogrus, TextFormatter
+        from platform import platform
         logging.setLoggerClass(PyLogrus)
         fmt = TextFormatter(
             datefmt='Z',
