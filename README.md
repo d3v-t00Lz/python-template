@@ -33,7 +33,7 @@ workflow of creating a new project and using the template and tooling.
   all Linux distributions)
 - Debian (Debian / Ubuntu / etc...)
 - Docker
-- MacOS app bundle
+- macOS app bundle in pkg or dmg
 - pypi / pip
 - RPM (Red Hat / Fedora / OpenSUSE / etc...)
 - Windows installers and single-file portable executables

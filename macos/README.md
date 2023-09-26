@@ -15,7 +15,9 @@ will be used to download dependencies.
 macos/homebrew_deps.sh
 pip3 install -r macos/requirements.txt
 # See macos/release.py --help for options and required arguments
-macos/release.py
+macos/release.py dmg qt
 # A DMG file will be created in [PROJECT ROOT]/dist/
+macos/release.py pkg
+# A PKG file will be created in [PROJECT ROOT]/dist/
 ```
 
