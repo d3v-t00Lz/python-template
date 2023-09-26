@@ -5,6 +5,7 @@ import argparse
 from glob import glob
 import json
 import os
+from platform import platform
 from shutil import move as mv, rmtree
 import subprocess
 import sys
@@ -839,11 +840,15 @@ def main():
             f'debian/python3-{name}.install',
         )
 
+    if platform().startswith('macOS'):
+        xargs = 'LANG=C xargs sed -i ""'
+    else:
+        xargs = 'xargs sed -i'
     _(
         "find appimage/ setup.* src/ test/ scripts/ Dockerfile* "
         "macos/ windows/ Makefile tools/ meta.json debian/ "
         "-type f "
-        "| xargs sed -i 's/pytemplate/{name}/gI'".format(name=name)
+        f"| {xargs} 's/pytemplate/{name}/gI'"
     )
 
     with open('README.md', 'w') as f:
