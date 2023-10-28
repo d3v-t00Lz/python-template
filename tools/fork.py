@@ -14,7 +14,7 @@ import sys
 COMMIT_MSG = """\
 Initial commit
 
-Fork github.com/d3v-t00Lz/python-template into {name}
+Fork {remote} into {name}
 
 python-template commit hash forked from: {commit_hash}
 tools/fork.py command used: {argv}
@@ -870,16 +870,23 @@ def main():
 
     if args.git_repo:
         if not args.git_history:
+            try:
+                remote = subprocess.check_output(
+                    ['git', 'remote', 'get-url', 'origin'],
+                ).decode()
+                if remote.startswith('/'):
+                    raise Exception('Cloned from local path')
+            except Exception as ex:
+                remote = "https://github.com/d3v-t00Lz/python-template.git"
+                print(f'Unable to determine original git remote: {ex}')
             rm('.git')
-            # Don't use -b, it does not work on at least some modern platforms
-            # such as WSL2-Ubuntu
-            _('git init .')
-            _('git switch -c main || true')
+            _('git init --initial-branch=main')
             _('git add .')
         commit_msg = COMMIT_MSG.format(
             name=name,
             commit_hash=COMMIT_HASH,
             argv=sys.argv,
+            remote=remote,
         )
         _(f'git commit -am "{commit_msg}"')
     else:
