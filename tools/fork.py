@@ -110,6 +110,15 @@ def parse_args():
     services = parser.add_argument_group('Services')
 
     features.add_argument(
+        '--git-origin',
+        dest='git_origin',
+        default=None,
+        help=(
+            'The git origin to add to the new repository.  Create one in '
+            'Github, Gitlab, Codeberg, etc... before running this command'
+        ),
+    )
+    features.add_argument(
         '--no-git-repo',
         action='store_false',
         dest='git_repo',
@@ -889,6 +898,9 @@ def main():
             remote=remote,
         )
         _(f'git commit -am "{commit_msg}"')
+        if args.git_origin:
+            _(f'git remote add origin {args.git_origin}')
+            _(f'git push -u origin main')
     else:
         rm('.git')
 
