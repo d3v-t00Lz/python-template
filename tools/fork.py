@@ -114,8 +114,9 @@ def parse_args():
         dest='git_origin',
         default=None,
         help=(
-            'The git origin to add to the new repository.  Create one in '
-            'Github, Gitlab, Codeberg, etc... before running this command'
+            'The URL of the git origin to add to the new repository.  '
+            'Create one in Github, Gitlab, Codeberg, etc... before running '
+            'this command'
         ),
     )
     features.add_argument(
