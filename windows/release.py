@@ -7,6 +7,7 @@ import os
 import re
 import shutil
 import subprocess
+import sys
 
 from jinja2 import Template
 
@@ -28,7 +29,7 @@ def parse_args():
         default=False,
         help=(
             'Transpile Python code to C, and compile using a '
-            'C compiler',
+            'C compiler'
         )
     )
     parser.add_argument(
@@ -59,20 +60,6 @@ def pyinstaller():
         print("#" * 80)
         subprocess.check_call(["pyinstaller", f"windows/{SPEC_FILE}"])
 
-    with open('windows/nsis.jinja') as f:
-        TEMPLATE = Template(f.read())
-
-    template = TEMPLATE.render(
-        DISPLAY_NAME=DISPLAY_NAME,
-        MINOR_VERSION=MINOR_VERSION,
-        MAJOR_VERSION=MAJOR_VERSION,
-        MAJOR_VERSION_NUM=1,
-        ORG=META['org'],
-    )
-    template_name = "{0}.nsi".format(MAJOR_VERSION)
-    with open(template_name, "w") as f:
-        f.write(template)
-
 
 def nuitka():
     print("Running Nuitka")
@@ -81,6 +68,7 @@ def nuitka():
         '..',
         'scripts',
     )
+    os.makedirs('dist', exist_ok=True)
     for script in os.listdir(scripts_dir):
         subprocess.check_call([
             sys.executable,
@@ -89,10 +77,8 @@ def nuitka():
             '--windows-disable-console',
             '--include-qt-plugins=platform,sensible',
             '--enable-plugin=pyqt6',
-            script,
+            os.path.join('scripts', script),
         ])
-
-        os.makedirs('dist', exist_ok=True)
         if os.path.exists(f'dist/{script}'):
             shutil.rmtree(f'dist/{script}')
         shutil.move(f'{script}.dist', f'dist/{script}')
@@ -101,6 +87,20 @@ if args.compile:
     nuitka()
 else:
     pyinstaller()
+
+with open('windows/nsis.jinja') as f:
+    TEMPLATE = Template(f.read())
+
+template = TEMPLATE.render(
+    DISPLAY_NAME=DISPLAY_NAME,
+    MINOR_VERSION=MINOR_VERSION,
+    MAJOR_VERSION=MAJOR_VERSION,
+    MAJOR_VERSION_NUM=1,
+    ORG=META['org'],
+)
+template_name = "{0}.nsi".format(MAJOR_VERSION)
+with open(template_name, "w") as f:
+    f.write(template)
 
 print("Running NSIS")
 subprocess.check_call([args.nsis_path, template_name])
