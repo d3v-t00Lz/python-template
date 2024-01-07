@@ -34,7 +34,8 @@ def _main_window():
     pixmap = QPixmap(logo_path).scaled(
         600,
         600,
-        transformMode=QtCore.Qt.TransformationMode.SmoothTransformation,
+        QtCore.Qt.AspectRatioMode.IgnoreAspectRatio,
+        QtCore.Qt.TransformationMode.SmoothTransformation,
     )
     global_vars.SPLASH = QSplashScreen(pixmap)
     global_vars.SPLASH.show()
