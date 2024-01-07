@@ -2,7 +2,9 @@
 
 from glob import glob
 import argparse
+import importlib
 import json
+import pkgutil
 import os
 import re
 import shutil
@@ -60,6 +62,54 @@ def pyinstaller():
         print("#" * 80)
         subprocess.check_call(["pyinstaller", f"windows/{SPEC_FILE}"])
 
+def recurse_modules(
+    root_name: str,
+):
+    """ Recursively list submodules of @root_name
+        Necessary because of the machinery used to implement subcommands,
+        importlib.import_module is not seen by pyinstaller, therefore
+        we need to enumerate the submodules here.
+    """
+    yield root_name
+    root_mod = importlib.import_module(root_name)
+    for sub_info in pkgutil.iter_modules(root_mod.__path__):
+        sub_name = '.'.join((root_name, sub_info.name))
+        yield sub_name
+        sub_mod = importlib.import_module(sub_name)
+        if sub_info.ispkg:
+            for mod_name in recurse_modules(sub_name):
+                yield mod_name
+
+def nuitka_modules(root_name: str):
+    return [
+        f'--include-module={x}'
+        for x in recurse_modules(root_name)
+    ]
+
+NUITKA_TARGETS = [
+    # PT:CLI
+    ('pytemplate_cli', []),
+    # PT:CLI
+    # PT:QT
+    (
+        'pytemplate_qt',
+        [
+            '--include-module=pytemplate_qt',
+            '--windows-disable-console',
+            '--include-qt-plugins=platform,sensible',
+            '--enable-plugin=pyqt6',
+        ],
+    ),
+    # PT:QT
+    # PT:SDL2
+    (
+        'pytemplate_sdl2', 
+        [
+            '--include-module=pytemplate_sdl2',
+        ],
+    ),
+    # PT:SDL2
+]
 
 def nuitka():
     print("Running Nuitka")
@@ -69,14 +119,15 @@ def nuitka():
         'scripts',
     )
     os.makedirs('dist', exist_ok=True)
-    for script in os.listdir(scripts_dir):
+    assert NUITKA_TARGETS, 'No targets'
+    for script, nuitka_args in NUITKA_TARGETS:
         subprocess.check_call([
             sys.executable,
             '-m', 'nuitka',
             '--standalone',
-            '--windows-disable-console',
-            '--include-qt-plugins=platform,sensible',
-            '--enable-plugin=pyqt6',
+            '--include-module=pytemplate',
+            *nuitka_args,
+            *nuitka_modules(script),
             os.path.join('scripts', script),
         ])
         if os.path.exists(f'dist/{script}'):
