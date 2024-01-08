@@ -86,7 +86,21 @@ def nuitka_modules(root_name: str):
         for x in recurse_modules(root_name)
     ]
 
+# PT:SDL2
+import sdl2dll
+SDL2_DATA_ARGS = [
+    f'--include-data-file={x}={os.path.basename(x)}'
+    for x in glob(os.path.join(sdl2dll.get_dllpath(), '*'))
+]
+# PT:SDL2
+
 NUITKA_TARGETS = [
+    # PT:SDL2
+    (
+        'pytemplate_sdl2', 
+        SDL2_DATA_ARGS,
+    ),
+    # PT:SDL2
     # PT:CLI
     ('pytemplate_cli', []),
     # PT:CLI
@@ -95,20 +109,12 @@ NUITKA_TARGETS = [
         'pytemplate_qt',
         [
             '--include-module=pytemplate_qt',
-            '--windows-disable-console',
+            #'--windows-disable-console',
             '--include-qt-plugins=platform,sensible',
             '--enable-plugin=pyqt6',
         ],
     ),
     # PT:QT
-    # PT:SDL2
-    (
-        'pytemplate_sdl2', 
-        [
-            '--include-module=pytemplate_sdl2',
-        ],
-    ),
-    # PT:SDL2
 ]
 
 def nuitka():
@@ -121,15 +127,17 @@ def nuitka():
     os.makedirs('dist', exist_ok=True)
     assert NUITKA_TARGETS, 'No targets'
     for script, nuitka_args in NUITKA_TARGETS:
-        subprocess.check_call([
+        nuitka_call = [
             sys.executable,
             '-m', 'nuitka',
             '--standalone',
-            '--include-module=pytemplate',
-            *nuitka_args,
+            *nuitka_modules('pytemplate'),
             *nuitka_modules(script),
+            *nuitka_args,
             os.path.join('scripts', script),
-        ])
+        ]
+        print(nuitka_call)
+        subprocess.check_call(nuitka_call)
         if os.path.exists(f'dist/{script}'):
             shutil.rmtree(f'dist/{script}')
         shutil.move(f'{script}.dist', f'dist/{script}')

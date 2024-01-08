@@ -15,8 +15,14 @@ def platform_check():
         therefore we must set the environment variable to that path before
         importing PySDL2
     """
-    if getattr(sys, 'frozen', False) and hasattr(sys, '_MEIPASS'):
-        print('running in a PyInstaller bundle')
+    if (
+            getattr(sys, 'frozen', False) 
+            and 
+            hasattr(sys, '_MEIPASS')
+        ) or (
+            hasattr(sys.modules['__main__'], '__compiled__') 
+        ):
+        print('running in a PyInstaller or Nuitka bundle')
         if (
             platform().lower().startswith('windows')
             and
@@ -24,12 +30,12 @@ def platform_check():
         ):
             os.environ[EV] = os.path.dirname(sys.executable)
 
-parse_args()
-platform_check()
 
 # Now import this with EV set if needed
 
 def main():
+    parse_args()
+    platform_check()
     from .pong import main as _main
     _main()
 
